@@ -15,10 +15,10 @@ Repo per il versioning della mia tesi di laurea
   - Illustrazione del contesto IoT e come si sta sviluppando
   - Classi di applicazioni IoT
   - Applicazioni di Elaborazione di immagini in ambito IoT
-  - Caso del PCN 
+  - Applicazione/i PCN 
   - Obiettivi del mio lavoro (migliorare(?) PCN + realizzazione distro custom con Yocto)
 - Sezione 2: Contesto tecnologico di dettaglio
-  - L'obiettivo del PCN (cosa fa)
+  - L'obiettivo del PCN
   - La sua versione attuale (PCN Eurotech)
   - Tecnologie/tool utilizzati
     - Descrizione funzionamento e vantaggi delle telecamere ToF
@@ -29,7 +29,7 @@ Repo per il versioning della mia tesi di laurea
 - Sezione 3: Cosa ho fatto e come l'ho fatto
   - Blocco 1: analisi ambienti disponibili per image processing embedded
     - Ambiente SDSoC + FPGA + OpenCV + AuvizCV
-    - Ambiente Yocto + Eurotech ReliGate 20-25 + OpenCV
+    - Ambiente Yocto + Eurotech ReliGate 2025 + OpenCV
     - Motivazioni per cui è stato infine scelta la seconda opzione
   - Blocco 2: PCNs: implementazioni e confronti
     - PCN Eurotech (in breve)

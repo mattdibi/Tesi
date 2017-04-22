@@ -35,15 +35,23 @@
 \maketitle
 
 %% Dedica (opzionale)
-\begin{dedication}Al mio cane,\par per avermi ascoltato mentre ripassavo le lezioni.\end{dedication}
+%% \begin{dedication}A mia madre.\end{dedication}
 
 %% Ringraziamenti (opzionali)
-\acknowledgements
-Sed vel lorem a arcu faucibus aliquet eu semper tortor. Aliquam dolor lacus, semper vitae ligula sed, blandit iaculis leo. Nam pharetra lobortis leo nec auctor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce ac risus pulvinar, congue eros non, interdum metus. Mauris tincidunt neque et aliquam imperdiet. Aenean ac tellus id nibh pellentesque pulvinar ut eu lacus. Proin tempor facilisis tortor, et hendrerit purus commodo laoreet. Quisque sed augue id ligula consectetur adipiscing. Vestibulum libero metus, lacinia ac vestibulum eu, varius non arcu. Nam et gravida velit.
+%% \acknowledgements
+%% Sed vel lorem a arcu faucibus aliquet eu semper tortor. Aliquam dolor lacus, semper vitae ligula sed, blandit iaculis leo. Nam pharetra lobortis leo nec auctor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce ac risus pulvinar, congue eros non, interdum metus. Mauris tincidunt neque et aliquam imperdiet. Aenean ac tellus id nibh pellentesque pulvinar ut eu lacus. Proin tempor facilisis tortor, et hendrerit purus commodo laoreet. Quisque sed augue id ligula consectetur adipiscing. Vestibulum libero metus, lacinia ac vestibulum eu, varius non arcu. Nam et gravida velit.
 
 %% Sommario (opzionale)
 \abstract
-Nunc ac dignissim ipsum, quis pulvinar elit. Mauris congue nec leo ornare lobortis. Nulla hendrerit pretium diam nec lobortis. Nullam aliquam laoreet nisl, sit amet facilisis lectus accumsan ut. Duis et elit hendrerit metus venenatis condimentum. Integer id eros molestie, interdum leo sit amet, aliquet metus. Integer fermentum tristique magna, vel luctus neque rhoncus vel. Ut hendrerit et quam et semper. Mauris egestas, odio sed aliquet luctus, magna orci euismod odio, vitae lacinia tellus tellus non lectus. Aliquam urna neque, porta et mattis aliquam, congue sit amet lorem. In ultrices augue sit amet ante vehicula, vitae rhoncus turpis auctor. Donec porta scelerisque eros, at mollis enim imperdiet ut. 
+Nello sviluppo di questa tesi si è affrontato lo studio e la progettazione di un sistema di conteggio dei passeggeri su una piattaforma embedded. Il software applicativo è basato su algoritmi di elaborazione di immagine resi disponibili dalla libreria open-source per l'image processing OpenCV. La piattaforma software è stata realizzata utilizzando il progetto Yocto, il quale permette la creazione di distribuzioni Linux customizzate e targettate all'utilizzo in abito embedded.
+L'applicazione di Passenger Counter ha come scopo quello di contare i passeggeri che attraversano in entrata e in uscita le porte di un mezzo pubblico, in modo tale da permettere un conteggio esatto delle persone presenti sul mezzo.
+Lo sviluppo si è diviso in quattro fasi principali:
+\begin{itemize}
+\item Una indagine preliminare sulle migliori piattaforme sulle quali sviluppare l'applicazione.
+\item Progettazione e implementazione del contatore usando solamente algoritmi di elaborazione delle immagini (Passenger Counter con background subtraction), individuando i passaggi più pesanti dal punto di vista computazionale.
+\item Progettazione e implementazione del contatore sfruttando telecamere a infrarossi Time-Of-Flight (Passenger counter con telecamere RealSense).
+\item Lo sviluppo della piattaforma software sulla quale integrare tutte le tecnologie utilizzate in fase di sviluppo per mezzo del progetto Yocto.
+\end{itemize}
 
 %% Indice
 \tableofcontents
@@ -62,7 +70,7 @@ Nunc ac dignissim ipsum, quis pulvinar elit. Mauris congue nec leo ornare lobort
 \part{Parte}
 
 %% Capitolo
-\chapter{Capitolo}
+\chapter{Introduzione}
 In hac habitasse platea dictumst. Vestibulum consectetur dictum pellentesque. Suspendisse nunc neque, commodo ac imperdiet nec, sollicitudin vitae libero. Donec bibendum vel nunc vitae pharetra. In vel volutpat odio, et interdum dui. Duis mauris ligula, congue eget molestie at, tincidunt nec diam. Nam vitae eros nec arcu suscipit vehicula. Aliquam consectetur imperdiet elit, eget pretium arcu fringilla at. Maecenas \cite{Knu86} sed libero pulvinar, mattis tortor vel, fermentum enim.
 
 %% Sezione
