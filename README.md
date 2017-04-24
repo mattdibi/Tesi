@@ -1,14 +1,6 @@
 # Tesi
 Repo per il versioning della mia tesi di laurea
 
-# Mail prof
-> Alllllllllllora, la struttura della tesi deve essere "a imbuto", ovvero - lasciando da parte la necessità di dovere scrivere il prologo, un'invenzione dei tempi moderni...
-> deve evolvere dal generale al particolare, conducendo il lettore via via a contenuti di maggior dettaglio.
-> Quindi, direi debba esserci una introduzione che illustra il contesto IoT così come si sta sviluppando, all'interno di questo le varie classi di applicazioni e tra queste quelle che
-> coinvolgono l'elaborazione di immagine, per arrivare al caso del PCN e a descrivere che obiettivi si è prefissato il tuo lavoro.
-> Dopo di questo, nella sezione successiva, passi in rassegna il contesto tecnologico di dettaglio (l'obiettivo del PCN, la sua versione attuale, il vantaggio delle telecamere ToF,
-> Java, OSGi ecc.). Poi passi a descrivere cosa hai fatto e come lo hai fatto. Infine le conclusioni in cui riassumi il tutto.
-
 ### Prototipo indice
 
 - Sezione 1: Introduzione
@@ -47,13 +39,14 @@ Repo per il versioning della mia tesi di laurea
   - Miglioramenti
 
 ### TODOs
-1. [ ] Scrivere al prof per l'approvazione del prototipo dell'indice
+1. [x] Scrivere al prof per l'approvazione del prototipo dell'indice
 2. [ ] Nel caso di approvazione espandere le sezioni e sottosezioni riassumendo per sommi capi il loro contenuto come fatto qui di seguito
 3. [ ] Cominciare a scrivere la tesi
 
-**Nota:** da qui in poi segue l'espansione dell'indice. La versione seguente non è aggiornata rispetto alle ultime direttive dettate dal prof.
+# Espansione indice
+Nel seguito ho riportato l'espansione dell'indice dove in ogni sezione ho descritto per sommi capi cosa intendo scrivere.
 
-# Sommario
+## Sommario
 
 Breve riassunto della tesi. Esporre:
 * Problema considerato
@@ -67,45 +60,88 @@ Breve riassunto della tesi. Esporre:
 
 ### Lista delle tabelle
 ...
+
 ### Lista delle figure
 ...
 
+## Sezione 1: Introduzione
+Sezione "imbuto". Andiamo dal generale al particolare. Breve ricerchina sullo stato attuale dell'IoT, storia e sviluppi futuri. Quindi si passa ad analizzare sempre più nel dettaglio l'ambito nel quale si è sviluppata la mia tesi.
 
-# Introduzione
-Spiegare il fatto che sono stati affrontati due problemi contemporaneamente PCN + sviluppo piattaforma software 
-sulla quale far girare il PCN (tramite Yocto)
+##### 1) Contesto IoT
+* Spiegazione concetto IoT
+  * Definizione Internet of Things
+  * Storia dell'IoT
+  * Sviluppi futuri dell'IoT
 
-PCN:
-* Spiegazione dei problemi del PCN eurotech che si volevano sistemare
-  * Difficoltà nel reperimento delle lenti (telecamera obsoleta)
-  * Costo elevato dovuto alla FPGA
-  * Costo elevato dovuto al fatto che ci deve essere una unità di elaborazione per telecamera
-* Spiegazione di come sono stati sistemati
+##### 2) Classi di applicazioni IoT
+* Spiegazione generale quindi passiamo al dettaglio
+  * Domotica
+  * Automotive
+  * Sistemi Embedded
+  * Monitoraggio in ambito industriale
+  * Telemetria
+  * Elaborazione di immagini
+* Applicazioni di Elaborazione di immagini in ambito IoT
+  * ...?
 
-Piattaforma:
-* Spiegazione di cosa la eurotech voleva dalla piattaforma di sviluppo
-  * Aumentare appetibilità della piattaforma venduta dalla Eurotech aggiungendo tecnologie
-* Spiegare cosa si è riusciti ad ottenere
-  * OpenCV con interfacce C++(Nativa) Java e Python
-  * Accesso alla libreria RealSense e telecamere
-  * JRE e JDK
+##### 3) Passenger Counter
+* Applicazione PCN
+  * Qual'è la sua funzione
+  * ...?
+* Obiettivi del mio lavoro
+  * Miglioramento del PCN la cui metrica sarebbe stata: costi, prestazioni ...
+  * Realizzazione di una infrastruttura che contenga la nuova versione del PCN (immagine Yocto)
 
-* Elenco schematico del contenuto dei vari capitoli
+## Sezione 2: Contesto tencologico di dettaglio
+Sezione nella quale passo a descrivere nel dettaglio le tecnologie che ho utilizzato nello svolgimento del mio lavoro.
 
+##### 1) PCN Eurotech
+* Obiettivo del PCN
+* PCN Eurotech: Descrizione versione corrente del PCN
+  * Telecamere a infrarossi
+  * Ricostruzione 3D luce strutturata
+  * FPGA per ricavare le informazioni di profondità
+  * Algoritmo di tracciamento su CPU (Tracciamento dei massimi locali nell'immagine 3D)
 
-# Corpo della tesi
+##### 2) Tecnologie usate nella mia versione del PCN
+* Telecamere ToF
+  * Funzionamento (SR300 e R200)
+  * Vantaggi
+* OpenCV
+* Yocto
+* OSGi(?)
 
-### Blocco 1: analisi ambienti disponibili per image processing embedded
+## Sezione 3: Corpo della tesi
+Sezione nella quale descrivo cosa ho fatto e come l'ho fatto.
+**Nota**: Necessario raccogliere dati sulle performance delle varie versioni per effettuare i vari confronti.
+
+### Blocco 1: Analisi ambienti disponibili per image processing embedded
+Qui passo a descrivere l'analisi effettuata per capire quale ambiente di sviluppo fosse il più promettente. Non penso di scrivere molto in questa sezione.
 
 ##### 1) Ambiente SDSoC + FPGA + OpenCV + AuvizCV
+* SDSoC
+  * Cos'è (tool che raggruppa vari tool Xilinx per automatizzare la sintesi di tencologie per FPGA partendo da un alto livello di astrazione)
+  * Come lo fa
+* AuvizCV
+  * Cos'è (libreria di codice pre ottimizzato per l'esecuzione su FPGA)
+  * Vantaggi (prestazioni)
+  * Svantaggi (poche funzioni, poca flessibilità, scarso supporto)
 
 ##### 2) Ambiente Yocto + Eurotech ReliGate 20-25 + OpenCV
+* Yocto
+  * Vantaggi (installo le cose che mi servono)
+* OpenCV
+  * Vantaggi (flessibilità, supporto)
 
 ##### 3) Motivazioni per cui è stato infine scelta la seconda opzione 
 * Ambiente più completo
 * Ambiente più flessibile
+* Performance più basse
 
 ### Blocco 2: Passenger counters: implementazioni e confronti
+Qui passo a descrivere l'effettiva implementazione delle varie versioni dei PCN, confrontandone vantaggi e svantaggi. Inoltre vorrei poter fare dei confronti sulle prestazioni di ogni versione. 
+
+**Nota**: Nel caso della precisione del conteggio è necessario capire se posso definire una metrica e confrontare effettivamente le varie versioni.
 
 ##### 1) PCN Eurotech (in breve)
 * Tecnologia usata dalla eurotech (algoritmo usato)
@@ -115,9 +151,7 @@ Piattaforma:
 * Problemi principali(quelli già spiegati prima ma più nel dettaglio dal punto di vista tecnico)
 * Soluzioni che si volevano ottenere
 
-##### 2) Breve overview di OpenCV (?)
-
-##### 3) PCN (versione con sottrazione del background)
+##### 2) PCN (versione con sottrazione del background)
 * Tecnologie impiegate
   * Webcam
 * Spiegazione algoritmo
@@ -125,49 +159,54 @@ Piattaforma:
   * Costo computazionale
   * Imprecisione
  
-##### 4) RSPCN (versione con telecamere RealSense)
-* Tecnologie impiegate
-  * Telecamere RealSense
-    * SR300
-    * R200
+##### 3) RSPCN (versione con telecamere RealSense)
 * Spiegazione algoritmo
 * Miglioramenti rispetto alle versioni precedenti
+  * Precisione
+  * Costo computazionale
+  * Possibilità di usare più di una telecamera
 
 ##### 5) Confronto prestazioni PCN vs RSPCN
 * Costo computazionale
 * Precisione nella rilevazione (metrica?)
 
 ##### 6) Versioni realizzate
-* cpp
-* java(?)
-  * wrap java realizzato con SWIG
-  * versione java con JavaCV e librealsense interfacciate a JavaCPP
+* c++
+  * Vantaggi/svantaggi
+* java wrap: java realizzato con SWIG
+  * Breve excursus sul tool utilizzato (SWIG)
+  * Vantaggi/svantaggi rispetto alle altre versioni
+  * Difficoltà riscontrate nella realizzazione
+* java : versione java con JavaCV e librealsense interfacciate a JavaCPP
+  * Breve excursus sul tool utilizzato (Progetto JavaCPP)
+  * Difficoltà riscontrate nella realizzazione
+  * Vantaggi/svantaggi rispetto alle altre versioni
 * osgi(?)
 
 ### Blocco 3: Piattaforma Yocto realizzazione e features
+Qui passo a descrivere cosa ho fatto per riuscire a realizzare una distro custom Poky che avesse al suo interno tutti i tool che mi servivano per implementare il PCN.
 
-##### 1) Overview Yocto project
-Cos'è cosa fa ecc...
-
-##### 2) Realizzazione della piattaforma
+##### Realizzazione della piattaforma
 * Risultato finale (immagine stack software)
 * Realizzazione
   * Procedimento
-  * Ricetta realizzata per inserire tutto (TODO)
 * Problemi riscontrati nella realizzazione dell'immagine che volevamo
   * Incompatiblità versioni precedenti con librealsense
+  * Necessità di usare il branch Morty quando la ricetta per installare il JDK si trovava molto più avanti nelle versioni.
   * Modifica della ricetta OpenCV
 
-# Conclusioni
+## Sezione 4: Conclusioni
 
-### PCN
+##### 1) Riassunto di quanto fatto
+
+##### 2) Risultati PCN
 * Risultati ottenuti con RSPCN
 * Possibili miglioramenti 
   * Implementazione algoritmi di machine learning per il tracciamento più preciso delle persone
   * Scaricare il carico computazionale più intenso sulla GPU
   * Test più approfonditi (i mezzi che ho a disposizione sono limitati)
 
-### Yocto
+##### 3) Risultati distro custom Poky
 * Risultati ottenuti con Yocto
 * Possibili miglioramenti
 
