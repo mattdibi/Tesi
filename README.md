@@ -1,14 +1,25 @@
-# Tesi
+# Tesi PCN
 Repo per il versioning della mia tesi di laurea
 
-### Prototipo indice
+Nel seguito ho riportato l'espansione dell'indice dove in ogni sezione ho descritto per sommi capi cosa intendo scrivere.
 
+## Sommario
+
+Breve riassunto della tesi. Esporre:
+* Problema considerato
+  * PCN
+  * Piattaforma per lo sviluppo
+* Come il problema è stato risolto
+* Principali risultati
+
+### Indice
 - Sezione 1: Introduzione
   - Illustrazione del contesto IoT e come si sta sviluppando
   - Classi di applicazioni IoT
   - Applicazioni di Elaborazione di immagini in ambito IoT
   - Applicazione/i PCN 
   - Obiettivi del mio lavoro (migliorare(?) PCN + realizzazione distro custom con Yocto)
+  - Struttura della tesi
 - Sezione 2: Contesto tecnologico di dettaglio
   - L'obiettivo del PCN
   - La sua versione attuale (PCN Eurotech)
@@ -37,26 +48,6 @@ Repo per il versioning della mia tesi di laurea
   - Riassunto
   - Risultati ottenuti
   - Miglioramenti
-
-### TODOs
-1. [x] Scrivere al prof per l'approvazione del prototipo dell'indice
-2. [ ] Nel caso di approvazione espandere le sezioni e sottosezioni riassumendo per sommi capi il loro contenuto come fatto qui di seguito
-3. [ ] Cominciare a scrivere la tesi
-
-# Espansione indice
-Nel seguito ho riportato l'espansione dell'indice dove in ogni sezione ho descritto per sommi capi cosa intendo scrivere.
-
-## Sommario
-
-Breve riassunto della tesi. Esporre:
-* Problema considerato
-  * PCN
-  * Piattaforma per lo sviluppo
-* Come il problema è stato risolto
-* Principali risultati
-
-### Indice
-...
 
 ### Lista delle tabelle
 ...
@@ -89,8 +80,11 @@ Sezione "imbuto". Andiamo dal generale al particolare. Breve ricerchina sullo st
   * Qual'è la sua funzione
   * ...?
 * Obiettivi del mio lavoro
-  * Miglioramento del PCN la cui metrica sarebbe stata: costi, prestazioni ...
-  * Realizzazione di una infrastruttura che contenga la nuova versione del PCN (immagine Yocto)
+  * Miglioramento del PCN la cui metrica per valutare il miglioramento sarebbe stata: costi, prestazioni ...
+  * Realizzazione di una infrastruttura che possa supportare la nuova versione del PCN (immagine Yocto)
+
+##### 4) Struttura della tesi
+Qui riporto l'organizzazione del testo della tesi come consigliato dalla guida dell'Università
 
 ## Sezione 2: Contesto tencologico di dettaglio
 Sezione nella quale passo a descrivere nel dettaglio le tecnologie che ho utilizzato nello svolgimento del mio lavoro.
@@ -102,10 +96,12 @@ Sezione nella quale passo a descrivere nel dettaglio le tecnologie che ho utiliz
   * Ricostruzione 3D luce strutturata
   * FPGA per ricavare le informazioni di profondità
   * Algoritmo di tracciamento su CPU (Tracciamento dei massimi locali nell'immagine 3D)
+TODO: Farsi passare qualche informazione in più dalla Eurotech?
 
 ##### 2) Tecnologie usate nella mia versione del PCN
 * Telecamere ToF
-  * Funzionamento (SR300 e R200)
+  * Funzionamento (SR300 e R200) TODO: Rubacchiare immagini dal repo di librealsense
+  * Librearia librealsense
   * Vantaggi
 * OpenCV
 * Yocto
@@ -119,15 +115,22 @@ Sezione nella quale descrivo cosa ho fatto e come l'ho fatto.
 Qui passo a descrivere l'analisi effettuata per capire quale ambiente di sviluppo fosse il più promettente. Non penso di scrivere molto in questa sezione.
 
 ##### 1) Ambiente SDSoC + FPGA + OpenCV + AuvizCV
+* Piattaforma Xilinx: Zedboard & Zybo
+  * Descrizione dell'hardware
+  * Difficoltà riscontrate nel reperire il modulo per l'interfacciamento alla porta HDMI
 * SDSoC
-  * Cos'è (tool che raggruppa vari tool Xilinx per automatizzare la sintesi di tencologie per FPGA partendo da un alto livello di astrazione)
-  * Come lo fa
+  * Descrizione: tool che raggruppa vari tool Xilinx per automatizzare la sintesi di tencologie per FPGA partendo da un alto livello di astrazione
+  * Breve descrizione del funzionamento: in pratica è uno script che chiama in sequenza tutti i tool della Xilinx. 
 * AuvizCV
   * Cos'è (libreria di codice pre ottimizzato per l'esecuzione su FPGA)
   * Vantaggi (prestazioni)
   * Svantaggi (poche funzioni, poca flessibilità, scarso supporto)
 
 ##### 2) Ambiente Yocto + Eurotech ReliGate 20-25 + OpenCV
+* Eurotech ReliGate 20-25
+  * Descrizione dell'hardware architettura x86 64bit intel 
+  * Vantaggi(flessibilità: è una arch x86 facilità di utilizzo) 
+  * Svantaggi: prevalentemente le prestazioni
 * Yocto
   * Vantaggi (installo le cose che mi servono)
 * OpenCV
@@ -144,11 +147,10 @@ Qui passo a descrivere l'effettiva implementazione delle varie versioni dei PCN,
 **Nota**: Nel caso della precisione del conteggio è necessario capire se posso definire una metrica e confrontare effettivamente le varie versioni.
 
 ##### 1) PCN Eurotech (in breve)
-* Tecnologia usata dalla eurotech (algoritmo usato)
-  * Telecamere a infrarossi
-  * Ricostruzione tramite FPGA
-  * Tracciamento dei massimi locali nell'immagine 3D
 * Problemi principali(quelli già spiegati prima ma più nel dettaglio dal punto di vista tecnico)
+  * Difficoltà reperibilità telecamere infrarossi
+  * Costi elevati dovuti alla presenza di una FPGA
+  * Costi elevati dovuti al fatto che ci dovesse essere una unità di elaborazion per telecamera e quindi per porta
 * Soluzioni che si volevano ottenere
 
 ##### 2) PCN (versione con sottrazione del background)
@@ -160,15 +162,20 @@ Qui passo a descrivere l'effettiva implementazione delle varie versioni dei PCN,
   * Imprecisione
  
 ##### 3) RSPCN (versione con telecamere RealSense)
+* Tecnologie impiegate
+  * Breve spiegazione della struttura del RSPCN
 * Spiegazione algoritmo
 * Miglioramenti rispetto alle versioni precedenti
   * Precisione
   * Costo computazionale
   * Possibilità di usare più di una telecamera
 
-##### 5) Confronto prestazioni PCN vs RSPCN
+##### 5) Confronto prestazioni PCN a sottrazione del background vs RSPCN
 * Costo computazionale
 * Precisione nella rilevazione (metrica?)
+* Maggior robustezza rispetto alle condizioni di illuminazione
+* Nessun problema di ombre
+* Mezzo pubblico in movimento probabilmente potrebbe creare problemi nell'individuazione del background
 
 ##### 6) Versioni realizzate
 * c++
@@ -186,7 +193,7 @@ Qui passo a descrivere l'effettiva implementazione delle varie versioni dei PCN,
 ### Blocco 3: Piattaforma Yocto realizzazione e features
 Qui passo a descrivere cosa ho fatto per riuscire a realizzare una distro custom Poky che avesse al suo interno tutti i tool che mi servivano per implementare il PCN.
 
-##### Realizzazione della piattaforma
+##### 1) Realizzazione della piattaforma
 * Risultato finale (immagine stack software)
 * Realizzazione
   * Procedimento
@@ -194,6 +201,9 @@ Qui passo a descrivere cosa ho fatto per riuscire a realizzare una distro custom
   * Incompatiblità versioni precedenti con librealsense
   * Necessità di usare il branch Morty quando la ricetta per installare il JDK si trovava molto più avanti nelle versioni.
   * Modifica della ricetta OpenCV
+
+##### 2) Deplyment dell'applicazione all'interno della piattaforma software
+* ...?
 
 ## Sezione 4: Conclusioni
 
