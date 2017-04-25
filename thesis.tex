@@ -6,7 +6,7 @@
 
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
-\graphicspath{ {img/Introduzione/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} }
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -142,7 +142,7 @@ Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui f
 Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni e con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo di comunicare tra loro trasferendo le informazioni rilevanti alle business application ed alle infrastrutture IT. Il PCN o Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{passenger-counting-people-counting-applications-and-devices-11-638.jpg}
+  \includegraphics[width=\textwidth]{SchemaPCNIoT.png}
   \centering
   \caption{Schema Passenger Counter Eurotech}
   \label{fig:SchemPCNEurotech}
@@ -169,6 +169,33 @@ L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Pas
 Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utilizzare nello svolgimento della tesi.
 
 \section{Tecnologie PCN Eurotech}
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{StrutturaPCN.png}
+  \centering
+  \caption{Struttura del Passenger Counter di Eurotech}
+  \label{fig:PCNEurotechHardware}
+\end{figure}
+
+\subsection{Hardware}
+Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione delle immagini.
+
+Il gateway \`e un'altro prodotto della Eurotech noto come ReliGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\`e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud della Eurotech.
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
+  \centering
+  \caption{Dispositivo di acquisizione delle immagini 3D}
+  \label{fig:DispAcqImm3D}
+\end{figure}
+
+Il dispositivo di acquisizione video visibile in figura \ref{fig:DispAcqImm3D}. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
+Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la scena, le telecamere a infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica accelerate in hardware permette di generare delle immagini in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
+
+\subsection{Software}
+
+\subsection{Problematiche di questa soluzione}
+
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
