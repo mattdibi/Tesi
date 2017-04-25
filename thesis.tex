@@ -98,6 +98,8 @@ Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico.
 Secondo le proiezioni di Gartner, Inc. una corporation per la ricerca e advisory tecnologica, entro il 2020 ci saranno oltre 20 miliardi di device connesse all'Internet of Things. Si sta parlando di una Industria 4.0 dove l'automazione industriale integra l'IoT per migliorare le condizioni di lavoro e la produttivit\`a. La chiave di volta dell'Industria 4.0 sono i sistemi ciberfisici (CPS), ovvero sistemi fisici che sono strettamente connessi con i sistemi informatici e possono interagire e collaborare con altri sistemi CPS i quali costituiscono lo step evolutivo successivo delle device IoT. 
 Un altro settore nel quale si proiettano ulteriori sviluppi \`e la Big Data Analysis. L'ubiquit\`a dei dispositivi intelligenti connessi all'Internet delle Cose permette analisi di dati vastissimi ai quali precedentemente era impensabile avere accesso. Le informazioni che si possono ricavare da questi dati sono molteplici e di sicuro interesse per molti ambiti di applicazione.
 
+%% Interruzione di pagina
+\newpage
 
 %% Classi di applicazioni IoT
 \section{Classi di applicazioni IoT}
@@ -125,6 +127,9 @@ Device connesse all'Internet delle cose possono essere abilitare il monitoraggio
 %% Qui mi ricollego al PCN che \`e la sezione seguente
 L'IoT pu\`o dare assistenza nella integrazione delle comunicazioni, controlli e elaborazione delle informazioni attraverso vari sistemi di trasporto. Le applicazioni dell'IoT si estendono a tutti gli aspetti dei sistemi di trasporto: i veicoli, l'infrastruttura, il pilota e i passeggeri. L'interazione dinamica tra questi componenti permette una comunicazione inter e intra veicolare, controllo del traffico intelligente, smart parking, gestione della logistica e delle flotte, controllo dei veicoli e sicurezza stradale.
 L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambito di applicazione dell'IoT e nel prossimo paragrafo ne analizzeremo gli obiettivi e funzionalit\`a.
+
+%% Interruzione di pagina
+\newpage
 
 %% Sezione PCN
 \section{Passenger Counter}
@@ -192,7 +197,18 @@ Il gateway \`e un'altro prodotto della Eurotech noto come ReliGATE 50-21. Utiliz
 Il dispositivo di acquisizione video visibile in figura \ref{fig:DispAcqImm3D}. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
 Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la scena, le telecamere a infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica accelerate in hardware permette di generare delle immagini in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
 
+%% Interruzione di pagina
+\newpage
+
 \subsection{Software}
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{Algoritmo.png}
+  \centering
+  \caption{Schematizzazione funzionamento algoritmo tracciamento passeggeri}
+  \label{fig:SchemAlgrTrackPCNEurotech}
+\end{figure}
+
 
 \subsection{Problematiche di questa soluzione}
 
