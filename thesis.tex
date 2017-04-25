@@ -89,7 +89,7 @@ Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico.
 
 %% Parte di questa sezione l'ho rubacchiata da wikipedia cercando: Industria 4.0
 \subsection{Sviluppi futuri}
-\begin{figure}
+\begin{figure}[h!]
   \includegraphics[width=\linewidth]{Internet_of_Things.png}
   \caption{Trend dell'internet of things}
   \centering
@@ -132,36 +132,36 @@ Passiamo ora a contestualizzare il lavoro svolto per questa tesi all'interno del
 
 Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al fornitore dei servizi sfruttando l'Internet delle Cose in modo tale da permettere una gestione pi\`u efficiente della flotta dei mezzi di trasporto. Il dispositivo deve essere in grado di effettuare il conteggio in modo non invasivo e contact-less, tenendo conto delle restrizioni dovute all'ambiente nel quale deve essere applicato.
 
-\begin{figure}
+\begin{figure}[h!]
   \includegraphics[width=9cm]{PassengerCountersz.jpg}
   \centering
   \caption{Schematizzazione del contatore di passeggeri}
   \label{fig:SchemPCN}
 \end{figure}
 
-Come riferimento e come base per la tesi \`e stato usato il Passenger Counter realizzato da Eurotech.
+Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni e con sede ad Amaro. Recentemente l'azienda sta cambiando il suo target di prodotti spostandosi sull'IoT. Fornisce una infrastruttura cloud di sua produzione capace di fornire connettivit\`a ai suoi dispositivi IoT nota come Eurotech Everyware Cloud. Il PCN o Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
 
-\begin{figure}
+\begin{figure}[h!]
   \includegraphics[width=\textwidth]{passenger-counting-people-counting-applications-and-devices-11-638.jpg}
   \centering
   \caption{Schema Passenger Counter Eurotech}
   \label{fig:SchemPCNEurotech}
 \end{figure}
 
-L'applicativo consta di tre parti fondamentali come visibile in figura \ref{fig:SchemPCNEurotech}:
+Il sistema di conteggio di passeggeri consta di tre parti fondamentali come schematizzato in figura \ref{fig:SchemPCNEurotech}:
 \begin{enumerate}
 \item Dispositivo di acquisizione video.
 \item Dispositivo di elaborazione e trasmissione dei dati in real-time.
 \item Infrastruttura di rete cloud per il raccoglimento dei dati.
 \end{enumerate}
-\`E quindi possibile accedere ai dati raccolti da pi\`u dispositivi.
+\`E quindi possibile accedere ai dati raccolti da pi\`u dispositivi per mezzo della Eurotech Everyware Cloud.
 
 \section{Obiettivi della tesi}
-L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Passenger Counter di Eurotech basandosi sulla infrastruttura software/hardware fornita dall'azienda cercando di migliorare quanto gi\`a fatto dall'azienda, esplorando nuove soluzioni tecnologiche alternative. Gli obiettivi della tesi sono sono stati principalmente tre:
+L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Passenger Counter di Eurotech basandosi sulla infrastruttura software/hardware fornita dall'azienda, cercando di migliorare quanto gi\`a fatto da Eurotech, esplorando soluzioni tecnologiche alternative. Questo obiettivo \`e stato quindi suddiviso in tre parti:
 \begin{enumerate}
 \item Identificare gli ambienti di sviluppo pi\`u idonei alla realizzazione del progetto.
-\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione ed abbattere i costi di produzione.
-\item Realizzare una infrastruttura software che fornisse tutti i tool e le librerie necessarie all'implementazione del Passenger Counter realizzato, che potesse essere installato sulla piattaforma hardware fornita da Eurotech.
+\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione ed abbattere i costi adattandolo alle tecnologie usate dall'azienda per i suoi prodotti. 
+\item Realizzare una infrastruttura software che fornisse tutti gli strumenti e le librerie necessarie all'implementazione del Passenger Counter realizzato e che potesse essere installato sulla piattaforma hardware fornita da Eurotech.
 \end{enumerate}
 
 %% Capitolo 2: Contesto tecnologico di dettaglio
