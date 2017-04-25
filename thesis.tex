@@ -110,7 +110,7 @@ Le applicazioni di monitoraggio ambientale tipicamente utilizzano sensori colleg
 \subsection{Infrastructure management}
 Il monitoraggio e il controllo di infrastrutture urbane come ponti, rotaie, wind-farms \`e un campo di applicazione chiave dell'IoT. L'infrastruttura IoT pu\`o essere usata per monitorare eventi o cambiamenti nelle condizioni strutturali che possono compromettere la sicurezza o aumentare i rischi. Pu\`o altres\`\i\ essere usato per la programmazione di interventi di manutenzione in maniera pi\`u efficiente coordinando le operazioni tra diversi fornitori di servizi. Le device IoT sono anche usate per controllare infrastrutture critiche come ponti per fornire accesso alle navi. Si pensa che l'utilizzo di device IoT possa migliorare la gestione degli incidenti e la coordinazione in caso emergenze, la qualit\`a del servizia e ridurre i costi in tutte le aree legate alla gestione delle infrastrutture.
 
-\subsection{Manifacturing}
+\subsection{Manufacturing}
 L'ambiente manifatturiero \`e sicuramente una delle applicazioni di punta dell'IoT fina dalla sua nascita. Gli inteventi dell'IoT spaziano dalla gestione degli equipaggiamenti al tracking degli asset nell'ambiente produttivo. Questa sinergia permette alle aziende di avere una maggior flessibilit\`a e di ottimizzare in tempo reale i sistemi di produzione nonch\`e la rete di approviggionamento grazie all'interconnesione tra macchinari, sensori e sistemi.
 L'integrazione di sistemi IoT all'interno di catene di produzione permette la predictive maintenance, valutazione statistica della degradazione dello stato dei macchinari, e prevenzione di guasti.
 Come visto in precedenza l'evoluzione dell'Industria 4.0 \`e interamente basata sull'integrazione tra sistemi di produzione e l'Internet of Things.
@@ -128,7 +128,45 @@ L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambit
 
 %% Sezione PCN
 \section{Passenger Counter}
+Passiamo ora a contestualizzare il lavoro svolto per questa tesi all'interno dell'ambito IoT.
 
+Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al fornitore dei servizi sfruttando l'Internet delle Cose in modo tale da permettere una gestione pi\`u efficiente della flotta dei mezzi di trasporto. Il dispositivo deve essere in grado di effettuare il conteggio in modo non invasivo e contact-less, tenendo conto delle restrizioni dovute all'ambiente nel quale deve essere applicato.
+
+\begin{figure}
+  \includegraphics[width=9cm]{PassengerCountersz.jpg}
+  \centering
+  \caption{Schematizzazione del contatore di passeggeri}
+  \label{fig:SchemPCN}
+\end{figure}
+
+Come riferimento e come base per la tesi \`e stato usato il Passenger Counter realizzato da Eurotech.
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{passenger-counting-people-counting-applications-and-devices-11-638.jpg}
+  \centering
+  \caption{Schema Passenger Counter Eurotech}
+  \label{fig:SchemPCNEurotech}
+\end{figure}
+
+L'applicativo consta di tre parti fondamentali come visibile in figura \ref{fig:SchemPCNEurotech}:
+\begin{enumerate}
+\item Dispositivo di acquisizione video.
+\item Dispositivo di elaborazione e trasmissione dei dati in real-time.
+\item Infrastruttura di rete cloud per il raccoglimento dei dati.
+\end{enumerate}
+
+\section{Obiettivi della tesi}
+L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Passenger Counter di Eurotech basandosi sulla infrastruttura software/hardware fornita dall'azienda cercando di migliorare quanto gi\`a fatto dall'azienda, esplorando nuove soluzioni tecnologiche alternative. Gli obiettivi della tesi sono sono stati principalmente tre:
+\begin{enumerate}
+\item Identificare gli ambienti di sviluppo pi\`u idonei alla realizzazione del progetto.
+\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione ed abbattere i costi di produzione.
+\item Realizzare una infrastruttura software che fornisse tutti i tool e le librerie necessarie all'implementazione del Passenger Counter realizzato, che potesse essere installato sulla piattaforma hardware fornita da Eurotech.
+\end{enumerate}
+\`E quindi possibile accedere ai dati raccolti da pi\`u dispositivi.
+
+%% Capitolo 2: Contesto tecnologico di dettaglio
+\chapter{Contesto tecnologico di dettaglio}
+Passiamo ora a descrivere pi\`u tecnicamente nel dettaglio le tecnologie utilizzare nello svolgimento della tesi.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
