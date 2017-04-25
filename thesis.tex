@@ -4,6 +4,10 @@
 %% Valori ammessi per target: bach (tesi triennale), mst (tesi magistrale), phd (tesi di dottorato).
 \documentclass[target=mst]{thud}[2014/03/11]
 
+%% Aggiunta pacchetto per inserimento di immagini
+\usepackage{graphicx}
+\graphicspath{ {img/Introduzione/} }
+
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
 \title{Elaborazione di Immagini in ambito Embedded con OpenCV: Passenger Counter}
@@ -60,7 +64,7 @@ Lo sviluppo si \`e diviso in quattro fasi principali:
 %\listoftables
 
 %% Lista delle figure (se presenti)
-%\listoffigures
+\listoffigures
 
 %% Corpo principale del documento
 \mainmatter
@@ -69,17 +73,39 @@ Lo sviluppo si \`e diviso in quattro fasi principali:
 %% La suddivisione in parti è opzionale; talvolta sono sufficienti i capitoli.
 %% \part{Parte}
 
-%% Capitolo
+%% Capitolo 1: Introduzione
 \chapter{Introduzione}
-In hac habitasse platea dictumst. Vestibulum consectetur dictum pellentesque. Suspendisse nunc neque, commodo ac imperdiet nec, sollicitudin vitae libero. Donec bibendum vel nunc vitae pharetra. In vel volutpat odio, et interdum dui. Duis mauris ligula, congue eget molestie at, tincidunt nec diam. Nam vitae eros nec arcu suscipit vehicula. Aliquam consectetur imperdiet elit, eget pretium arcu fringilla at. Maecenas \cite{Knu86} sed libero pulvinar, mattis tortor vel, fermentum enim.
+Nel seguito viene riportato il contesto all'interno del quale si configura l'applicazione sviluppata nel corso della tesi. Quindi verr\`a descritto l'applicazione del Passenger Counter e gli obiettivi di questa tesi. Nel secondo capitolo verr\`a affrontato il contesto tecnologico di dettaglio mentre nel terzo capitolo verr\`a trattata la realizzazione vera e propria dell'applicazione. 
 
-%% Sezione
-\section{Sezione}
-Donec pulvinar neque non lectus vulputate pellentesque. Quisque rutrum arcu velit, in feugiat sapien posuere vel. Praesent metus orci, aliquam ac cursus eget, fermentum a nisl. Etiam eu augue lacus. Nam nisi sapien, mattis sed vehicula non, pellentesque at quam. Sed euismod, dolor nec commodo lobortis, erat erat ultricies eros, bibendum dictum nulla felis in dui. Nulla blandit ultrices arcu, vitae lacinia tellus tempor sit amet. Nulla non tincidunt dolor. In eget luctus sem, sed elementum ligula. Proin elementum adipiscing sem, sit amet ultricies nisl tincidunt eu. Ut lobortis dui quam, et scelerisque erat ultrices sit amet. Sed libero sem, mollis quis euismod quis, suscipit ac justo.
+%% Sezione Contesto IoT
+%% NOTA: L'intera sezione che segue \`e stata presa dalla Wikipedia inglese alla voce: Internet of Things.
+\section{Il contesto IoT}
+L'Internet of Things (IoT) \`e l'internconnesione di device, veicoli, edifici e oggetti dotati di elettronica, software, sensori, attuatori e connettivit\`a che permettono a questi oggetti di raccogliere e scambiare dati. L'IoT permette agli oggetti di essere rilevati e controllati in remoto attraverso l'infrastruttura di rete esistente, creando opportunit\`a per una integrazione pi\`u diretta del mondo fisico all'interno di sistemi informatizzati, con l'obbiettivo di aumentare l'efficienza, la precisione e il beneficio economico riducendo al contempo la necesssit\`a dell'intervento umano. Tipicamente ci si aspetta che l'IoT offra connettivit\`a avanzata tra device, sistemi e servizi che vadano oltre la comunicazione Machine-to-machine (M2M) e coprano una variet\`a di protocolli, domini ed applicazioni. L'obiettivo \`e quello di introdurre processi di automazione in tutti i settori.
 
-%% Sottosezione
-\subsection{Sottosezione}
-Donec cursus tortor eget sem ornare imperdiet. Ut vel orci non ipsum condimentum laoreet vitae ut sapien. Aenean metus mi, vehicula quis turpis nec, porttitor blandit dui. Nullam sed sollicitudin quam. Fusce nisl ante, commodo eget lacus ac, mollis ullamcorper neque. Quisque faucibus dictum nisl, dignissim fermentum sapien fringilla vel. Proin dui velit, molestie sit amet sapien et, pellentesque tristique purus. Curabitur ac quam ac diam varius bibendum.
+%% Storia dell'IoT
+\subsection{Storia dell'Internet of Things}
+Il neologismo inglese Internet of Things \`e stato introdotto per la prima volta da Kevin Ashton, cofondatore e direttore esecutivo di Auto-ID Center (consorzio di ricerca con sede al MIT), durante una presentazione nel 1999, ma il concetto di una rete di device "intelligenti" fu discusso per la prima volta nel 1982, con un distributore di bibite opportunamente modificato per interfacciarsi ad internet dalla Carniegie Mellon University. Esso era capace di riportare il suo inventario e qualora le bibite di cui era appena stato rifornito fossero ancora calde. Tra il 1993 e il 1996 molte aziende cominciarono a proporre soluzioni per l'Internet delle Cose ma \`e solamente dopo il 1999 che il settore cominci\`o ad assumere rilevanza. Le prime applicazioni per questo tipo di concetti erano l'inventariamento degli oggetti all'interno di fabbriche. Ci\`o poteva essere realizzato utilizzando tag RFID (Radio-frequency Identification) che permettessero ai sistemi informatici di identificare e tracciare gli oggetti presenti all'interno di ambienti vasti. Questo tipo di applicazione dell'IoT \`e ormai pratica standard nota come RFID Asset Tracking.
+Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico. La capacit\`a di integrare negli oggetti elettronica, sensori e connettivit\`a wireless ne ha ampliato le capacit\`a e le possibili applicazioni. Nel settore IoT ora convergono molteplici tencologie quali real-time analytics, machine learning, commodity sensors e sistemi embedded.
+
+%% Parte di questa sezione l'ho rubacchiata da wikipedia cercando: Industria 4.0
+\subsection{Sviluppi futuri}
+\begin{figure}
+  \includegraphics[width=\linewidth]{Internet_of_Things.png}
+  \caption{Trend dell'internet of things}
+  \centering
+  \label{fig:trendIoT}
+\end{figure}
+Secondo le proiezioni di Gartner, Inc. una corporation per la ricerca e advisory tecnologica, entro il 2020 ci saranno oltre 20 miliardi di device connesse all'Internet of Things. Si sta parlando di una Industria 4.0 dove l'automazione industriale integra l'IoT per migliorare le condizioni di lavoro e la produttivit\`a. La chiave di volta dell'Industria 4.0 sono i sistemi ciberfisici (CPS), ovvero sistemi fisici che sono strettamente connessi con i sistemi informatici e possono interagire e collaborare con altri sistemi CPS i quali costituiscono lo step evolutivo successivo delle device IoT. 
+Un altro settore nel quale si proiettano ulteriori sviluppi \`e la Big Data Analysis. L'ubiquit\`a dei dispositivi intelligenti connessi all'Internet delle Cose permette analisi di dati vastissimi ai quali precedentemente era impensabile avere accesso. Le informazioni che si possono ricavare da questi dati sono molteplici e di sicuro interesse per molti ambiti di applicazione.
+
+
+%% Classi di applicazioni IoT
+\section{Classi di applicazioni IoT}
+Passiamo ora ad analizzare i campi di applicazione pi\`u diffusi per l'Internet delle Cose.
+
+%% Sezione PCN
+\section{Passenger Counter}
+Bla bla bla
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
