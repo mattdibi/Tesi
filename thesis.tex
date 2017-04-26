@@ -6,7 +6,7 @@
 
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} }
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -414,11 +414,63 @@ Linux Embedded.
 \subsection{Framework OSGi}\label{OSGi}
 In pausa finch\`e non sei sicuro di usarlo.
 
+% Capitolo 3: Corpo della tesi. Sviluppo del progetto: cosa ho fatto e come l'ho fatto.
 \chapter{Sviluppo del progetto}
 In questo capitolo verr\`a riportato come \`e stato affrontato lo sviluppo dell'applicazione e come sono stati affrontati i problemi riscontrati.
 
 \section{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
-Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione.
+Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
+
+% TODO: Approfondire di pi\`u?
+\subsection{Ambiente di sviluppo Xilinx}
+Inizialmente si era pensato di sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo in quanto sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
+
+\subsubsection{Hardware}
+La piattaforma target sarebbe stata una Avnet Zedboard accompagnata dal modulo di espansione per aggiungere una HDMI in input. Specifiche tecniche:
+\begin{itemize}
+\item ZYNQ-7000 SOC XC7Z020-CLG484-1: Dual ARM Cortex-A9 MPCore Up to 667 MHz operation NEON Processing / FPU Engines
+\item Memoria: 512 MB DDR3 256 Mb Quad-SPI Flash Full size SD/MMC card cage 4 GB SD card
+\item Connessioni: 10/100/1000 Ethernet, USB OTG (Device/Host/OTG), USB UART
+\item Espanzione: FMC (Low Pin Count) (5) Pmod headers (2x6)
+\item Video: HDMI output (1080p60 + audio), VGA connector, 128 x 32 OLED
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{Zynq7000.png}
+  \centering
+  \caption{Diagramma del SoC Zynq-7000}
+  \label{fig:Zynq7000}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Piattaforma per lo sviluppo SDSoC}
+La piattaforma per lo sviluppo SDSoC permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
+
+\begin{figure}[h!]
+  \includegraphics[scale=1]{XilinxSDSoC.png}
+  \centering
+  \caption{Schematizzazione workflow SDSoC}
+  \label{fig:SDSoC}
+\end{figure}
+
+Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, e non \`e altro che un subset delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx.
+
+%TODO: Completare
+\subsection{Ambiente di sviluppo x86 Intel - Yocto}
+Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
+
+\subsubsection{Hardware}
+L'azienda ha fornito come piattaforma hardware un ReliGate 20-25.
+
+\subsection{Motivazioni per la scelta finale}
+Si è infine scelto di operare all'interno del secondo sistema di sviluppo per molteplici motivi.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
