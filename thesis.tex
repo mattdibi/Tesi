@@ -79,6 +79,7 @@ Nel seguito viene riportato il contesto all'interno del quale si configura l'app
 
 %% Sezione Contesto IoT
 %% NOTA: L'intera sezione che segue \`e stata presa dalla Wikipedia inglese alla voce: Internet of Things.
+%% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
 \section{Il contesto IoT}
 L'Internet of Things (IoT) \`e l'internconnesione di device, veicoli, edifici e oggetti dotati di elettronica, software, sensori, attuatori e connettivit\`a che permettono a questi oggetti di raccogliere e scambiare dati. L'IoT permette agli oggetti di essere rilevati e controllati in remoto attraverso l'infrastruttura di rete esistente, creando opportunit\`a per una integrazione pi\`u diretta del mondo fisico all'interno di sistemi informatizzati, con l'obbiettivo di aumentare l'efficienza, la precisione e il beneficio economico riducendo al contempo la necesssit\`a dell'intervento umano. Tipicamente ci si aspetta che l'IoT offra connettivit\`a avanzata tra device, sistemi e servizi che vadano oltre la comunicazione Machine-to-machine (M2M) e coprano una variet\`a di protocolli, domini ed applicazioni. L'obiettivo \`e quello di introdurre processi di automazione in tutti i settori.
 
@@ -88,6 +89,7 @@ Il neologismo inglese Internet of Things \`e stato introdotto per la prima volta
 Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico. La capacit\`a di integrare negli oggetti elettronica, sensori e connettivit\`a wireless ne ha ampliato le capacit\`a e le possibili applicazioni. Nel settore IoT ora convergono molteplici tencologie quali real-time analytics, machine learning, commodity sensors e sistemi embedded.
 
 %% Parte di questa sezione l'ho rubacchiata da wikipedia cercando: Industria 4.0
+%% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
 \subsection{Sviluppi futuri}
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{Internet_of_Things.png}
@@ -106,6 +108,7 @@ Un altro settore nel quale si proiettano ulteriori sviluppi \`e la Big Data Anal
 Passiamo ora ad analizzare i campi di applicazione pi\`u diffusi per l'Internet delle Cose.
 
 %% Qui ho rubato da Wikipedia inglese il paragrafo sulle Applications nella pagina dedicata all'IoT
+%% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
 \subsection{Environmental monitoring}
 Le applicazioni di monitoraggio ambientale tipicamente utilizzano sensori collegati all'Internet delle Cose per fornire assistenza nella protezione dell'ambiente. Il monitoraggio pu\`o interessare la qualit\`a dell'aria o dell'acqua, condizioni atmosferiche o del suolo, e pu\`o includere aree come il monitoraggio degli spostamenti della fauna selvatica e del suo habitat. Ci\`o pu\`o avere applicazioni anche nell'ambito della rilevazione di disastri naturali: sistemi di allerta per terremoti e tsunami possono essere implementati nell'ambito IoT. Device IoT in questo campo di applicazione sono tipicamente dislocate su un'ampia area geografica possono anche essere mobili.
 
@@ -135,7 +138,14 @@ L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambit
 \section{Passenger Counter}
 Passiamo ora a contestualizzare il lavoro svolto per questa tesi all'interno dell'ambito IoT.
 
-Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al fornitore dei servizi sfruttando l'Internet delle Cose in modo tale da permettere una gestione pi\`u efficiente della flotta dei mezzi di trasporto. Il dispositivo deve essere in grado di effettuare il conteggio in modo non invasivo e contact-less, tenendo conto delle restrizioni dovute all'ambiente nel quale deve essere applicato.
+Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al gestore del servizio, sfruttando l'Internet delle Cose, in modo tale che sia possibile:
+\begin{itemize}
+\item Rilevare frodi.
+\item Aumentare l'efficienza della flotta di mezzi migliorando la gestione e la programmazione dei percorsi.
+\item Restringere il numero di persone sul mezzo per ragioni di sicurezza.
+\item Analizzare i flussi di traffico all'interno delle citt\`a.
+\end{itemize}
+Il dispositivo deve essere in grado di effettuare il conteggio in modo non invasivo e contact-less, tenendo conto delle restrizioni dovute all'ambiente nel quale deve essere applicato.
 
 \begin{figure}[h!]
   \includegraphics[width=9cm]{PassengerCountersz.jpg}
@@ -182,6 +192,9 @@ Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utili
   \label{fig:PCNEurotechHardware}
 \end{figure}
 
+%% Interruzione di pagina
+\newpage
+
 \subsection{Hardware}
 Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione delle immagini.
 
@@ -200,17 +213,56 @@ Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la 
 %% Interruzione di pagina
 \newpage
 
-\subsection{Software}
+\subsection{Algoritmo per il tracciamento dei passeggeri}
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{Algoritmo.png}
+  \includegraphics[scale=0.75]{Algoritmov2.png}
   \centering
   \caption{Schematizzazione funzionamento algoritmo tracciamento passeggeri}
   \label{fig:SchemAlgrTrackPCNEurotech}
 \end{figure}
 
+%% TODO: Chiedere al prof se il conteggio viene effettuato sul ReliGate o sul DynaPCN
+L'unit\`a di elaborazione centrale si vede arrivare in ingresso una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
+Il cuore dell'algoritmo opera come segue:
+\begin{enumerate}
+\item Vengono rilevati i massimi locali all'interno dell'imagine in scala di grigi, i quali rappresentano le teste delle persone.
+\item Traccia la posizione nel tempo di questi massimi locali all'interno del flusso di immagini.
+\item Rileva quando questi massimi locali attraversano una linea di demarcazione virtuale, la quale indica l'ingresso o uscita dalla soglia e aggiorna i contatori.
+\end{enumerate}
+In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione di quanto accade durante il conteggio.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Infrastruttura software}
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{SoftwareStack.png}
+  \centering
+  \caption{Schematizzazione stack software del sistema di Passenger Counting}
+  \label{fig:StackSoftwarePCNEurotech}
+\end{figure}
+
+La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto. \textbf{(inserire riferimento al paragrafo in cui parlo di Yocto)} Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. \textbf{(inserire riferimento al paragrafo in cui parlo di OSGi)}. Su questo framework \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\`e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessari alla nuova versione del Passenger Counter.
 
 \subsection{Problematiche di questa soluzione}
+Questa soluzione non \`e per\`o esente da problematiche:
+
+\begin{enumerate}
+\item Le ottiche del dispositivo di acquisizione delle immagini sono costose e difficili da reperire.
+\item L'utilizzo di una FPGA per la ricostruzione delle informazioni di profondit\`a fa aumentare i costi di produzione.
+\item Per come \`e stata implementata la soluzione \`e necessario installare una unit\`a computazionale per dispositivo di acquisizione delle immagini. Anche questo contribuisce ad aumentare i costi di produzione di un sistema PCN.
+\end{enumerate}
+
+Vedremo che nella versione del Passenger Counter realizzata nel corso di questa tesi sono stati risolti in buona parte tutte queste problematiche, con vari gradi di successo.
+
+%% Interruzione di pagina
+\newpage
+
+\section{Tecnologie utilizzate durante lo sviluppo della tesi}
+In questa sezione andremo ad esaminare le tecnologie che sono state utilizzate per realizzare la nuova versione del Passenger Counter.
 
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
