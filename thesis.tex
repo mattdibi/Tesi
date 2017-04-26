@@ -245,7 +245,7 @@ In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione
   \label{fig:StackSoftwarePCNEurotech}
 \end{figure}
 
-La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto. \textbf{(inserire riferimento al paragrafo in cui parlo di Yocto)} Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. \textbf{(inserire riferimento al paragrafo in cui parlo di OSGi)}. Su questo framework \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per affrondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi (Per affrondire questo framework si veda il paragrafo \ref{OSGi}). Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
 Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\`e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessari alla nuova versione del Passenger Counter.
 
 %% Interruzione di pagina
@@ -358,7 +358,7 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 
 %% Copiato spudoratamente dalla mia presentazione su OpenCV.
 %% TODO: Migliorare il contenuto di questa sezione
-\subsection{Libreria per l'image processing: OpenCV}
+\subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
 Siccome una parte centrale della tesi verteva sull'elaborazione delle immagini \`e stato necessario integrare nel progetto l'uso della libreria OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
 OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali contiene pi\`u di 500 funzioni pre-ottimizzate per le operazioni di image processing pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
@@ -382,7 +382,7 @@ L'approccio modulare permette alle funzioni contenute nei vari moduli di essere 
 
 %% Copiato spudoratamente dalla mia presentazione su Yocto.
 %% TODO: Migliorare il contenuto di questa sezione
-\subsection{Yocto Project}
+\subsection{Yocto Project}\label{Yocto}
 Yocto Project \`e un insieme di strumenti che vanno a creare immagini di sistemi operativi per sistemi Linux
 embedded corredati da toolchain di crosscompilazione, emulatori ecc ecc. Non \`e una distribuzione Linux
 embedded, ma permette di crearne una custom per la propria piattaforma hardware.
@@ -411,7 +411,7 @@ Linux Embedded.
 %% Interruzione di pagina
 \newpage
 
-\subsection{Framework OSGi}
+\subsection{Framework OSGi}\label{OSGi}
 In pausa finch\`e non sei sicuro di usarlo.
 
 \chapter{Sviluppo del progetto}
