@@ -6,7 +6,7 @@
 
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} }
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -136,8 +136,6 @@ L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambit
 
 %% Sezione PCN
 \section{Passenger Counter}
-Passiamo ora a contestualizzare il lavoro svolto per questa tesi all'interno dell'ambito IoT.
-
 Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al gestore del servizio, sfruttando l'Internet delle Cose, in modo tale che sia possibile:
 \begin{itemize}
 \item Rilevare frodi.
@@ -155,6 +153,9 @@ Il dispositivo deve essere in grado di effettuare il conteggio in modo non invas
 \end{figure}
 
 Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni e con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo di comunicare tra loro trasferendo le informazioni rilevanti alle business application ed alle infrastrutture IT. Il PCN o Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
+
+%% Interruzione di pagina
+\newpage
 
 \begin{figure}[h!]
   \includegraphics[width=\textwidth]{SchemaPCNIoT.png}
@@ -264,6 +265,87 @@ Vedremo che nella versione del Passenger Counter realizzata nel corso di questa 
 \section{Tecnologie utilizzate durante lo sviluppo della tesi}
 In questa sezione andremo ad esaminare le tecnologie che sono state utilizzate per realizzare la nuova versione del Passenger Counter.
 
+%%TODO: Aggiungere nella bibliografia i riferimenti ai Datasheet delle telecamere
+\subsection{Telecamere Intel RealSense}
+Come dispositvi di acquisizione delle immagini sono state utilizzate le telecamere Intel RealSense. Esse sono telecamere ad infrarossi di nuova generazione che permettono la ricostruzione delle informazioni di profondit\`a della scena filmata sfruttando diverse tecniche di elaborazione delle immagini.
+
+\subsubsection{Intel RealSense R200}
+
+\begin{figure}[h!]
+  \includegraphics[width=.49\textwidth]{R200.jpg}
+  \includegraphics[width=.49\textwidth]{r200_module.png}
+  \centering
+  \caption{Telecamera R200}
+  \label{fig:R200}
+\end{figure}
+
+Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a dovuta alla visione della stessa scena da due punti di vista differenti. Per ottenere una ricostruzione delle informazioni in realtime \`e stato usato un circuito ASIC per raggiungere le prestazioni desiderate.
+
+Specifiche tecniche:
+
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+	\hline
+	& Depth Stream & Color Stream \\ \hline
+	Risoluzione massima & 640 x 480 & 1920 x 1080 \\ \hline
+    Frame rate massimo & 90fps & 60fps \\ \hline
+    FOV (WxH) & 56 x 43 & 70 x 43 \\ \hline
+    Indoor Range & 0.7 - 3.5m & - \\ \hline
+    OutdoorRange & 10m & - \\
+    \hline
+	\end{tabular}
+\end{center}
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Intel RealSense SR300}
+
+\begin{figure}[h!]
+  \includegraphics[width=.49\textwidth]{SR300.jpg}
+  \includegraphics[width=.49\textwidth]{SR300_module.png}
+  \centering
+  \caption{Telecamera SR300}
+  \label{fig:SR300}
+\end{figure}
+
+La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. Il proiettore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti ed ottenere altre informazioni sulla superficio. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera.
+Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando un circuito ASIC.
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{DepthDataFlowSR300.png}
+  \centering
+  \caption{Schema funzionamento Intel RealSense SR300}
+  \label{fig:SchemaFunzSR300}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+Specifiche tecniche:
+
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+	\hline
+	& Depth Stream & Color Stream \\ \hline
+	Risoluzione massima & 640 x 480 & 1920 x 1080 \\ \hline
+    Frame rate massimo & 60fps & 60fps \\ \hline
+    FOV (WxH) & 71 x 55  & 68 x 41 \\ \hline
+    Indoor Range & 0.2 - 1.5m & - \\ \hline
+    OutdoorRange & - & - \\
+    \hline
+	\end{tabular}
+\end{center}
+
+\subsubsection{Formato immagine}
+Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria librealsense. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
+
+Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. 
+\`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
+
+%%TODO: Aggoungere:
+%% - Problemi della scala: in SW la R200 ha un range massimo di 65metri e la SR300 di 2m. Spiegare
+%% - Problemi del formato: pixel privi di dati sono posti a 0
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
