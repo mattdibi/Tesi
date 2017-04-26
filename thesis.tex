@@ -340,16 +340,18 @@ Specifiche tecniche:
 	\end{tabular}
 \end{center}
 
-\subsubsection{Formato immagine}
-Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria librealsense\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
+\subsubsection{Libreria e formato immagine}
+Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
 
-Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. 
-\`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
+Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
+Vi \`e una eccezione a questa codifica in quanto, il valore del pixel 0, \`e attribuito ai pixel per i quali non \`e stato possibile ricavare informazione sulla distanza, ci\`o pu\`o essere dovuto a problemi di range o esposizione dell'immagine.
 
-%%TODO
-TODO: Aggiungere:
- - Problemi della scala: in SW la R200 ha un range massimo di 65metri e la SR300 di 2m. Spiegare
- - Problemi del formato: pixel privi di dati sono posti a 0
+Vi sono per\`o delle minime differenze tra le due telecamere per quanto riguarda la risoluzione della distanza calcolata:
+\begin{itemize}
+\item Per la Intel RealSense SR300: il formato dello stream di profondit\`a \`e di 16 bit privi di segno interpolati su un range di 8m nonostante il range della telecamere arrivi ad un massimo di 1,5m. Ci\`o implica che la risoluzione della profondit\`a sia 0,125mm. 
+\item Per la Intel RealSense R200: il formato \`e di 16 bit privi di segno interpolati su un range di circa 65m. Ci\`o implica una risoluzione di profondit\`a di 1mm.
+\end{itemize}
+Questo fatto non ha per\`o comportato problemi dal punto di vista della funzionalit\`a dell'applicazione in quanto la risoluzione e precisione delle telecamere non \`e critica per il corretto funzionamento del contatore.
 
 %% Interruzione di pagina
 \newpage
@@ -359,11 +361,11 @@ TODO: Aggiungere:
 \subsection{Libreria per l'image processing: OpenCV}
 Siccome una parte centrale della tesi verteva sull'elaborazione delle immagini \`e stato necessario integrare nel progetto l'uso della libreria OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
-OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). La libreria ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
+OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali contiene pi\`u di 500 funzioni pre-ottimizzate per le operazioni di image processing pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
 Moduli principali e finalit\`a:
 \begin{itemize}
-\item core: funzionalità di base.
+\item core: funzionalit\`a di base.
 \item imgproc: image processing.
 \item imgcodecs: lettura e scrittura di file di tipo immagine.
 \item videoio: lettura e scrittura di file di tipo video.
@@ -373,16 +375,18 @@ Moduli principali e finalit\`a:
 \item ml: Machine Learning Library (MLL).
 \end{itemize}
 
-L'approccio modulare permette alle funzioni contenute nei vari moduli di essere riutilizzate negli altri per ottenere un approccio più ad alto livello. Le funzioni viste in un modulo sono spesso utilizzate in congiunzione e come supporto degli altri moduli. Un esempio tipico è l'applicazione del filtro Sobel (modulo imgproc) per la rilevazione dei contorni delle figure per aiutare il rilevamento di oggetti (modulo objdetect). Un altro esempio è l'applicazione di filtri per il pre-processing di un training set prima di essere dato in pasto all'algoritmo di machine learning per l'estrazione di feature significative che migliorino l'apprendimento.
+L'approccio modulare permette alle funzioni contenute nei vari moduli di essere riutilizzate negli altri per ottenere un approccio pi\`u ad alto livello. Le funzioni viste in un modulo sono spesso utilizzate in congiunzione e come supporto degli altri moduli. Un esempio tipico \`e l'applicazione del filtro Sobel (modulo imgproc) per la rilevazione dei contorni delle figure per aiutare il rilevamento di oggetti (modulo objdetect). Un altro esempio \`e l'applicazione di filtri per il pre-processing di un training set prima di essere dato in pasto all'algoritmo di machine learning per l'estrazione di feature significative che migliorino l'apprendimento.
 
 %% Interruzione di pagina
 \newpage
 
+%% Copiato spudoratamente dalla mia presentazione su Yocto.
+%% TODO: Migliorare il contenuto di questa sezione
 \subsection{Yocto Project}
-Yocto Project è un insieme di strumenti che vanno a creare immagini di sistemi operativi per sistemi Linux
-embedded corredati da toolchain di crosscompilazione, emulatori ecc ecc. Non è una distribuzione Linux
+Yocto Project \`e un insieme di strumenti che vanno a creare immagini di sistemi operativi per sistemi Linux
+embedded corredati da toolchain di crosscompilazione, emulatori ecc ecc. Non \`e una distribuzione Linux
 embedded, ma permette di crearne una custom per la propria piattaforma hardware.
-Yocto Project è quindi un ombrello sotto il quale si raccolgo vari sotto-progetti volti allo sviluppo di sistemi
+Yocto Project \`e quindi un ombrello sotto il quale si raccolgo vari sotto-progetti volti allo sviluppo di sistemi
 Linux Embedded.
 
 \begin{figure}[h!]
@@ -395,14 +399,26 @@ Linux Embedded.
 \subsubsection{Componenti del progetto}
 
 \begin{itemize}
-\item OpenEmbedded: è un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system è basato su ricette BitBake.
-\item BitBake: è un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette. è uno dei componenti fondamentali di Yocto Project.
-\item Ricette BitBake: Le ricette BitBake si comportano come le ebuild di Gentoo Linux, ovvero sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinchè sia possibile installarli sulla target device.
+\item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
+\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
+\item Ricette BitBake: Le ricette BitBake si comportano come le ebuild di Gentoo Linux, ovvero sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target device.
 \item OpenEmbedded Core(OE-Core): \`e l'insieme base di metadati che usa BitBake.
 \item Sato reference User Interface: UI opzionale basata su GTK+ per l'utilizzo su device con schermo dalle dimensioni limitate, inclusa in OE-Core.
 \item Board Support Package (BSP): \`e una collezione di informazioni che definisce come supportare un particolare tipo di hardware platform. Il BSP include informazioni a riguardo di: hardware presente, configurazione del kernel e driver per hardware addizionale
-\item Poky: è una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded Core) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata. In pratica fa da distribuzione template.
+\item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded Core) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata. In pratica fa da distribuzione template.
 \end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Framework OSGi}
+In pausa finch\`e non sei sicuro di usarlo.
+
+\chapter{Sviluppo del progetto}
+In questo capitolo verr\`a riportato come \`e stato affrontato lo sviluppo dell'applicazione e come sono stati affrontati i problemi riscontrati.
+
+\section{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
+Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
