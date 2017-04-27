@@ -479,12 +479,12 @@ In questo capitolo verr\`a riportato come \`e stato affrontato lo sviluppo dell'
 \section{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
 Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
 
-% TODO: Approfondire di pi\`u?
 \subsection{Ambiente di sviluppo Xilinx}
-Inizialmente si era pensato di sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo in quanto sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
+Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possible sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
 \subsubsection{Hardware}
-La piattaforma target sarebbe stata una Avnet Zedboard accompagnata dal modulo di espansione per aggiungere una HDMI in input. Specifiche tecniche:
+La piattaforma target sarebbe stata una Avnet Zedboard. Specifiche tecniche:
+% Migliorare l'aspetto di queste specifiche. Meglio una tabella?
 \begin{itemize}
 \item ZYNQ-7000 SOC XC7Z020-CLG484-1: Dual ARM Cortex-A9 MPCore Up to 667 MHz operation NEON Processing / FPU Engines
 \item Memoria: 512 MB DDR3 256 Mb Quad-SPI Flash Full size SD/MMC card cage 4 GB SD card
@@ -492,14 +492,12 @@ La piattaforma target sarebbe stata una Avnet Zedboard accompagnata dal modulo d
 \item Espanzione: FMC (Low Pin Count) (5) Pmod headers (2x6)
 \item Video: HDMI output (1080p60 + audio), VGA connector, 128 x 32 OLED
 \end{itemize}
-
-%% Interruzione di pagina
-\newpage
+Purtroppo, avendo la scheda una sola porta HDMI disponibile solo in output \`e stato necessario procurarsi un modulo aggiuntivo da collegarsi all'header FMC per avere a disposizione anche una porta HDMI in ingresso.
 
 In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{Zynq7000.png}
+  \includegraphics[width=\textwidth]{Zynq7000.jpg}
   \centering
   \caption{Diagramma del SoC Zynq-7000}
   \label{fig:Zynq7000}
@@ -511,10 +509,12 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 \subsubsection{Piattaforma per lo sviluppo SDSoC}
 La piattaforma per lo sviluppo SDSoC permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
 
+SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, \`e possibile eseguire l'applicazione sull'ARM Cortex ed eseguire le task pi\`u pesanti dal punto di vista computazionale sulla FPGA.
+
 \begin{figure}[h!]
   \includegraphics[scale=1]{XilinxSDSoC.png}
   \centering
-  \caption{Schematizzazione workflow SDSoC}
+  \caption{Workflow SDSoC}
   \label{fig:SDSoC}
 \end{figure}
 
