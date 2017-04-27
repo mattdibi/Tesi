@@ -357,25 +357,55 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 \newpage
 
 %% Copiato spudoratamente dalla mia presentazione su OpenCV.
-%% TODO: Migliorare il contenuto di questa sezione
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
 Siccome una parte centrale della tesi verteva sull'elaborazione delle immagini \`e stato necessario integrare nel progetto l'uso della libreria OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
-OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali contiene pi\`u di 500 funzioni pre-ottimizzate per le operazioni di image processing pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
+OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di image processing, comupter visione e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
-Moduli principali e finalit\`a:
+\subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
-\item core: funzionalit\`a di base.
-\item imgproc: image processing.
-\item imgcodecs: lettura e scrittura di file di tipo immagine.
-\item videoio: lettura e scrittura di file di tipo video.
-\item highui: High-level GUI e Media I/O.
-\item video: analisi video.
-\item objdetect: rilevazione di oggetti (fa leva su SVM e Cascade Classification).
-\item ml: Machine Learning Library (MLL).
+\item \textbf{Modulo core}: funzionalit\`a di base. Lo scopo del modulo \`e  definire interfacce e funzionalità che permettano di semplificare la manipolazione di immagini e flussi video. Il modulo contiene le funzionalità di  base delle libreria e ne definisce le strutture fondamentali nonch\'e gestisce la memoria. 
+\item \textbf{Modulo highui}: High-level GUI e Media I/O. l modulo HighGUI \`e stato progettato per fornire funzioni che permettano di provare le funzionalit\`a della libreria ed osservare i risultati velocemente. Fornisce semplici interfacce per creare e manipolare finestre che possano visualizzare immagini e aggiungere slider alle finestre, gestire semplici eventi come click del mouse e comandi da tastiera.
+\item \textbf{Modulo imgproc}: image processing. Il modulo di Image Processing contiene funzioni e classi per la manipolazione di immagini. Ci\`o comprende:
+    \begin{itemize}
+    \item Image Filtering: funzioni per la convoluzione di immagini con un kernel, dilatazione di immagini, filtro Sobel, GaussianBlur ecc...
+    \item Trasformazioni geometriche: ridimensionamenti, warping ecc...
+    \item Funzioni per il disegno: permettono di disegnare semplici forme sulle immagini che vengono manipolate
+    \item Funzioni per l'analisi delle immagini: istogrammi, analisi strutturale e descrittori di forme, motion analysis e tracking di oggetti.
+    \end{itemize}
+\item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\`e analisi di video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
+\item \textbf{Modulo objdetect}: rilevazione di oggetti. Implementa funzioni e classi per il rilevamento e tracciamento di oggetti all'interno di immagini e flussi video. OpenCV ottiene tutto ci\`o facendo leva sui Haar Feature-based Cascade Classifier e Histogram of Oriented Gradients object detector.
+\item \textbf{Modulo ml}: machine learning. La Machine Learning Library (MLL) \`e un insieme di classi e funzioni per la classificazione statistica, regressione e clustering dei dati. La maggior parte degli algoritmi di classificazione e regressione sono implementati come classi C++. Algoritmi implementati dal modulo:
+    \begin{itemize}
+    \item Artificial Neural Networks ¿ Multi-Layer Perceptrons.
+    \item Tree Classifier.
+    \item Expectation Maximization algorithm.
+    \item K-nearest Neighbors model.
+    \item Logistic Regression.
+    \item Normal Bayes Classifier.
+    \item Support Vector Machines (SVM).
+    \item Random forest predictor.
+    \item Sochastic Gradient Descent SVM classifier.
+    \end{itemize}
 \end{itemize}
 
-L'approccio modulare permette alle funzioni contenute nei vari moduli di essere riutilizzate negli altri per ottenere un approccio pi\`u ad alto livello. Le funzioni viste in un modulo sono spesso utilizzate in congiunzione e come supporto degli altri moduli. Un esempio tipico \`e l'applicazione del filtro Sobel (modulo imgproc) per la rilevazione dei contorni delle figure per aiutare il rilevamento di oggetti (modulo objdetect). Un altro esempio \`e l'applicazione di filtri per il pre-processing di un training set prima di essere dato in pasto all'algoritmo di machine learning per l'estrazione di feature significative che migliorino l'apprendimento.
+La struttura fondamentale della libreria \`e l'oggetto Mat, il quale \`e usato come contenitore delle immagini. Esso \`e una classe C++ formata da due componenti principali
+\begin{itemize}
+\item L¿header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
+\item La matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc¿)
+\end{itemize}
+Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile.
+
+\subsubsection{Storia}
+Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa Intel finalizzata all'avanzamento delle applicazioni CPU-intensive che includeva ray tracing real-time e display 3D. Inizialmente le finalit\`a del progetto erano descritte come:
+\begin{itemize}
+\item Permettere l'avanzamento della computer vision fornendo non solo una libreria di codice open-source ma anche pre ottimizzato per costruire l'infrastruttura base di applicazioni di computer visione.
+\item Condividere conoscenza sulla computer vision fornendo una infrastruttura comune sulla quale tutti gli sviluppatori potessero costruire.
+\item Far avanzare le applicazioni commerciali basate sulla computer vision rendendo il codice portabile, ottimizzato per le performance.
+\end{itemize}
+Ad oggi il supporto al progetto \`e dato dall'organizzazione no-profit OpenCV.org, la quale mantiene uno sviluppatore e un sito per la documentazione. La libreria \`e ormai lo standard de facto per le applicazioni di computer vision e image processing, vista la sua diffusione e la community molto attiva.
+
+Per lo sviluppo dell'applicazione di Passenger Counter la scelta di utilizzare questa libreria \`e stata quasi obbligata visto l'ottimo supporto e diffusione della libreria. Inoltre la vasta portabilit\`a e l'attenzione alle performance la rendono applicabile anche al caso embedded real-time.
 
 %% Interruzione di pagina
 \newpage
