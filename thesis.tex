@@ -282,6 +282,7 @@ Come dispositvi di acquisizione delle immagini sono state utilizzate le telecame
   \label{fig:R200}
 \end{figure}
 
+%% TODO: Migliorare spiegazione funzionamento ricostruzione 3D stereoscopico. Scarica immagine che schematizzi funzionamento.
 Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a dovuta alla visione della stessa scena da due punti di vista differenti. Per ottenere una ricostruzione delle informazioni in realtime \`e stato usato un circuito ASIC per raggiungere le prestazioni desiderate.
 
 Specifiche tecniche:
@@ -377,7 +378,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 \item \textbf{Modulo objdetect}: rilevazione di oggetti. Implementa funzioni e classi per il rilevamento e tracciamento di oggetti all'interno di immagini e flussi video. OpenCV ottiene tutto ci\`o facendo leva sui Haar Feature-based Cascade Classifier e Histogram of Oriented Gradients object detector.
 \item \textbf{Modulo ml}: machine learning. La Machine Learning Library (MLL) \`e un insieme di classi e funzioni per la classificazione statistica, regressione e clustering dei dati. La maggior parte degli algoritmi di classificazione e regressione sono implementati come classi C++. Algoritmi implementati dal modulo:
     \begin{itemize}
-    \item Artificial Neural Networks ¿ Multi-Layer Perceptrons.
+    \item Artificial Neural Networks / Multi-Layer Perceptrons.
     \item Tree Classifier.
     \item Expectation Maximization algorithm.
     \item K-nearest Neighbors model.
@@ -391,10 +392,10 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 
 La struttura fondamentale della libreria \`e l'oggetto Mat, il quale \`e usato come contenitore delle immagini. Esso \`e una classe C++ formata da due componenti principali
 \begin{itemize}
-\item L¿header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
-\item La matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc¿)
+\item L'header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
+\item La matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc...)
 \end{itemize}
-Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile.
+Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile questa conversione \`e garantita dal modulo imgcodecs, la quale funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo Mat.
 
 \subsubsection{Storia}
 Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa Intel finalizzata all'avanzamento delle applicazioni CPU-intensive che includeva ray tracing real-time e display 3D. Inizialmente le finalit\`a del progetto erano descritte come:
@@ -405,38 +406,60 @@ Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa 
 \end{itemize}
 Ad oggi il supporto al progetto \`e dato dall'organizzazione no-profit OpenCV.org, la quale mantiene uno sviluppatore e un sito per la documentazione. La libreria \`e ormai lo standard de facto per le applicazioni di computer vision e image processing, vista la sua diffusione e la community molto attiva.
 
-Per lo sviluppo dell'applicazione di Passenger Counter la scelta di utilizzare questa libreria \`e stata quasi obbligata visto l'ottimo supporto e diffusione della libreria. Inoltre la vasta portabilit\`a e l'attenzione alle performance la rendono applicabile anche al caso embedded real-time.
+Per lo sviluppo dell'applicazione di Passenger Counter la scelta di utilizzare questa libreria \`e stata quasi obbligata visto l'ottimo supporto e diffusione della libreria. Inoltre la vasta portabilit\`a e l'attenzione alle performance la rendono particolarmente adatto al caso embedded real-time.
 
 %% Interruzione di pagina
 \newpage
 
 %% Copiato spudoratamente dalla mia presentazione su Yocto.
 %% TODO: Migliorare il contenuto di questa sezione
-\subsection{Yocto Project}\label{Yocto}
-Yocto Project \`e un insieme di strumenti che vanno a creare immagini di sistemi operativi per sistemi Linux
-embedded corredati da toolchain di crosscompilazione, emulatori ecc ecc. Non \`e una distribuzione Linux
-embedded, ma permette di crearne una custom per la propria piattaforma hardware.
-Yocto Project \`e quindi un ombrello sotto il quale si raccolgo vari sotto-progetti volti allo sviluppo di sistemi
-Linux Embedded.
+\subsection{Ambiente di sviluppo per l'OS: Yocto Project}\label{Yocto}
+Per integrare nella piattaforma target gli strumenti necessari al funzionamento dell'applicativo \`e stato necessario realizzare una distribuzione Linux customizzata adatta alle nostre esigenze. Per farlo \`e stato utilizzato il progetto Yocto, standard industriale de facto per realizzare distribuzioni Linux embedded.
+
+Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi embedded, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Yocto Project \`e quindi un ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux embedded.
+
+Le architettura supportate dal progetto sono le pi\`u diffuse nell'ambito embedded: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
+
+OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette.
+
+\subsubsection{Componenti del progetto Yocto}
+\begin{itemize}
+\item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
+\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
+\item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata.
+\item Layers: il build system del progetto Yocto \`e composto da layer. I layer sono una collezione logica di ricette che rappresentano stack di applicazioni o Board Support Packaged (BSP). I BSP contengono i pacchetti e i driver fondamentali necessari per costruire una distribuzione Linux per una specifica board o architettura. Solitamente questi BSP sono mantenuti dai produttori dell'hardware e sono l'interfaccia tra l'OS e l'hardware che lo esegue.
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
 
 \begin{figure}[h!]
   \includegraphics[width=\textwidth]{yocto-environment.png}
   \centering
-  \caption{Ambiente di sviluppo Yocto}
-  \label{fig:AmbienteYocto}
+  \caption{Workflow progetto Yocto}
+  \label{fig:WorkflowYocto}
 \end{figure}
 
-\subsubsection{Componenti del progetto}
+\subsubsection{Processo di build di una distribuzione}
+Dopo aver configurato e lanciato il processo di build il build system provvede ad eseguire le seguenti operazioni per ogni pacchetto e applicazione che si desidera installare:
+\begin{enumerate}
+\item Recupera autonomamente i sorgenti remoti e locali.
+\item Procede alla cross-compilazione dei sorgenti.
+\item Genera i file .deb/.rpm/.ipk dipendentemente dalla configurazione.
+\end{enumerate}
+Una volta che sono stati generati tutti i pacchetti richiesti procede alla generazione dell'immagine della distribuzione, genera quindi il filesystem, installa i pacchetti e genera l'immagine che pu\`o essere eseguita sulla macchina target. In seguito \`e possibile generare la toolchain per la cross-compilazione di sorgenti per l'immagine della macchina target, questo processo generer\`a un piccolo installer il quale installer\`a la toolchain nella macchina dedicata allo sviluppo delle applicazioni per la piattaforma target.
 
-\begin{itemize}
-\item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
-\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
-\item Ricette BitBake: Le ricette BitBake si comportano come le ebuild di Gentoo Linux, ovvero sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target device.
-\item OpenEmbedded Core(OE-Core): \`e l'insieme base di metadati che usa BitBake.
-\item Sato reference User Interface: UI opzionale basata su GTK+ per l'utilizzo su device con schermo dalle dimensioni limitate, inclusa in OE-Core.
-\item Board Support Package (BSP): \`e una collezione di informazioni che definisce come supportare un particolare tipo di hardware platform. Il BSP include informazioni a riguardo di: hardware presente, configurazione del kernel e driver per hardware addizionale
-\item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded Core) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata. In pratica fa da distribuzione template.
-\end{itemize}
+%% Interruzione di pagina
+\newpage
+
+Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario realizzare l'immagine della distribuzione Linux opportunamente modificata e la toolchain di cross-sviluppo prima di cominciare lo sviluppo dell'applicazione. Una volta completati questi passaggi si \`e potuti passare allo sviluppo dell'applicazione sulla SDKMachine. Siccome si \`e passati attraverso diverse tecnologie il processo \`e stato ripetuto pi\`u volte per poter integrare le nuove tecnologie all'interno della toolchain.
+
+\begin{figure}[h!]
+  \includegraphics[scale=1]{cross-development-toolchains.png}
+  \centering
+  \caption{Toolchain di cross-sviluppo del progetto Yocto}
+  \label{fig:ToolchainYocto}
+\end{figure}
 
 %% Interruzione di pagina
 \newpage
