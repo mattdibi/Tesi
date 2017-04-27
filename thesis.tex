@@ -495,15 +495,17 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
 Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possible sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
 \subsubsection{Hardware}
-La piattaforma target sarebbe stata una Avnet Zedboard. Specifiche tecniche:
+La piattaforma target sarebbe stata una Avnet Zedboard.
+
+Specifiche tecniche:
 
 \begin{center}
 	\begin{tabular}{|c|c|}
 	\hline
-    ZYNQ-7000 SOC XC7Z020-CLG484-1 & Dual ARM Cortex-A9 MPCore \\ \hline
-    Memoria & 512 MB DDR3 \\ \hline
-    Espanzione & FMC (Low Pin Count) (5) Pmod headers (2x6) \\ \hline
-    Video & HDMI output (1080p60 + audio), VGA connector \\
+    ZYNQ-7000 SOC XC7Z020 & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
+    Memoria & 512 MB DDR3 + 256 Mb Quad-SPI Flash + 4GB SD card \\ \hline
+    Espansione & FMC (Low Pin Count) + Pmod headers (2x6) \\ \hline
+    Video & HDMI output (1080p60 + audio) + VGA \\
     \hline
 	\end{tabular}
 \end{center}
@@ -539,13 +541,13 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
 %% Interruzione di pagina
 \newpage
 
-%TODO: Completare
-\subsection{Ambiente di sviluppo x86 Intel - Yocto}
+%TODO: Approfondire?
+\subsection{Ambiente di sviluppo Intel - Yocto}
 
 \begin{center}
 	\begin{tabular}{|c|c|}
 	\hline
-	Hardware & Eurotech ReliGate 20-25 \\ \hline
+	Hardware & Eurotech ReliaGate 20-25 \\ \hline
 	Acquisizione video & Webcam - Telecamere Intel RealSense \\ \hline
     Ambiente di sviluppo & Toolchain generata con Yocto \\ \hline
     Piattaforma software & Distribuzione Linux custom Poky \\
@@ -556,10 +558,47 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
 Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
 \subsubsection{Hardware}
-L'azienda ha fornito come piattaforma hardware un ReliGate 20-25.
+L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le telecamere Intel RealSense.
+
+\begin{figure}[h!]
+  \includegraphics[scale=0.5]{ReliaGATE2025.jpg}
+  \centering
+  \caption{ReliaGate 20-25}
+  \label{fig:ReliGate2025}
+\end{figure}
+
+Specifiche tecniche:
+
+\begin{center}
+	\begin{tabular}{|c|c|}
+	\hline
+    ReliaGate 20-25-33 & Processore Intel E3827 Dual Core 1.75GHz x86-64 \\ \hline
+    Memoria & 2GB 1333MHz DDR3L ECC + 8GB eMMC \\ \hline
+    Connettivit\`a & 1x USB 3.0 + 2x USB 2.0 + 2x RS-232/RS-422/RS-485 \\ \hline
+    Video & mini DisplayPort \\
+    \hline
+	\end{tabular}
+\end{center}
+
+%% Interruzione di pagina
+\newpage
 
 \subsection{Motivazioni per la scelta finale}
-Si è infine scelto di operare all'interno del secondo sistema di sviluppo per molteplici motivi.
+Si è infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
+\begin{itemize}
+\item Flessibilit\`a: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
+\item Completezza: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate.
+\item Performance: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
+\item Compatibilit\`a: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime.
+\end{itemize}
+
+Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
+
+%% Interruzione di pagina
+\newpage
+
+\section{Passenger Counter con sottrazione del background}
+In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. \`E per\`o stata fondamentale per la versione successiva, facente uso delle telecamere RealSense.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
