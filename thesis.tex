@@ -282,8 +282,14 @@ Come dispositvi di acquisizione delle immagini sono state utilizzate le telecame
   \label{fig:R200}
 \end{figure}
 
-%% TODO: Migliorare spiegazione funzionamento ricostruzione 3D stereoscopico. Scarica immagine che schematizzi funzionamento.
-Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a dovuta alla visione della stessa scena da due punti di vista differenti. Per ottenere una ricostruzione delle informazioni in realtime \`e stato usato un circuito ASIC per raggiungere le prestazioni desiderate.
+Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{DepthDataFlowR200.png}
+  \centering
+  \caption{Schema funzionamento Intel RealSense R200}
+  \label{fig:SchemaFunzR200}
+\end{figure}
 
 Specifiche tecniche:
 
