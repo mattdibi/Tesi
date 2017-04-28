@@ -6,7 +6,7 @@
 
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} }
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -60,11 +60,11 @@ Lo sviluppo si \`e diviso in quattro fasi principali:
 %% Indice
 \tableofcontents
 
-%% Lista delle tabelle (se presenti)
-%\listoftables
-
 %% Lista delle figure (se presenti)
 \listoffigures
+
+%% Lista delle tabelle (se presenti)
+\listoftables
 
 %% Corpo principale del documento
 \mainmatter
@@ -311,7 +311,8 @@ Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurote
 
 Specifiche tecniche:
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|c|}
 	\hline
 	& Depth Stream & Color Stream \\ \hline
@@ -322,7 +323,8 @@ Specifiche tecniche:
     OutdoorRange & 10m & - \\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Specifiche tecniche Intel RealSense R200}
+\end{table}
 
 %% Interruzione di pagina
 \newpage
@@ -352,7 +354,8 @@ Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando
 
 Specifiche tecniche:
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|c|}
 	\hline
 	& Depth Stream & Color Stream \\ \hline
@@ -363,7 +366,8 @@ Specifiche tecniche:
     OutdoorRange & - & - \\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Specifiche tecniche Intel RealSense SR300}
+\end{table}
 
 \subsubsection{Libreria librealsense e formato immagine}
 Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
@@ -499,16 +503,18 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
 
 \subsection{Ambiente di sviluppo Xilinx}
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|}
 	\hline
 	Hardware & Avnet Zedboard \\ \hline
-	Acquisizione video & Webcam \\ \hline
+	Acquisizione video & HDMI Webcam \\ \hline
     Ambiente di sviluppo & Xilinx SDSoC \\ \hline
     Piattaforma software & Bare-metal\\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Riassunto componenti ambiente di sviluppo Xilinx}
+\end{table}
 
 Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possible sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
@@ -520,7 +526,8 @@ La piattaforma target sarebbe stata una Avnet Zedboard.
 
 Specifiche tecniche:
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|}
 	\hline
     ZYNQ-7000 SOC XC7Z020 & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
@@ -529,7 +536,8 @@ Specifiche tecniche:
     Video & HDMI output (1080p60 + audio) + VGA \\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Specifiche tecniche Avnet Zedboard}
+\end{table}
 
 Purtroppo, avendo la scheda una sola porta HDMI disponibile solo in output \`e stato necessario procurarsi un modulo aggiuntivo da collegarsi all'header FMC per avere a disposizione anche una porta HDMI in ingresso.
 
@@ -577,7 +585,8 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
 %TODO: Approfondire?
 \subsection{Ambiente di sviluppo Intel - Yocto}
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|}
 	\hline
 	Hardware & Eurotech ReliaGate 20-25 \\ \hline
@@ -586,7 +595,8 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
     Piattaforma software & Distribuzione Linux custom Poky \\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Riassunto componenti ambiente di sviluppo Intel - Yocto}
+\end{table}
 
 Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
@@ -602,7 +612,8 @@ L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le te
 
 Specifiche tecniche:
 
-\begin{center}
+\begin{table}[h!]
+    \centering
 	\begin{tabular}{|c|c|}
 	\hline
     ReliaGate 20-25-33 & Processore Intel E3827 Dual Core 1.75GHz x86-64 \\ \hline
@@ -611,7 +622,8 @@ Specifiche tecniche:
     Video & mini DisplayPort \\
     \hline
 	\end{tabular}
-\end{center}
+    \caption{Specifiche tecniche ReliaGate 20-25-33}
+\end{table}
 
 \subsubsection{Software e piattaforma per lo sviluppo}
 Gli strumenti che si sarebbe andati ad utilizzare sono quelli di cui si \`e parlato nel capitolo 2. Yocto per la realizzazione della distribuzione Linux, la toolchain di Yocto per la cross-compilazione dei sorgenti, OpenCV per l'image processing e le telecamere RealSense con annessa libreria.
@@ -634,7 +646,10 @@ Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato re
 \newpage
 
 \section{Passenger Counter con sottrazione del background}
-In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. \`E per\`o stata fondamentale per la versione successiva, facente uso delle telecamere RealSense.
+In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito ma \`e stata fondamentale per lo sviluppo della versione successiva, in quanto ne condivide gran parte del codice e concetti fondamentali. 
+
+\subsection{Componenti hardware}
+Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
