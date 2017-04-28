@@ -217,7 +217,7 @@ Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utili
 \subsection{Hardware}
 Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione delle immagini.
 
-Il gateway \`e un'altro prodotto della Eurotech noto come ReliGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\`e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud della Eurotech.
+Il gateway \`e un'altro prodotto della Eurotech noto come ReliaGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\`e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud della Eurotech.
 
 \begin{figure}[h!]
   \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
@@ -241,7 +241,7 @@ Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la 
   \label{fig:SchemAlgrTrackPCNEurotech}
 \end{figure}
 
-%% TODO: Chiedere al prof se il conteggio viene effettuato sul ReliGate o sul DynaPCN
+%% TODO: Chiedere al prof se il conteggio viene effettuato sul ReliaGate o sul DynaPCN
 L'unit\`a di elaborazione centrale si vede arrivare in ingresso una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
 Il cuore dell'algoritmo opera come segue:
 \begin{enumerate}
@@ -365,7 +365,7 @@ Specifiche tecniche:
 	\end{tabular}
 \end{center}
 
-\subsubsection{Libreria e formato immagine}
+\subsubsection{Libreria librealsense e formato immagine}
 Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
 
 Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
@@ -512,6 +512,9 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
 
 Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possible sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
+%% Interruzione di pagina
+\newpage
+
 \subsubsection{Hardware}
 La piattaforma target sarebbe stata una Avnet Zedboard.
 
@@ -545,8 +548,6 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 \subsubsection{Piattaforma per lo sviluppo SDSoC}
 La piattaforma per lo sviluppo SDSoC permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
 
-SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, \`e possibile eseguire l'applicazione sull'ARM Cortex ed eseguire le task pi\`u pesanti dal punto di vista computazionale sulla FPGA.
-
 \begin{figure}[h!]
   \includegraphics[scale=1]{XilinxSDSoC.png}
   \centering
@@ -554,7 +555,21 @@ SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In f
   \label{fig:SDSoC}
 \end{figure}
 
-Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, e non \`e altro che un subset delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx.
+SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, \`e possibile eseguire l'applicazione sull'ARM Cortex ed eseguire le task pi\`u pesanti dal punto di vista computazionale sulla FPGA.
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Compatibilit\`a con OpenCV e liberia AuvizCV}
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{AuvizCV.jpg}
+  \centering
+  \caption{Risultati benchmark}
+  \label{fig:BenchmarkAuvizCV}
+\end{figure}
+
+Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, la quale non \`e altro che un subset delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx. Questa libreria sfrutta le potenzialit\`a di SDSoC in quanto \`e stata scritta interamente in codice di alto livello e, in fase di compilazione, le funzioni utilizzate vengono sintetizzate sulla FPGA. Questa API si mantiene coerente con OpenCV per facilitare l'implementazione e l'accelerazione in harware. In figura \ref{fig:BenchmarkAuvizCV} sono riportati i risultati dei benchmark confrontando l'accelerazione di alcuni algoritmi di OpenCV usando varie tecnologie.
 
 %% Interruzione di pagina
 \newpage
@@ -582,7 +597,7 @@ L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le te
   \includegraphics[scale=0.5]{ReliaGATE2025.jpg}
   \centering
   \caption{ReliaGate 20-25}
-  \label{fig:ReliGate2025}
+  \label{fig:ReliaGate2025}
 \end{figure}
 
 Specifiche tecniche:
@@ -598,6 +613,9 @@ Specifiche tecniche:
 	\end{tabular}
 \end{center}
 
+\subsubsection{Software e piattaforma per lo sviluppo}
+Gli strumenti che si sarebbe andati ad utilizzare sono quelli di cui si \`e parlato nel capitolo 2. Yocto per la realizzazione della distribuzione Linux, la toolchain di Yocto per la cross-compilazione dei sorgenti, OpenCV per l'image processing e le telecamere RealSense con annessa libreria.
+
 %% Interruzione di pagina
 \newpage
 
@@ -607,7 +625,7 @@ Si è infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i segu
 \item Flessibilit\`a: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
 \item Completezza: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate.
 \item Performance: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
-\item Compatibilit\`a: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime.
+\item Compatibilit\`a: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software.
 \end{itemize}
 
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
