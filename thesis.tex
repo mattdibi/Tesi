@@ -15,6 +15,30 @@
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
+%% Custom style per i listing
+\lstdefinestyle{customcpp}{
+        language=C++,
+		backgroundcolor=\color{backcolour},   
+		commentstyle=\color{codegreen},
+		keywordstyle=\color{magenta},
+		numberstyle=\tiny\color{codegray},
+		stringstyle=\color{codepurple},
+		basicstyle=\footnotesize,
+		breakatwhitespace=false,         
+		breaklines=true,                 
+		captionpos=b,                    
+		keepspaces=true,                 
+		numbers=left,                    
+		numbersep=5pt,                  
+		showspaces=false,                
+		showstringspaces=false,
+		showtabs=false,                  
+		tabsize=2
+}
+
+%% Setting globale per i listing: stile di default customcpp
+\lstset{style=customcpp}
+
 \usepackage{capt-of}
 \graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} }
 
@@ -708,24 +732,6 @@ Il codice usa l'algoritmo descritto in Suzuki, S. and Abe, K., Topological Struc
 
 \subsection{Kernel del codice del PCN a sottrazione del background}
 
-\lstset{language=C++,
-		backgroundcolor=\color{backcolour},   
-		commentstyle=\color{codegreen},
-		keywordstyle=\color{magenta},
-		numberstyle=\tiny\color{codegray},
-		stringstyle=\color{codepurple},
-		basicstyle=\footnotesize,
-		breakatwhitespace=false,         
-		breaklines=true,                 
-		captionpos=b,                    
-		keepspaces=true,                 
-		numbers=left,                    
-		numbersep=5pt,                  
-		showspaces=false,                
-		showstringspaces=false,
-		showtabs=false,                  
-		tabsize=2
-}
 \begin{lstlisting}[language=C++, caption=Kernel del codice del Passenger Counter a sottrazione del background]
 VideoCapture cap;
 
