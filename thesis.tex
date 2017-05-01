@@ -717,11 +717,12 @@ La sottrazione del background \`e una tecnica, molto utilizzata dell'image proce
 
 L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, "Improved adaptive Gausian mixture model for background subtraction" del 2004 e "Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction" del 2006.
 
-Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane. Questo algoritmo seleziona automaticamente il numero pi\`u opportuno di gaussiane da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che probabilmente appartengono al background sono quelli che rimangono per pi\`u tempo all'interno della scena e sono i pi\`u statici.
+Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che probabilmente appartengono al background sono quelli che rimangono per pi\`u tempo all'interno della scena e sono i pi\`u statici.
 
 %% Interruzione di pagina
 \newpage
 
+Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazione dell'algoritmo di background subtraction, si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio.
 Qui di seguito \`e riportato un esempio di funzionamento.
 
 \begin{figure}[h!]
@@ -741,6 +742,16 @@ L'algoritmo \`e descritto in Suzuki, S. and Abe, K., Topological Structural Anal
 Questo algoritmo per la rilevazione dei contorni \`e utilizzato anche nella seconda versione del Passenger Counter.
 
 Qui di seguito \`e riportato un esempio di funzionamento.
+
+\begin{figure}[h!]
+  \includegraphics[scale=0.75]{findContours.png}
+  \centering
+  \caption{Esempio funzionamento findContours: l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni ricavati per mezzo dell'algoritmo sull'immagine a colori.}
+  \label{fig:EsempioFindContours}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
 
 \subsection{Kernel del codice del PCN a sottrazione del background}
 
