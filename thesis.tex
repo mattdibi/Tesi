@@ -959,7 +959,7 @@ void Passenger::updateCoords(Point newCenter)
     }
 
     // Reset age
-    // If the object is being tracked it means its active we don't want it to disappear
+    // If the object is being tracked it means it's active we don't want it to disappear
     age = 0;
 
     return;
@@ -980,15 +980,158 @@ Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
 \end{enumerate}
 
-Inolte \`e stata implementata anche la seguente variabile:
-\begin{itemize}
-\item trackColor: \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
-\end{itemize}
+Inolte \`e stata implementata anche la variabile: \textbf{trackColor} \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
 
 %% Interruzione di pagina
 \newpage
 
 \subsubsection{Conteggio degli attraversamenti}
+Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
+
+\begin{lstlisting}[language=C++]
+if(areaCurrentObject > areaMin)
+{
+    // --TRACKING
+    // Getting bounding rectangle
+    Rect br = boundingRect(contours[idx]);
+    Point2f mc = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
+
+    // Drawing mass center and bounding rectangle
+    rectangle( frame, br.tl(), br.br(), GREEN, 2, 8, 0 );
+    circle( frame, mc, 5, RED, 2, 8, 0 );
+
+    // --PASSENGERS DB UPDATE
+    bool newPassenger = true;
+    for(unsigned int i = 0; i < passengers.size(); i++)
+    {
+        // If the passenger is near a known passenger assume they are the same one
+        if( abs(mc.x - passengers[i].getCurrentPoint().x) <= xNear &&
+            abs(mc.y - passengers[i].getCurrentPoint().y) <= yNear )
+        {
+            // Update coordinates
+            newPassenger = false;
+            passengers[i].updateCoords(mc);
+
+            // --COUNTER
+            if(passengers[i].getTracks().size() > 1)
+            {
+                // Up to down
+                if( (passengers[i].getLastPoint().y < frame.rows/2 && passengers[i].getCurrentPoint().y >= frame.rows/2) ||
+                    (passengers[i].getLastPoint().y <= frame.rows/2 && passengers[i].getCurrentPoint().y > frame.rows/2) )
+                {
+                    // Counting multiple passenger depending on area size
+                    if (areaCurrentObject > MAX_1PASS_AREA && areaCurrentObject < MAX_2PASS_AREA)
+                        cnt_out += 2;
+                    else if (areaCurrentObject > MAX_2PASS_AREA)
+                        cnt_out += 3;
+                    else
+                        cnt_out++;
+
+                    // Logging count
+                    cout << "ID: " << passengers[i].getPid() << " crossed going U to D.\n";
+
+                    // Visual feedback
+                    circle(frame, Point(frame.cols - 20, 20), 8, RED, CV_FILLED);
+                }
+
+                // Down to up
+                if( (passengers[i].getLastPoint().y > frame.rows/2 && passengers[i].getCurrentPoint().y <= frame.rows/2) ||
+                    (passengers[i].getLastPoint().y >= frame.rows/2 && passengers[i].getCurrentPoint().y < frame.rows/2) )
+                {
+                    // Counting multiple passenger depending on area size
+                    if (areaCurrentObject > MAX_1PASS_AREA && areaCurrentObject < MAX_2PASS_AREA)
+                        cnt_in += 2;
+                    else if (areaCurrentObject > MAX_2PASS_AREA)
+                        cnt_in += 3;
+                    else
+                        cnt_in++;
+
+                    // Logging count
+                    cout << "ID: " << passengers[i].getPid() << " crossed going D to U.\n";
+
+                    // Visual feedback
+                    circle(frame, Point(frame.cols - 20, 20), 8, GREEN, CV_FILLED);
+                }
+
+            }
+
+            break;
+        }
+    }
+
+    // If wasn't near any known object it is a new passenger
+    if(newPassenger)
+    {
+        Passenger p(pid, mc);
+        passengers.push_back(p);
+        pid++;
+    }
+}
+\end{lstlisting}
+
+%% Interruzione di pagina
+\newpage
+
+Il codice riportato esegue le seguenti operazioni:
+\begin{enumerate}
+\item Se l'entit\`a rilevata si trova entro una certa distanza massima da un passeggero che si trova all'interno del database assumiamo che siano lo stesso passeggero.
+\item Di questo passeggero aggiorniamo la nuova coordinata e, nel caso abbia uno storico maggiore ad una singola coordinata, verifichiamo che non abbia superato la soglia virtuale rappresentata dalla met\`a del raggio visivo della telecamera. Il superamento della soglia \`e verificato come segue:
+    \begin{itemize}
+    \item Nel caso la penultima coordinata registrata si trovasse al di sotto della soglia visiva e l'ultima coordinata sopra, aggiorniamo il contatore degli ingressi.
+    \item Nel caso la penultima coordinata registrata si trovasse al di sopra della soglia visiva e l'ultima coordinata sotto, aggiorniamo il contatore delle uscite.
+    \end{itemize}
+\item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Procediamo quindi ad aggiornare il database aggiungendo il nuovo passeggero.
+\end{enumerate}
+
+Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
+Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
+
+\begin{lstlisting}[language=C++]
+// For every passenger in passengers DB
+for(unsigned int i = 0; i < passengers.size(); i++)
+{
+    // -- DRAWING PASSENGER TRAJECTORIES
+    if(passengers[i].getTracks().size() > 1)
+    {
+        polylines(frame, passengers[i].getTracks(), false, passengers[i].getTrackColor(),2);
+        putText(frame, "Pid: " + to_string(passengers[i].getPid()), passengers[i].getCenter(), FONT_HERSHEY_SIMPLEX, 0.5, passengers[i].getTrackColor(), 2);
+    }
+
+    // --UPDATE PASSENGER STATS
+    // Updating age
+    passengers[i].updateAge();
+
+    // Removing older passengers
+    // NB: The age depends on the FPS that the camera is capturing!
+    if(passengers[i].getAge() > maxPassengerAge)
+    {
+        passengers.erase(passengers.begin() +i);
+    }
+}
+
+// --PRINTING INFORMATION
+putText(frame, "FPS: " + to_string(fps), Point(0,  15) , FONT_HERSHEY_SIMPLEX, 0.5, RED, 2);
+
+putText(frame, "Count IN: "  + to_string(cnt_in), Point(0,frame.rows - 30) , FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
+putText(frame, "Count OUT: " + to_string(cnt_out), Point(0, frame.rows - 10) , FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
+\end{lstlisting}
+
+Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato anche per aggiornare il parametro age dei passeggeri. Quando questo parametro supera un certo valore di soglia, dovuto al fatto che i passeggeri sono usciti dal raggio visivo della telecamera da troppo tempo, vengono rimossi dal database.
+
+Il risultato delle operazioni \`e il seguente:
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{PCN3.png}
+  \centering
+  \caption{Risultato tracciamento in fase sperimentale}
+  \label{fig:PCN3}
+\end{figure}
+
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Risultati ottenuti}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
