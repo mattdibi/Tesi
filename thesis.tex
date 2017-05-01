@@ -658,6 +658,8 @@ Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato re
 \section{Passenger Counter con sottrazione del background}
 In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
+Inizialmente, descriveremo l'hardware utilizzato, tratteremo le tecniche utilizzate, quindi passeremo a descrivere come sono state integrate nel codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+
 \subsection{Componenti hardware}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
 
@@ -684,15 +686,27 @@ Per questa prima implementazione del contatore di passeggeri \`e stata utilizzat
 
 Essendo driverless veniva riconosciuta senza problemi dal ReliaGate ed \`e stato possibile leggere i frame in ingresso tramite OpenCV senza l'installazione di componenti software aggiuntivi.
 
-\subsection{Funzionamento Passenger Counter con background subtraction}
-Nel seguito tratteremo il funzionamento della prima implementazione del contatore. Suddivideremo il codice in tre parti:
-\begin{enumerate}
-\item Rilevamento dei blob
-\item Tracking dei blob
-\item Conteggio degli attraversamenti
-\end{enumerate}
+% TODO: Tradurre e dare un significato al paragrafo seguente
+\subsection{Algoritmo per la sottrazione del background}
+It is also a Gaussian Mixture-based Background/Foreground Segmentation Algorithm. It is based on two papers by Z.Zivkovic, "Improved adaptive Gausian mixture model for background subtraction" in 2004 and "Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction" in 2006. It uses a method to model each background pixel by a mixture of K Gaussian distributions (K = 3 to 5). The weights of the mixture represent the time proportions that those colours stay in the scene. The probable background colours are the ones which stay longer and more static. One important feature of this algorithm is that it selects the appropriate number of gaussian distribution for each pixel. (Remember, in last case, we took a K gaussian distributions throughout the algorithm). It provides better adaptibility to varying scenes due illumination changes etc.
 
-\subsubsection{Rilevamento dei blob}
+As in previous case, we have to create a background subtractor object. Here, you have an option of selecting whether shadow to be detected or not. If detectShadows = True (which is so by default), it detects and marks shadows, but decreases the speed. Shadows will be marked in gray color.
+
+Qui di seguito \`e riportato un esempio di funzionamento.
+
+\begin{figure}[h!]
+  \includegraphics[width=.49\textwidth]{resframe.jpg}
+  \includegraphics[width=.49\textwidth]{resmog2.jpg}
+  \centering
+  \caption{Esempio funzionamento BackgroundSubtractorMOG2}
+  \label{fig:EsempioBackSub}
+\end{figure}
+
+% TODO: Cercare e capire la tecnica usata da Opencv per il rilevamento dei contorni
+\subsection{Algoritmo per il rilevamento dei contorni}
+Il codice usa l'algoritmo descritto in Suzuki, S. and Abe, K., Topological Structural Analysis of Digitized Binary Images by Border Following. CVGIP 30 1, pp 32-46 (1985).
+
+\subsection{Kernel del codice del PCN a sottrazione del background}
 
 \lstset{language=C++,
 		backgroundcolor=\color{backcolour},   
@@ -712,7 +726,7 @@ Nel seguito tratteremo il funzionamento della prima implementazione del contator
 		showtabs=false,                  
 		tabsize=2
 }
-\begin{lstlisting}[language=C++, caption=Codice rilevamento dei blob]
+\begin{lstlisting}[language=C++, caption=Kernel del codice del Passenger Counter a sottrazione del background]
 VideoCapture cap;
 
 // Streams
@@ -761,29 +775,6 @@ Il codice esegue le seguenti operazioni:
 \item Seguono delle trasformazioni morfologiche sui frame necessarie a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevazione dei contorni.
 \item Quindi i frame vengono passati alla funzione findContours la quale ricava i contorni delle immagini che le vengono passate. Questi contorni costituiscono i blob che rappresentano i passeggeri che si muovo al di sotto del rilevatore.
 \end{enumerate}
-
-Vediamo ora nel dettaglio cosa fanno le funzioni di cui sopra.
-
-% TODO: Tradurre e dare un significato al paragrafo seguente
-\subsubsection{Sottrazione del background}
-It is also a Gaussian Mixture-based Background/Foreground Segmentation Algorithm. It is based on two papers by Z.Zivkovic, "Improved adaptive Gausian mixture model for background subtraction" in 2004 and "Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction" in 2006. It uses a method to model each background pixel by a mixture of K Gaussian distributions (K = 3 to 5). The weights of the mixture represent the time proportions that those colours stay in the scene. The probable background colours are the ones which stay longer and more static. One important feature of this algorithm is that it selects the appropriate number of gaussian distribution for each pixel. (Remember, in last case, we took a K gaussian distributions throughout the algorithm). It provides better adaptibility to varying scenes due illumination changes etc.
-
-As in previous case, we have to create a background subtractor object. Here, you have an option of selecting whether shadow to be detected or not. If detectShadows = True (which is so by default), it detects and marks shadows, but decreases the speed. Shadows will be marked in gray color.
-
-Qui di seguito \`e riportato un esempio di funzionamento.
-
-\begin{figure}[h!]
-  \includegraphics[width=.49\textwidth]{resframe.jpg}
-  \includegraphics[width=.49\textwidth]{resmog2.jpg}
-  \centering
-  \caption{Esempio funzionamento BackgroundSubtractorMOG2}
-  \label{fig:EsempioBackSub}
-\end{figure}
-
-\subsubsection{Trasformazioni morfologiche}
-
-\subsubsection{Rilevamento dei contorni}
-
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
