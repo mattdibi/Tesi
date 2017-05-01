@@ -6,6 +6,7 @@
 
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
+\usepackage{mathtools}
 
 \usepackage{listings}
 \usepackage{color}
@@ -754,8 +755,16 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 \newpage
 
 \subsection{Kernel del codice del PCN a sottrazione del background}
+Suddivideremo il codice in tre sezioni principali:
+\begin{enumerate}
+\item Estrazione degli oggetti in movimento.
+\item Rilevamento e tracking degli oggetti di nostro interesse.
+\item Conteggio degli attraversamenti.
+\end{enumerate}
 
-\begin{lstlisting}[language=C++, caption=Kernel del codice del Passenger Counter a sottrazione del background]
+\subsubsection{Estrazione degli oggetti in movimento}
+
+\begin{lstlisting}[language=C++]
 VideoCapture cap;
 
 // Streams
@@ -778,7 +787,7 @@ while(!stop)
     // --BACKGROUND SUBTRACTION
     pMOG2->apply(frame, fgMaskMOG2, 0.1);
 
-    // --MORPHOLOGICAL TRANSFORMATION
+    // --DENOISING
     // Threshold the image
     threshold(fgMaskMOG2, morphTrans, whiteThreshold, MAXRGBVAL, THRESH_BINARY);
 
@@ -791,19 +800,82 @@ while(!stop)
     // Blurring the image
     blur(morphTrans,morphTrans, Size(blur_ksize,blur_ksize));
 
-    // --FINDING CONTOURS
-    findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
     ...
 }
 \end{lstlisting}
 
+%% Interruzione di pagina
+\newpage
+
 Il codice esegue le seguenti operazioni:
 \begin{enumerate}
 \item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo Mat per poter essere manipolati facilmente da OpenCV.
-\item I frame vengono passati alla funzione che applica la sottrazione del background.
-\item Seguono delle trasformazioni morfologiche sui frame necessarie a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevazione dei contorni.
-\item Quindi i frame vengono passati alla funzione findContours la quale ricava i contorni delle immagini che le vengono passate. Questi contorni costituiscono i blob che rappresentano i passeggeri che si muovo al di sotto del rilevatore.
+\item I frame vengono passati alla funzione che applica la sottrazione del background. OpenCV prevede la creazione di un oggetto BackgroundSubtractor il quale ha tra i suoi metodi l'applicazione della sottrazione del background. Questo metodo produce come output una immagine in scala di grigi nella quale i pixel bianchi appartengono al primo piano, i pixel neri appartengono al background.
+\item Seguono delle trasformazioni  sui frame necessarie a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevazione dei contorni.
+    \begin{enumerate}
+    \item Threshold: viene applicata una soglia per eliminare le ombre. Ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (whiteThreshold) viene portato al valore MAXRGBVAL. Ogni pixel che si trova sotto la soglia viene posto a 0. Ovvero:
+    
+    \begin{equation}
+    dstPixel(x,y) = \begin{cases} MAXRGBVAL, & \mbox{se } srcPixel(x,y) > threshold \\ 0, & \mbox{altrimenti } \end{cases}
+    \end{equation}
+
+    \item Erosione: Questa operazione ha come risultato quello di espandere le regioni scure dell'immagine. L'obiettivo \`e quello di eliminare il rumore bianco gaussiano dall'immagine.
+    \item Dilatazione: Questa operazione ha come risultato quello di far "crescere" le regioni luminose dell'immagine. L'obiettivo \`e quello di rendere pi\`u facilmente rilevabili gli oggetti del primo piano.
+    \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore dell'immagine. Questa funzione utilizza una semplice filtro lineare.
+    \end{enumerate}
 \end{enumerate}
+
+Risultato delle operazioni:
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCN1v2.png}
+  \centering
+  \caption{L'immagine a sinistra rappresenta l'input. L'immagine al centro \`e il risultato dell'applicazione della sottrazione del background. L'immagine a destra \`e l'output delle operazioni di sottrazione del rumore.}
+  \label{fig:PCN1}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
+
+
+\begin{lstlisting}[language=C++]
+while(!stop)
+{
+    ...
+
+    // --FINDING CONTOURS
+    findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+
+    // For every detected object
+    for(unsigned int idx = 0; idx < contours.size(); idx++)
+    {
+        // Draw contours for every detected object
+        // drawContours( frame, contours, idx, Scalar(0,255,0), 2, 8, hierarchy, 0, Point(0,0) );
+
+        // -- AREA
+        // Calculating area
+        double areaCurrentObject = contourArea(contours[idx]);
+
+        // If calculated area is big enough begin tracking the object
+        if(areaCurrentObject > areaMin)
+        {
+            // Getting bounding rectangle
+            Rect br = boundingRect(contours[idx]);
+            Point2f mc = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
+
+            // Drawing mass center and bounding rectangle
+            rectangle( frame, br.tl(), br.br(), GREEN, 2, 8, 0 );
+            circle( frame, mc, 5, RED, 2, 8, 0 );
+
+            ...
+        }
+
+        ...
+    }
+}
+\end{lstlisting}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
