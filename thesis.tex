@@ -875,6 +875,7 @@ while(!stop)
 
 %% Interruzione di pagina
 \newpage
+
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
 Il codice esegue le seguenti operazioni:
@@ -903,7 +904,6 @@ Risultato delle operazioni:
 %% Interruzione di pagina
 \newpage
 
-% TODO: Parlare della classe passengers e poi di come viene utilizzata
 \subsubsection{Struttura per la rappresentazione delle entit\`a passeggeri}
 Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
 
@@ -946,7 +946,10 @@ Passenger::Passenger(int id, Point center, int newAge = 0)
     age = newAge;
 
     tracks.push_back(center);
-    trackColor = Scalar(rand() % 255, rand() % 255, rand() % 255);
+    int r = rand() % 255;
+    int g = rand() % 255;
+    int b = rand() % 255;
+    trackColor = Scalar(r,g,b);
 }
 
 void Passenger::updateCoords(Point newCenter)
@@ -1131,7 +1134,13 @@ Il risultato delle operazioni \`e il seguente:
 %% Interruzione di pagina
 \newpage
 
+%TODO: Tirare fuori immagini a sbrega con i risultati ottenuti
 \subsection{Risultati ottenuti}
+
+\subsubsection{Test effettuati}
+
+\subsubsection{Performance}
+%TODO: Parlare degli FPS e tempo di esecuzione
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
