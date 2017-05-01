@@ -754,7 +754,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 %% Interruzione di pagina
 \newpage
 
-\subsection{Kernel del codice del PCN a sottrazione del background}
+\subsection{Titolo}
 Suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
@@ -776,7 +776,7 @@ Ptr<BackgroundSubtractor> pMOG2; //MOG2 Background subtractor
 
 int history = 1000;
 double varThreshold = BACKGROUN_SUB_THRESHOLD;
-bool detectShadows = false;
+bool detectShadows = true;
 pMOG2 = createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
 
 while(!stop)
@@ -839,7 +839,6 @@ Risultato delle operazioni:
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-
 \begin{lstlisting}[language=C++]
 while(!stop)
 {
@@ -851,9 +850,6 @@ while(!stop)
     // For every detected object
     for(unsigned int idx = 0; idx < contours.size(); idx++)
     {
-        // Draw contours for every detected object
-        // drawContours( frame, contours, idx, Scalar(0,255,0), 2, 8, hierarchy, 0, Point(0,0) );
-
         // -- AREA
         // Calculating area
         double areaCurrentObject = contourArea(contours[idx]);
@@ -876,6 +872,38 @@ while(!stop)
     }
 }
 \end{lstlisting}
+
+%% Interruzione di pagina
+\newpage
+\subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
+
+Il codice esegue le seguenti operazioni:
+
+\begin{enumerate}
+\item Ricava i contorni per mezzo della funzione di cui abbiamo discusso l'algoritmo nella sezione precedente.
+\item Per ogni contorno completo rilevato dalla funzione eseguiamo le seguenti operazioni:
+    \begin{enumerate}
+    \item Ne calcoliamo l'area. Se supera una certa area minima, ricava sperimentalmente, decidiamo che si tratta di una persona.
+    \item Ne ricaviamo il rettangolo che inscrive i controrni rilevati in precedenza tramite la funzione boundingRectangle.
+    \item Di questo rettangolo rileviamo il centro.
+    \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e questo centro sull'immagine a colori.
+    \end{enumerate}
+\end{enumerate}
+L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione del centro di questo rettangolo che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
+
+Risultato delle operazioni:
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCN2.png}
+  \centering
+  \caption{L'immagine a sinistra rappresenta l'immagine in ingresso dopo la sottrazione del background. L'immagine al centro \`e l'output delle operazioni di sottrazione del rumore. L'immagine a destra \`e l'immagine di ingresso sulla quale sono stati disegnati il bounding rectangle e il centro del rettangolo.}
+  \label{fig:PCN2}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Conteggio dei passeggeri}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
