@@ -683,7 +683,7 @@ Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato re
 \section{Passenger Counter con sottrazione del background}
 In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
-Inizialmente, descriveremo l'hardware utilizzato, tratteremo le tecniche utilizzate, quindi passeremo a descrivere come sono state integrate nel codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+Inizialmente, descriveremo l'hardware utilizzato, tratteremo le tecniche utilizzate, quindi passeremo a descrivere la struttura del codice il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
 \subsection{Componenti hardware}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
@@ -750,6 +750,25 @@ Qui di seguito \`e riportato un esempio di funzionamento.
   \caption{Esempio funzionamento findContours: l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni ricavati per mezzo dell'algoritmo sull'immagine a colori.}
   \label{fig:EsempioFindContours}
 \end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Struttura del codice}
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{PCNUML.png}
+  \centering
+  \caption{Diagramma UML del Passenger Counter a sottrazione del background}
+  \label{fig:PCNUML}
+\end{figure}
+
+In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni dei vari componenti del progetto sono le seguenti:
+\begin{enumerate}
+\item \textbf{Passenger}: la quale implementa la struttura adatta a rappresentare i passeggeri all'interno del programma.
+\item \textbf{PCN}: la quale implementa il contatore di passeggeri vero e proprio. Questa implementazione permette la parallelizzazione dei contatori, \`e quindi possibile instanziare un contatore per telecamera.
+\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN.
+\end{enumerate}
 
 %% Interruzione di pagina
 \newpage
@@ -1125,7 +1144,7 @@ Il risultato delle operazioni \`e il seguente:
 \begin{figure}[h!]
   \includegraphics[width=\textwidth]{PCN3.png}
   \centering
-  \caption{Risultato tracciamento in fase sperimentale}
+  \caption{Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la soglia per l'attraversamento.}
   \label{fig:PCN3}
 \end{figure}
 
