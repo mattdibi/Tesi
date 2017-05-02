@@ -773,12 +773,108 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni
 %% Interruzione di pagina
 \newpage
 
-\subsection{Analisi del codice del programma}
-Suddivideremo il codice in quattro sezioni principali:
+\subsubsection{Classe Passenger}
+Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
+
+\begin{lstlisting}[language=C++, caption=passenger.h]
+class Passenger {
+
+  public:
+
+    // Constructor
+    Passenger(int id, Point center, int newAge);
+
+    // Selectors
+    int getPid() {return pid;};
+    int getAge() {return age;};
+
+    vector<Point> getTracks(){return tracks;};
+    Scalar getTrackColor(){return trackColor;};
+
+    Point getCurrentPoint(){return tracks[tracks.size()-1];};
+    Point getLastPoint(){return tracks[tracks.size()-2];};
+
+    // Methods
+    void updateCoords(Point newCenter);
+    void updateAge(){age++;return;};
+
+  private:
+    int pid;    // Passenger ID
+    int age;    // Passenger age
+
+    vector<Point> tracks;
+    Scalar trackColor;
+
+};
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++, caption=passenger.cpp]
+Passenger::Passenger(int id, Point center, int newAge = 0)
+{
+    pid = id;
+    age = newAge;
+
+    tracks.push_back(center);
+    int r = rand() % 255;
+    int g = rand() % 255;
+    int b = rand() % 255;
+    trackColor = Scalar(r,g,b);
+}
+
+void Passenger::updateCoords(Point newCenter)
+{
+    tracks.push_back(newCenter);
+
+    // If too many tracking points remove older points
+    if(tracks.size() > MAX_TRACK_LENGTH) {
+        tracks.erase(tracks.begin());
+    }
+
+    // Reset age
+    // If the object is being tracked it means it's active we don't want it to disappear
+    age = 0;
+
+    return;
+}
+\end{lstlisting}
+
+Questa classe ha tre obiettivi principali:
+\begin{enumerate}
+\item Identificare univocamente le entit\`a che entrano nel raggio visivo della telecamera.
+\item Memorizzare lo storico delle posizione occupate da tali entit\`a all'interno del raggio visivo della telecamera.
+\item Tenere traccia del tempo per il quale l'entit\`a rimane all'intenro del raggio visivo della telecamera.
+\end{enumerate}
+
+Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
+\begin{enumerate}
+\item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
+\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Il massimo numero di posizioni mantenute in memoria \`e stato deciso sperimentalmente.
+\item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
+\end{enumerate}
+
+Inolte \`e stata implementata la variabile: \textbf{trackColor}. trackColor \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Classe PCN}
+
+TODO: Sistemare da qui in poi. Aggiungere
+\begin{itemize}
+\item Finalit\`a della classe
+\item Analisi dell'header
+\item Quindi passare a descrivere l'algoritmo vero e proprio
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+% TODO: Da qui in poi aggiornare tutto il codice e le immagini
+\subsection{Analisi del kernel del programma}
+Suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
 \item Rilevamento e tracking degli oggetti di nostro interesse.
-\item Struttura per la rappresentazione delle entit\`a passeggeri.
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
@@ -922,89 +1018,6 @@ Risultato delle operazioni:
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Struttura per la rappresentazione delle entit\`a passeggeri}
-Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
-
-\begin{lstlisting}[language=C++, caption=passenger.h]
-class Passenger {
-
-  public:
-
-    // Constructor
-    Passenger(int id, Point center, int newAge);
-
-    // Selectors
-    int getPid() {return pid;};
-    int getAge() {return age;};
-
-    vector<Point> getTracks(){return tracks;};
-    Scalar getTrackColor(){return trackColor;};
-
-    Point getCurrentPoint(){return tracks[tracks.size()-1];};
-    Point getLastPoint(){return tracks[tracks.size()-2];};
-
-    // Methods
-    void updateCoords(Point newCenter);
-    void updateAge(){age++;return;};
-
-  private:
-    int pid;    // Passenger ID
-    int age;    // Passenger age
-
-    vector<Point> tracks;
-    Scalar trackColor;
-
-};
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, caption=passenger.cpp]
-Passenger::Passenger(int id, Point center, int newAge = 0)
-{
-    pid = id;
-    age = newAge;
-
-    tracks.push_back(center);
-    int r = rand() % 255;
-    int g = rand() % 255;
-    int b = rand() % 255;
-    trackColor = Scalar(r,g,b);
-}
-
-void Passenger::updateCoords(Point newCenter)
-{
-    tracks.push_back(newCenter);
-
-    // If too many tracking points remove older points
-    if(tracks.size() > MAX_TRACK_LENGTH) {
-        tracks.erase(tracks.begin());
-    }
-
-    // Reset age
-    // If the object is being tracked it means it's active we don't want it to disappear
-    age = 0;
-
-    return;
-}
-\end{lstlisting}
-
-Questa classe ha tre obiettivi principali:
-\begin{enumerate}
-\item Identificare univocamente le entit\`a che entrano nel raggio visivo della telecamera.
-\item Memorizzare lo storico delle posizione occupate da tali entit\`a all'interno del raggio visivo della telecamera.
-\item Tenere traccia del tempo per il quale l'entit\`a rimane all'intenro del raggio visivo della telecamera.
-\end{enumerate}
-
-Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
-\begin{enumerate}
-\item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
-\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Il massimo numero di posizioni mantenute in memoria \`e stato deciso sperimentalmente.
-\item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
-\end{enumerate}
-
-Inolte \`e stata implementata anche la variabile: \textbf{trackColor} \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
-
-%% Interruzione di pagina
-\newpage
 
 \subsubsection{Conteggio degli attraversamenti}
 Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
