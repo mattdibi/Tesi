@@ -767,7 +767,7 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni
 \begin{enumerate}
 \item \textbf{Passenger}: la quale implementa la struttura adatta a rappresentare i passeggeri all'interno del programma.
 \item \textbf{PCN}: la quale implementa il contatore di passeggeri vero e proprio. Questa implementazione permette la parallelizzazione dei contatori, \`e quindi possibile instanziare un contatore per telecamera.
-\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN.
+\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN sfruttando i metodi pubblici resi disponibili dalla classe PCN.
 \end{enumerate}
 
 %% Interruzione di pagina
@@ -852,26 +852,99 @@ Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
 \end{enumerate}
 
-Inolte \`e stata implementata la variabile: \textbf{trackColor}. trackColor \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
+Inolte \`e stata implementata la variabile: \verb|trackColor|. \verb|trackColor| \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
 
 %% Interruzione di pagina
 \newpage
 
 \subsection{Classe PCN}
 
-TODO: Sistemare da qui in poi. Aggiungere
+Questa classe ha come obiettivi principali:
 \begin{itemize}
-\item Finalit\`a della classe
-\item Analisi dell'header
-\item Quindi passare a descrivere l'algoritmo vero e proprio
+\item Implementare un oggetto contatore che fornisca interfacce verso l'esterno per poterne controllare i comportamenti.
+\item Effettuare l'interfacciamento al dispositivo di acquisizione delle immagini.
+\item Implementare il kernel del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui abbiamo parlato in precedenza.
+\item Permettere l'esecuzione parallela di pi\`u contatori contemporaneamente, uno per telecamera collegata al unit\`a di elaborazione.
+\item Permettere la visualizzazione dei risultati dell'elaborazione.
+\end{itemize}
+
+Qui di seguito \`e riportato l'header della classe PCN:
+\begin{lstlisting}[language=C++, caption=PCN.h]
+class PCN {
+
+  public:
+
+    PCN(int device);
+    ~PCN() { thread_.join(); }
+
+    // Selectors
+    string getThreadID(){return threadID;};
+
+    int getCountIn(){return cnt_in;};
+    int getCountOut(){return cnt_out;};
+
+    // Setters
+    void setCalibration(bool value) {calibrationOn = value; return;};
+    void setDisplayColor(bool value) {displayColor = value; return;};
+    void setDisplayBacksub(bool value) {displayBacksub = value; return;};
+    void setDisplayDenoise(bool value) {displayDenoise = value; return;};
+    void setSaveVideo(bool value) {saveVideo = value; return;};
+
+    // Methods
+    void start();
+    void count();
+    void stop(){halt = true;};
+
+    void resetCounters(){cnt_in = 0; cnt_out = 0; return;};
+
+    void toggleCalibration();
+    void toggleDisplayColor();
+    void toggleDisplayBacksub();
+    void toggleDisplayDenoise();
+
+private:
+    VideoCapture cap;
+    Ptr<BackgroundSubtractor> pMOG2; //MOG2 Background subtractor
+
+    std::thread thread_;
+    string threadID;
+
+    bool halt = false;
+
+    // Passenger counters
+    int cnt_in  = 0;
+    int cnt_out = 0;
+
+    // Passengers tracker
+    int pid = 0;
+    vector<Passenger> passengers;
+
+    // Options
+    bool calibrationOn = false;
+    bool displayColor = false;
+    bool displayBacksub = false;
+    bool displayDenoise = false;
+    bool saveVideo = false;
+};
+\end{lstlisting}
+
+I punti rilevanti dell'header sono i seguenti:
+\begin{itemize}
+\item La funzione \verb|count()| rappresenta il kernel del programma e verr\`a analizzata in seguito.
+\item Le funzioni toggle vengono usate per aprire e chiudere le finestre che visualizzano gli stream video nei quali sono riportati  i vari step dell'elaborazione dell'input.
+\item La funzione \verb|toggleCalibration()| abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
+\item Il vettore di passeggeri rappresenta la memoria del contatore finalizzata al tracciamento dei passeggeri. Vedremo come verr\`a utilizzato nella funzione \verb|count()|.
+\item \verb|cnt_in| e \verb|cnt_out| sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
+\item \verb|thread_| e \verb|threadID| sono usati per la parallelizzazione del conteggio. Si noti che threadID viene usato per identificare univocamente le finestre degli stream video, questo si \`e reso necessario perch\`e OpenCV utilizza il nome delle finestre come identificatore e, nel caso di accesso a pi\`u telecamere contemporaneamente, ci\`o comportava problemi di non univocit\`a dei nomi e sovrapposizione di pi\`u stream in una stessa finestra.
+\item \verb|pMOG2| implementa la sottrazione del background di cui abbiamo parlato in precedenza.
 \end{itemize}
 
 %% Interruzione di pagina
 \newpage
 
-% TODO: Da qui in poi aggiornare tutto il codice e le immagini
-\subsection{Analisi del kernel del programma}
-Suddivideremo il codice in tre sezioni principali:
+% TODO: Da qui in poi aggiornare tutto il codice
+\subsection{Analisi del kernel del programma: funzione count()}
+La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
 \item Rilevamento e tracking degli oggetti di nostro interesse.
@@ -880,66 +953,76 @@ Suddivideremo il codice in tre sezioni principali:
 
 \subsubsection{Estrazione degli oggetti in movimento}
 
-\begin{lstlisting}[language=C++]
-VideoCapture cap;
-
-// Streams
-Mat frame;       //input stream
-Mat fgMaskMOG2;  //fg mask generated by MOG2 method
-Mat morphTrans;  //fgMaskMOG2 after morphological transformations
-
-Ptr<BackgroundSubtractor> pMOG2; //MOG2 Background subtractor
-
-int history = 1000;
-double varThreshold = BACKGROUN_SUB_THRESHOLD;
-bool detectShadows = true;
-pMOG2 = createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
-
-while(!stop)
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 1]
+void PCN::count()
 {
-    // Wait for a frame from camera/video and store it into frame
-    cap.read(frame);
+    // Streams
+    Mat color;
+    Mat fgMaskMOG2;
+    Mat morphTrans;
+    Mat denoisedMat;
 
-    // --BACKGROUND SUBTRACTION
-    pMOG2->apply(frame, fgMaskMOG2, 0.1);
+    // Contours detection variables
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
 
-    // --DENOISING
-    // Threshold the image
-    threshold(fgMaskMOG2, morphTrans, whiteThreshold, MAXRGBVAL, THRESH_BINARY);
+    // Calibration
+    int learningRate = LEARNINGRATE;
+    int whiteThreshold = THRESHOLD;
+    int dilateAmount = DILATE_AMOUNT;
+    int erodeAmount = ERODE_AMOUNT;
+    int blur_ksize = BLUR_KSIZE;
+    int areaMin = AREA_MIN;
+    int xNear = X_NEAR;
+    int yNear = Y_NEAR;
+    int maxPassengerAge = MAX_PASSENGER_AGE;
 
-    // Eroding
-    erode(morphTrans,morphTrans, Mat(Size(erodeAmount,erodeAmount), CV_8UC1));
+    while(!halt)
+    {
+        bool bSuccess = cap.read(color);
 
-    // Dilating
-    dilate(morphTrans,morphTrans, Mat(Size(dilateAmount,dilateAmount), CV_8UC1));
+        pMOG2->apply(color, fgMaskMOG2, (float)(learningRate/10000.0));
 
-    // Blurring the image
-    blur(morphTrans,morphTrans, Size(blur_ksize,blur_ksize));
+        // --DENOISE
+        // Threshold the image
+        threshold(fgMaskMOG2, morphTrans, whiteThreshold, MAXRGBVAL, THRESH_BINARY);
 
-    ...
+        // Eroding
+        erode(morphTrans,morphTrans, Mat(Size(erodeAmount,erodeAmount), CV_8UC1));
+
+        // Dilating
+        dilate(morphTrans,morphTrans, Mat(Size(dilateAmount,dilateAmount), CV_8UC1));
+
+        // Blurring the image
+        blur(morphTrans,morphTrans, Size(blur_ksize,blur_ksize));
+        denoisedMat = morphTrans.clone();
+
+        ...
+    }
 }
 \end{lstlisting}
 
-%% Interruzione di pagina
-\newpage
-
 Il codice esegue le seguenti operazioni:
 \begin{enumerate}
-\item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo Mat per poter essere manipolati facilmente da OpenCV.
-\item I frame vengono passati alla funzione che applica la sottrazione del background. OpenCV prevede la creazione di un oggetto BackgroundSubtractor il quale ha tra i suoi metodi l'applicazione della sottrazione del background. Questo metodo produce come output una immagine in scala di grigi nella quale i pixel bianchi appartengono al primo piano, i pixel neri appartengono al background.
+\item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo \verb|Mat| per poter essere manipolati facilmente da OpenCV. Tutto questo \`e implementato dal metodo \verb|read()| della classe \verb|VideoCapture|.
+\item I frame vengono passati alla funzione che applica la sottrazione del background. OpenCV prevede la creazione di un oggetto \verb|BackgroundSubtractor| il quale ha tra i suoi metodi l'applicazione della sottrazione del background. Questo metodo produce come output una immagine in scala di grigi nella quale i pixel bianchi appartengono al primo piano, i pixel neri appartengono al background, i pixel grigi alle ombre. Un parametro fondamentale della funzione \verb|apply()| \`e il \verb|learningRate|: esso rappresenta il peso con il quale viene aggiornato il modello del background.
 \item Seguono delle trasformazioni  sui frame necessarie a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevazione dei contorni.
     \begin{enumerate}
-    \item Threshold: viene applicata una soglia per eliminare le ombre. Ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (whiteThreshold) viene portato al valore MAXRGBVAL. Ogni pixel che si trova sotto la soglia viene posto a 0. Ovvero:
+    \item Threshold: viene applicata una soglia per eliminare le ombre. Come abbiamo visto in precedenza l'algoritmo di sottrazione del background rileva le ombre e le colora di grigio. \`E possibile eliminarle imponendo una soglia che agisca sul colore dell'immagine. \verb|threshold()| fa in modo che ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (\verb|whiteThreshold|) viene portato al valore \verb|MAXRGBVAL| cio\`e 255. Ogni pixel che si trova sotto la soglia viene posto a 0. Ovvero:
     
     \begin{equation}
     dstPixel(x,y) = \begin{cases} MAXRGBVAL, & \mbox{se } srcPixel(x,y) > threshold \\ 0, & \mbox{altrimenti } \end{cases}
     \end{equation}
 
+    Cos\`\i\ facendo le ombre, che hanno un colore il cui valore in pixel \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti.
     \item Erosione: Questa operazione ha come risultato quello di espandere le regioni scure dell'immagine. L'obiettivo \`e quello di eliminare il rumore bianco gaussiano dall'immagine.
     \item Dilatazione: Questa operazione ha come risultato quello di far "crescere" le regioni luminose dell'immagine. L'obiettivo \`e quello di rendere pi\`u facilmente rilevabili gli oggetti del primo piano.
     \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore dell'immagine. Questa funzione utilizza una semplice filtro lineare.
     \end{enumerate}
 \end{enumerate}
+
+%% Interruzione di pagina
+\newpage
 
 Risultato delle operazioni:
 
@@ -950,13 +1033,10 @@ Risultato delle operazioni:
   \label{fig:PCN1}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
-
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-\begin{lstlisting}[language=C++]
-while(!stop)
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2]
+while(!halt)
 {
     ...
 
@@ -978,8 +1058,8 @@ while(!stop)
             Point2f mc = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
 
             // Drawing mass center and bounding rectangle
-            rectangle( frame, br.tl(), br.br(), GREEN, 2, 8, 0 );
-            circle( frame, mc, 5, RED, 2, 8, 0 );
+            rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
+            circle( color, mc, 5, RED, 2, 8, 0 );
 
             ...
         }
@@ -1022,17 +1102,16 @@ Risultato delle operazioni:
 \subsubsection{Conteggio degli attraversamenti}
 Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
 
-\begin{lstlisting}[language=C++]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3]
 if(areaCurrentObject > areaMin)
 {
-    // --TRACKING
     // Getting bounding rectangle
     Rect br = boundingRect(contours[idx]);
     Point2f mc = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
 
     // Drawing mass center and bounding rectangle
-    rectangle( frame, br.tl(), br.br(), GREEN, 2, 8, 0 );
-    circle( frame, mc, 5, RED, 2, 8, 0 );
+    rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
+    circle( color, mc, 5, RED, 2, 8, 0 );
 
     // --PASSENGERS DB UPDATE
     bool newPassenger = true;
@@ -1050,8 +1129,8 @@ if(areaCurrentObject > areaMin)
             if(passengers[i].getTracks().size() > 1)
             {
                 // Up to down
-                if( (passengers[i].getLastPoint().y < frame.rows/2 && passengers[i].getCurrentPoint().y >= frame.rows/2) ||
-                    (passengers[i].getLastPoint().y <= frame.rows/2 && passengers[i].getCurrentPoint().y > frame.rows/2) )
+                if( (passengers[i].getLastPoint().y < color.rows/2 && passengers[i].getCurrentPoint().y >= color.rows/2) ||
+                    (passengers[i].getLastPoint().y <= color.rows/2 && passengers[i].getCurrentPoint().y > color.rows/2) )
                 {
                     // Counting multiple passenger depending on area size
                     if (areaCurrentObject > MAX_1PASS_AREA && areaCurrentObject < MAX_2PASS_AREA)
@@ -1061,16 +1140,13 @@ if(areaCurrentObject > areaMin)
                     else
                         cnt_out++;
 
-                    // Logging count
-                    cout << "ID: " << passengers[i].getPid() << " crossed going U to D.\n";
-
                     // Visual feedback
-                    circle(frame, Point(frame.cols - 20, 20), 8, RED, CV_FILLED);
+                    circle(color, Point(color.cols - 20, 20), 8, RED, CV_FILLED);
                 }
 
                 // Down to up
-                if( (passengers[i].getLastPoint().y > frame.rows/2 && passengers[i].getCurrentPoint().y <= frame.rows/2) ||
-                    (passengers[i].getLastPoint().y >= frame.rows/2 && passengers[i].getCurrentPoint().y < frame.rows/2) )
+                if( (passengers[i].getLastPoint().y > color.rows/2 && passengers[i].getCurrentPoint().y <= color.rows/2) ||
+                    (passengers[i].getLastPoint().y >= color.rows/2 && passengers[i].getCurrentPoint().y < color.rows/2) )
                 {
                     // Counting multiple passenger depending on area size
                     if (areaCurrentObject > MAX_1PASS_AREA && areaCurrentObject < MAX_2PASS_AREA)
@@ -1080,11 +1156,8 @@ if(areaCurrentObject > areaMin)
                     else
                         cnt_in++;
 
-                    // Logging count
-                    cout << "ID: " << passengers[i].getPid() << " crossed going D to U.\n";
-
                     // Visual feedback
-                    circle(frame, Point(frame.cols - 20, 20), 8, GREEN, CV_FILLED);
+                    circle(color, Point(color.cols - 20, 20), 8, GREEN, CV_FILLED);
                 }
 
             }
@@ -1093,7 +1166,7 @@ if(areaCurrentObject > areaMin)
         }
     }
 
-    // If wasn't near any known object it is a new passenger
+    // If it wasn't near any known object it is a new passenger
     if(newPassenger)
     {
         Passenger p(pid, mc);
@@ -1102,9 +1175,6 @@ if(areaCurrentObject > areaMin)
     }
 }
 \end{lstlisting}
-
-%% Interruzione di pagina
-\newpage
 
 Il codice riportato esegue le seguenti operazioni:
 \begin{enumerate}
@@ -1120,7 +1190,7 @@ Il codice riportato esegue le seguenti operazioni:
 Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
 Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
 
-\begin{lstlisting}[language=C++]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4]
 // For every passenger in passengers DB
 for(unsigned int i = 0; i < passengers.size(); i++)
 {
@@ -1150,7 +1220,10 @@ putText(frame, "Count IN: "  + to_string(cnt_in), Point(0,frame.rows - 30) , FON
 putText(frame, "Count OUT: " + to_string(cnt_out), Point(0, frame.rows - 10) , FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
 \end{lstlisting}
 
-Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato anche per aggiornare il parametro age dei passeggeri. Quando questo parametro supera un certo valore di soglia, dovuto al fatto che i passeggeri sono usciti dal raggio visivo della telecamera da troppo tempo, vengono rimossi dal database.
+Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato anche per aggiornare la variabile \verb|age| dei passeggeri. Quando questo parametro supera un certo valore di soglia, dovuto al fatto che i passeggeri sono usciti dal raggio visivo della telecamera da troppo tempo, vengono rimossi dal database.
+
+%% Interruzione di pagina
+\newpage
 
 Il risultato delle operazioni \`e il seguente:
 
