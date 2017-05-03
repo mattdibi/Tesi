@@ -1234,6 +1234,102 @@ Il risultato delle operazioni \`e il seguente:
   \label{fig:PCN3}
 \end{figure}
 
+%% Interruzione di pagina
+\newpage
+
+\subsection{main.cpp}
+
+\begin{lstlisting}[language=C++, caption=main.cpp]
+int main(int argc, char * argv[])
+{
+    bool stop = false;
+    bool displayHelpFlag = false;
+    char choice;
+
+    vector<PCN *> counters;
+
+    for(int i = 0; i < deviceNumber; i++) {
+        counters.push_back(new PCN(i));
+        cout << endl; 
+        cout << "Device number: " << i << endl;
+    }
+
+    if(argc >= 2)
+    {
+        if(!strcmp(argv[1], "-s")) {
+            for(int i = 0; i < deviceNumber; i++) {
+                counters[i]->setSaveVideo(true);
+            }
+        }
+    }
+
+    for(int i = 0; i < deviceNumber; i++) {
+        counters[i]->start();
+    }
+
+    do
+    {
+        cout << "Please enter a valid command:\n>";
+        choice = getchar();
+        cout << "You entered: " << choice << endl;
+
+        for(int i = 0; i < deviceNumber; i++) {
+            
+            cout << "Device : " << i << endl;
+            switch(choice)
+            {
+                case('p'):
+                    cout << "Current count:\n";
+                    cout << "Count in  = " << counters[i]->getCountIn() << endl;
+                    cout << "Count out = " << counters[i]->getCountOut() << endl;
+                    cout << "Current balance =" << counters[i]->getCountIn() - counters[i]->getCountOut() << endl;
+                    break;
+
+                case('r'):
+                    cout << "Resetting counters\n";
+                    counters[i]->resetCounters();
+                    break;
+
+                case('c'):
+                    cout << "Toggle color\n";
+                    counters[i]->toggleDisplayColor();
+                    break;
+                
+                ...
+                
+                case('q'):
+                    cout << "Exiting program!\n";
+                    counters[i]->stop();
+                    cout << "Capture closed.\n";
+                    stop = true;
+                    break;
+
+                default:
+                    displayHelpFlag = true;
+                    break;
+            }
+        }
+
+        if(displayHelpFlag) {
+            displayHelp();
+            displayHelpFlag = false;
+        }
+
+        // Consume input
+        while ((choice = getchar()) != '\n' && choice != EOF);
+
+    } while(!stop);
+
+    return 0;
+}
+\end{lstlisting}
+
+Il codice effettua le seguenti operazioni:
+\begin{enumerate}
+\item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera verr\`a instanziato un oggetto della classe PCN.
+\item Vengono fatti partire in parallelo i contatori per mezzo del metodo \verb|start()|.
+\item Viene fatto partire un loop all'interno del quale si aspettano i comandi da eseguire su tutti i contatori.
+\end{enumerate}
 
 %% Interruzione di pagina
 \newpage
@@ -1245,6 +1341,14 @@ Il risultato delle operazioni \`e il seguente:
 
 \subsubsection{Performance}
 %TODO: Parlare degli FPS e tempo di esecuzione
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Problemi}
+
+%% Interruzione di pagina
+\newpage
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
