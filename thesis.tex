@@ -773,7 +773,7 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Classe Passenger}
+\subsection{Classe Passenger}
 Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
 
 \begin{lstlisting}[language=C++, caption=passenger.h]
@@ -1326,9 +1326,9 @@ int main(int argc, char * argv[])
 
 Il codice effettua le seguenti operazioni:
 \begin{enumerate}
-\item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera verr\`a instanziato un oggetto della classe PCN.
+\item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera, quindi, viene instanziato un oggetto della classe PCN.
 \item Vengono fatti partire in parallelo i contatori per mezzo del metodo \verb|start()|.
-\item Viene fatto partire un loop all'interno del quale si aspettano i comandi da eseguire su tutti i contatori.
+\item Viene fatto partire un loop all'interno del quale si aspettano i comandi da eseguire su tutti i contatori immessi dall'utente.
 \end{enumerate}
 
 %% Interruzione di pagina
