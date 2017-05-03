@@ -1340,7 +1340,42 @@ Il codice effettua le seguenti operazioni:
 \subsubsection{Test effettuati}
 
 \subsubsection{Performance}
-%TODO: Parlare degli FPS e tempo di esecuzione
+Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni.
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{bhoh}: 
+
+\begin{table}[h!]
+    \centering
+	\begin{tabular}{|c|c|c|}
+	\hline
+    & ReliaGate 20-25 & Sistema Linux \\ \hline
+    Tempo di esecuzione del loop principale & 0.041254  s & 0.0311649 s \\ \hline
+    Algoritmo sottrazione del background & 0.0294414 s & 0.00316497 s \\ \hline
+    Sottrazione del rumore & 0.00280683 s & 0.000546563 s \\ \hline
+    Algoritmo rilevamento contorni & 0.00109507 s & 0.000211879 s \\ \hline
+    Rilevamento e tracking degli oggetti & 0.000178409 s & 2.64784e-05 s \\ \hline
+    Frame Rate & 20.1 FPS & 30 FPS \\ \hline
+	\end{tabular}
+    \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
+\end{table}
+
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando una webcam capace di fornire uno stream a 60 FPS:
+
+\begin{table}[h!]
+    \centering
+	\begin{tabular}{|c|c|c|}
+	\hline
+    & ReliaGate 20-25 & Sistema Linux \\ \hline
+    Tempo di esecuzione del loop principale & 0.0467684  s & 0.0157044 s \\ \hline
+    Algoritmo sottrazione del background & 0.0333335 s & 0.00310198 s \\ \hline
+    Sottrazione del rumore & 0.0027739 s & 0.000538276 s \\ \hline
+    Algoritmo rilevamento contorni & 0.00175694 s & 0.000233947 s \\ \hline
+    Rilevamento e tracking degli oggetti & 0.000279599 s & 2.85814e-05 s \\ \hline
+    Frame Rate & 20.5 FPS & 60 FPS \\ \hline
+	\end{tabular}
+    \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
+\end{table}
+
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo.
 
 %% Interruzione di pagina
 \newpage
