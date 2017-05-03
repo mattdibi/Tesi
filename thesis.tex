@@ -1346,6 +1346,19 @@ Il codice effettua le seguenti operazioni:
 \newpage
 
 \subsection{Problemi}
+I problemi principali rilevati in questa implementazione del Passenger Counter sono i seguenti:
+\begin{enumerate}
+\item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
+\item \textbf{Performance}: L'algoritmo di sottrazione del background, come riportato nel paragrafo precedente, \`e piuttosto oneroso dal punto di vista computazionale. Ci\`o ne limita le possibili applicazioni: non \`e possibile utilizzare telecamere con risoluzione elevata e bisogna limitare il numero di telecamere utilizzate contemporaneamente.
+\item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\`e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza.
+\end{enumerate}
+
+Per questo motivo si \`e passati ad una seconda implementazione sfruttando una tecnologia esente da queste problematiche: il Passenger Counter con telecamere RealSense.
+
+%% Interruzione di pagina
+\newpage
+
+\section{Passenger Counter con telecamere RealSense}
 
 %% Interruzione di pagina
 \newpage
