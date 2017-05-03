@@ -1338,7 +1338,9 @@ Il codice effettua le seguenti operazioni:
 \subsection{Risultati ottenuti}
 
 \subsubsection{Test effettuati}
+%TODO: Fare test con la telecamera simulando il Passenger Counter e fare tante foto.
 
+%TODO: Inserire grafico per vedere meglio le performance
 \subsubsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni.
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{bhoh}: 
@@ -1375,7 +1377,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
 \end{table}
 
-Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo.
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale agire.
 
 %% Interruzione di pagina
 \newpage
