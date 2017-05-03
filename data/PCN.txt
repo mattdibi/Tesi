@@ -1,0 +1,33 @@
+Telecamera 1: webcam mia
+1)i74790k
+Loop execution time for PCN background subtraction : 0.0311649 seconds
+Background subtraction 0.00316497 seconds
+Morphological Transformations 0.000546563 seconds
+Find contours 0.000211879 seconds
+Detect objects 2.64784e-05 seconds
+FPS = 29.9
+
+2)20-25
+Loop execution time for PCN background subtraction : 0.041254 seconds
+Background subtraction 0.0294414 seconds
+Morphological Transformations 0.00280683 seconds
+Find contours 0.00109507 seconds
+Detect objects 0.000178409 seconds
+FPS = 20.1
+
+Telecamera 2: RealSense
+1) i74790k
+Loop execution time for PCN background subtraction : 0.0157044 seconds
+Background subtraction 0.00310198 seconds
+Morphological Transformations 0.000538276 seconds
+Find contours 0.000233947 seconds
+Detect objects 2.85814e-05 seconds
+FPS = 59.9
+
+2)20-25
+Loop execution time for PCN background subtraction : 0.0467684 seconds
+Background subtraction 0.0333335 seconds
+Morphological Transformations 0.0027739 seconds
+Find contours 0.00175694 seconds
+Detect objects 0.000279599 seconds
+FPS = 20.5
