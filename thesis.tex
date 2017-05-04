@@ -685,7 +685,7 @@ In questa sezione tratteremo la prima versione realizzata del contatore di passe
 
 Inizialmente, descriveremo l'hardware utilizzato, tratteremo le tecniche utilizzate, quindi passeremo a descrivere la struttura del codice il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
-\subsection{Componenti hardware}
+\subsection{Componenti hardware}\label{HardwarePCN}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
 
 \begin{table}[ht]
@@ -1355,14 +1355,55 @@ Il codice effettua le seguenti operazioni:
 
 %TODO: Tirare fuori immagini a sbrega con i risultati ottenuti
 \subsection{Risultati ottenuti}
+In questo paragrafo vengono riportati i risultati dei test effettuati con questa versione del contatore di passeggeri.
 
-\subsubsection{Test effettuati}
-%TODO: Fare test con la telecamera simulando il Passenger Counter e fare tante foto.
+\subsubsection{Dimostrazione funzionamento}
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuto in seguito alla sottrazione del background, a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore.
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCNTest1.png}
+  \centering
+  \caption{Risultato test PCN a sottrazione del background: frame 1.}
+  \label{fig:PCNTest1}
+\end{figure}
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCNTest2.png}
+  \centering
+  \caption{Risultato test PCN a sottrazione del background: frame 2.}
+  \label{fig:PCNTest2}
+\end{figure}
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCNTest3.png}
+  \centering
+  \caption{Risultato test PCN a sottrazione del background: frame 3.}
+  \label{fig:PCNTest3}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del rumore ed eliminazione dell'ombra ottenuti. Nonostrante ci\`o l'ombra proiettata lateralmente sul muro viene rilevata erroneamente come oggetto in movimento. Essa viene quindi tracciata dal programma e rilevata come passeggero.
+
+Inoltre, al centro del fotogramma, \`e possibile notare un ulteriore falso tracciamento dovuto ad un picco di rumore registrato dalla telecamera.
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{PCNTest4.png}
+  \centering
+  \caption{Risultato test PCN a sottrazione del background: frame 4.}
+  \label{fig:PCNTest4}
+\end{figure}
+
+In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzione del rumore molto elevato in questo frame. Si noti come in questo caso l'ombra proiettata sul muro laterale sia correttamente rilevata come ombra e quindi eliminata dalle operazioni di riduzione del rumore. Nel frame a colori \`e possibile notare come l'ombra sul muro abbia lasciato una scia di tracciamento, ci\`o \`e dovuto al fatto che, pur essendo sparita dal raggio visivo, il suo parametro \verb|age| non ha ancora raggiunto il valore massimo, e quindi non \`e ancora stata eliminata dalla memoria.
+
+%% Interruzione di pagina
+\newpage
 
 %TODO: Inserire grafico per vedere meglio le performance
 \subsubsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni.
-Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{bhoh}: 
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{HardwarePCN}: 
 
 \begin{table}[h!]
     \centering
@@ -1405,6 +1446,7 @@ Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del 
 I problemi principali rilevati in questa implementazione del Passenger Counter sono i seguenti:
 \begin{enumerate}
 \item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
+\item \textbf{Tracciamenti indesiderati}: Come visto nel paragrafo precedente, nonostante l'algoritmo riesca a rilevare la maggior parte delle ombre come tali, spesso le ombre vengono tracciate erroneamente. Ci\`o comporta errori nel conteggio.
 \item \textbf{Performance}: L'algoritmo di sottrazione del background, come riportato nel paragrafo precedente, \`e piuttosto oneroso dal punto di vista computazionale. Ci\`o ne limita le possibili applicazioni: non \`e possibile utilizzare telecamere con risoluzione elevata e bisogna limitare il numero di telecamere utilizzate contemporaneamente.
 \item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\`e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza.
 \end{enumerate}
