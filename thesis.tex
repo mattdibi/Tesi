@@ -41,7 +41,7 @@
 \lstset{style=customcpp}
 
 \usepackage{capt-of}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} }
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -404,7 +404,7 @@ Specifiche tecniche:
     \caption{Specifiche tecniche Intel RealSense SR300}
 \end{table}
 
-\subsubsection{Libreria librealsense e formato immagine}
+\subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
 Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tencologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
 
 Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
@@ -1462,10 +1462,29 @@ In questa sezione tratteremo la versione del contatore di passeggeri che utilizz
 
 Poich\`e questa versione \`e basata interamente sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
 
-\subsection{Struttra del codice}
+\subsection{Struttura del codice}
+In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contantore a sottrazione del background:
+
+\begin{enumerate}
+\item \textbf{Passenger}: \`e la stessa classe usata nella versione precedente del programma.
+\item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense}.
+\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time delle telecamere e del contatore. Si noti inoltre che rileva automaticamente il numero di telecamere collegate e instanzia un contatore per ogniuna di esse.
+\end{enumerate}
 
 %% Interruzione di pagina
 \newpage
+
+\begin{figure}[h!]
+  \includegraphics[width=\textwidth]{RSPCNUML.png}
+  \caption{Diagramma UML del Passenger Counter con telecamere RealSense}
+  \centering
+  \label{fig:RSPCNUML}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Classe RSPCN}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
