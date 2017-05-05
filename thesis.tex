@@ -1938,12 +1938,31 @@ Il procedimento \`e pressoch\`e identico alla versione precedente:
 \item Si effettua una veloce operazione di riduzione del rumore.
 \end{enumerate}
 
-Da questo punto in pou il codice rimane identico alla versione a sottrazione del background trattata nella sezione \ref{kernelPCN} a pagina \pageref{kernelPCN}.
+Da questo punto in poi il codice rimane identico alla versione a sottrazione del background trattata nella sezione \ref{kernelPCN} a pagina \pageref{kernelPCN}.
+
+%% Interruzione di pagina
+\newpage
+
+Come nel caso precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{RSPCN.png}
+  \caption{Esempio funzionamento Passenger Counter con telecamere RealSense.}
+  \label{fig:RSPCN}
+\end{figure}
+
+Si noti che la lieve differenza nella posizione delle due telecamere fa in modo che il rettangolo che inscrive l'oggetto tracciato sia leggermente spostato rispetto all'oggetto, e cos\`\i\ pure il centro dell'oggetto, poich\`e il tracking viene effettuato sullo stream proveniente dalla telecamera a infrarossi, mentre il rettangolo viene disegnato sullo stream proveniente dalla telecamera a colori. 
+
+Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o creare confusione durante la visualizzazione dei video.
 
 %% Interruzione di pagina
 \newpage
 
 \subsection{Risultati ottenuti}
+In questo parametro sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare anche le prestazioni delle due telecamere.
+
+\subsubsection{Dimostrazione funzionamento telecamera SR300}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
