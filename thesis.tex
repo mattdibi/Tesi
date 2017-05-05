@@ -1700,8 +1700,82 @@ Mat RSPCN::getColorMap(Mat depthImage) {
 }
 \end{lstlisting}
 
-Come si \`e parlato nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato di un plot per mezzo di OpenCV di questo formato di immagini.
+Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato di un plot per mezzo di OpenCV di questo formato di immagini.
 
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{rawDepthImageC.png}
+  \caption{Output Intel RealSense SR300 colori.}
+  \label{fig:colorSR300}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{rawDepthImageD.png}
+  \caption{Output Intel RealSense SR300 grezzo.}
+  \label{fig:rawDepthImage}
+\end{minipage}
+\end{figure}
+
+Si noti che la leggera discrepanza tra le due immagini \`e dovuta al fatto che il sensore a infrarossi e quello per le immagini a colori si trovano in posizioni diverse. Inoltre il sensore a infrarossi ha un FOV pi\`u elevato.
+
+\subsubsection{Funzionamento getColorMap()}
+Il primo step \`e portare il valore dei pixel per i quali non \`e stato possibile ricavare il dato di distanza alla massima distanza rappresentabile. Quindi portiamo tutti i pixel nulli a 65535. Questo \`e implementato dalla funzione \verb|setTo()|.
+
+Quindi convertiamo l'immagine da 16 bit a 8 bit usando un fattore di scala. Si noti che questa conversione \`e con perdita.
+
+Otteniamo il risultato in figura \ref{fig:getColorMapStep1}.
+
+%% Interruzione di pagina
+\newpage
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{getColorMapStep1.png}
+  \caption{getColorMap: Step 1}
+  \label{fig:getColorMapStep1}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{getColorMapStep2.png}
+  \caption{getColorMap: Step 2}
+  \label{fig:getColorMapStep2}
+\end{minipage}
+\end{figure}
+
+A questo punto vogliamo rappresentare i pixel pi\`u vicini con colori pi\`u chiari e i pixel pi\`u lontani con colori pi\`u scuri. Per ottenere ci\`o \`e sufficiente sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Otteniamo l'immagine in figura \ref{fig:getColorMapStep2}:
+
+Quindi passiamo l'immagine cos\`\i\ ottenuta alla funzione \verb|equalizeHist()| la quale aumenta il contrasto dell'immagine che le viene passata come argomento. In questo modo i colori che rappresentano la distanza nell'immagine risultano pi\`u evidenti. Poich\'e questa funzione accetta in ingresso solamente immagini a 8 bit si \`e resa necessaria la conversione con perdita.
+
+In figura \ref{fig:getColorMapStep3} il risultato dell'applicazione della funzione.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{getColorMapStep3.png}
+  \caption{getColorMap: Step 3}
+  \label{fig:getColorMapStep3}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{getColorMapStep4.png}
+  \caption{getColorMap: Step 4}
+  \label{fig:getColorMapStep4}
+\end{minipage}
+\end{figure}
+
+Infine viene applicata la funzione \verb|applyColorMap()| la quale va semplicemente a ricolorare l'immagine in scala di grigi per avere una migliore percezione delle informazioni fornite dalle telecamere RealSense.
+
+Si noti infine che durante questa elaborazione sono stati conservati i dati del pixel pi\`u lontano e pi\`u vicino e convertiti in distanza. Ci\`o ha aiutato molto durante lo sviluppo del progetto per poter calibrare al meglio il contatore.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Metodo getFrame()}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
