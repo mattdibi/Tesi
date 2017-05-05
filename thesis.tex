@@ -866,7 +866,7 @@ Questa classe ha come obiettivi principali:
 \item Effettuare l'interfacciamento al dispositivo di acquisizione delle immagini.
 \item Implementare il kernel del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui abbiamo parlato in precedenza.
 \item Permettere l'esecuzione parallela di pi\`u contatori contemporaneamente, uno per telecamera collegata al unit\`a di elaborazione.
-\item Permettere la visualizzazione dei risultati dell'elaborazione.
+\item Permettere la visualizzazione e la registrazione dei risultati dell'elaborazione.
 \end{itemize}
 
 Qui di seguito \`e riportato l'header della classe PCN:
@@ -1540,6 +1540,168 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 \newpage
 
 \subsection{Classe RSPCN}
+Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Counter a sottrazione del background, con qualche aggiunta. Essa deve infatti:
+
+\begin{itemize}
+\item Interfacciarsi con le telecamere RealSense per mezzo della libreria librealsense in modo da poterne controllare i settaggi in tempo reale e ricavare i dati di profondit\`a.
+\item Convertire i dati ottenuti dalle telecamere RealSense in qualcosa di utilizzabile dall'algoritmo.
+\end{itemize}
+
+Qui di seguito \`e riportato l'header della classe RSPCN:
+
+\begin{lstlisting}[language=C++, caption=RSPCN.h]
+class RSPCN {
+
+public:
+  // Constructor
+  RSPCN(device *assignedDevice);
+  ~RSPCN() { thread_.join(); }
+
+  // Selectors
+  string getThreadID(){return threadID;};
+  float getDeviceScale(){return scale;};
+  string getDeviceName(){return dev->get_name();};
+  string getDeviceSerial(){return dev->get_serial();};
+  string getDeviceFirmware(){return dev->get_firmware_version();};
+
+  int getCountIn(){return cnt_in;};
+  int getCountOut(){return cnt_out;};
+
+  // Setters
+  void setCalibration(bool value) {calibrationOn = value; return;};
+  void setDisplayColor(bool value) {displayColor = value; return;};
+  void setDisplayDepth(bool value) {displayDepth = value; return;};
+  void setDisplayRawDepth(bool value) {displayRawDepth = value; return;};
+  void setDisplayFrame(bool value) {displayFrame = value; return;};
+  void setFramerateStabilization(bool value) {framerateStabilizationOn = value; return;};
+  void setCameraPresets(int value);
+  void setSaveVideo(bool value) {saveVideo = value; return;};
+
+  // Methods
+  void start();
+  void count();
+  void stop(){halt = true;};
+
+  void resetCounters(){cnt_in = 0; cnt_out = 0; return;};
+
+  Mat getColorMap(Mat depthImage);
+  Mat getFrame(Mat depthImage, int thresholdCentimeters);
+  
+  void toggleCalibration();
+  void toggleDisplayColor();
+  void toggleDisplayDepth();
+  void toggleDisplayRawDepth();
+  void toggleDisplayFrame();
+  void toggleFrameRateStabilization(){framerateStabilizationOn = !framerateStabilizationOn; return;};
+
+private:
+  device * dev;
+
+  std::thread thread_;
+  string threadID;
+
+  bool halt = false;
+
+  // Camera type
+  bool cameraDevice;
+
+  // Camera options
+  int ImageWidth;
+  int ImageHeight;
+  int CameraFramerate;
+
+  // Camera scale
+  float scale;
+
+  // Passenger counters
+  int cnt_in  = 0;
+  int cnt_out = 0;
+
+  // Passengers tracker
+  int pid = 0;
+  vector<Passenger> passengers;
+
+  // Options
+  bool calibrationOn = false;
+  bool displayColor = false;
+  bool displayRawDepth = false;
+  bool displayDepth = false;
+  bool displayFrame = false;
+  bool framerateStabilizationOn = true;
+  bool saveVideo = false;
+};
+\end{lstlisting}
+
+%% Interruzione di pagina
+\newpage
+
+I punti rilevanti dell'header sono i seguenti:
+
+\begin{itemize}
+\item La funzione \verb|count()| anche in questo caso rappresenta il cuore del Passenger Counter e verr\`a analizzata separatamente.
+\item La variabile \verb|dev| di tipo \verb|device| \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
+\item La variabile \verb|cameraDevice| si \`e resa necessaria per poter distinguere le due telecamere usate durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
+\item I metodi \verb|getColorMap()| e \verb|getFrame()| sono le funzioni che convertono i frame forniti dalle telecamere RealSense in qualcosa di utilizzabile dal nostro algoritmo. Nel seguito vedremo in dettaglio cosa fanno.
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Metodo getColorMap()}
+Questo metodo \`e stato molto utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno quindi \`e opportuno spiegarne il funzionamento.
+
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap()]
+Mat RSPCN::getColorMap(Mat depthImage) {
+    Mat depthColorMap;
+
+    double min;
+    double max;
+    Point tmpMinLoc;
+    Point tmpMaxLoc;
+
+    int nearestVal;
+    Point nearestLoc;
+
+    int farthestVal;
+    Point farthestLoc;
+
+    // Saving farthest point
+    minMaxLoc(depthImage, &min, &max, &tmpMinLoc, &tmpMaxLoc);
+    farthestVal = max;
+    farthestLoc = tmpMaxLoc;
+
+    // If pixelValue == 0 set it to 65535( = 2^16 - 1)
+    depthImage.setTo(65535, depthImage == NODATA);
+
+    // Saving nearest point
+    minMaxLoc(depthImage, &min, &max, &tmpMinLoc, &tmpMaxLoc);
+    nearestVal = min;
+    nearestLoc = tmpMinLoc;
+
+    // Converts CV_16U to CV_8U using a scale factor of 255.0/ 65535
+    depthImage.convertTo(depthImage, CV_8UC1, 255.0 / 65535);
+
+    // Current situation: Nearest object => Black, Farthest object => White
+    // We want to have  : Nearest object => White, Farthest object => Black
+    depthImage = cv::Scalar::all(255) - depthImage;
+
+    // Color map: Nearest object => Red, Farthest object => Blue
+    equalizeHist( depthImage, depthImage );
+    applyColorMap(depthImage, depthColorMap, COLORMAP_JET);
+
+    // Highlight nearest and farthest pixel
+    circle( depthColorMap, nearestLoc, 5, WHITE, 2, 8, 0 );
+    putText(depthColorMap, "Nearest: " + to_string(nearestVal*scale) + " m", Point(0, depthColorMap.rows - 30), FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
+
+    circle( depthColorMap, farthestLoc, 5, WHITE, 2, 8, 0 );
+    putText(depthColorMap, "Farthest: " + to_string(farthestVal*scale) + " m", Point(0, depthColorMap.rows - 10), FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
+
+    return depthColorMap;
+}
+\end{lstlisting}
+
+Come si \`e parlato nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato di un plot per mezzo di OpenCV di questo formato di immagini.
+
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
