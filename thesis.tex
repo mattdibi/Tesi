@@ -7,6 +7,7 @@
 %% Aggiunta pacchetto per inserimento di immagini
 \usepackage{graphicx}
 \usepackage{mathtools}
+\usepackage{pgfplots}
 
 \usepackage{listings}
 \usepackage{color}
@@ -1402,42 +1403,96 @@ In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzi
 
 %TODO: Inserire grafico per vedere meglio le performance
 \subsubsection{Performance}
-Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni.
+Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
+
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{HardwarePCN}: 
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Loop Principale, Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25
+\addplot 
+    coordinates {(41.254,Loop Principale) (29.4414,Sottrazione background)
+         (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) (0.178409,Tracking oggetti)};
+% Sistema Linux
+\addplot 
+    coordinates {(31.1649,Loop Principale) (3.16497,Sottrazione background)
+         (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) (0.026478,Tracking oggetti)};
+\legend{ReliaGate 20-25, Sistema Linux}
+\end{axis}
+\end{tikzpicture}
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|c|}
 	\hline
     & ReliaGate 20-25 & Sistema Linux \\ \hline
-    Tempo di esecuzione del loop principale & 0.041254  s & 0.0311649 s \\ \hline
-    Algoritmo sottrazione del background & 0.0294414 s & 0.00316497 s \\ \hline
-    Sottrazione del rumore & 0.00280683 s & 0.000546563 s \\ \hline
-    Algoritmo rilevamento contorni & 0.00109507 s & 0.000211879 s \\ \hline
-    Rilevamento e tracking degli oggetti & 0.000178409 s & 2.64784e-05 s \\ \hline
+    Tempo di esecuzione del loop principale & 41.254 ms & 31.1649 ms \\ \hline
+    Algoritmo sottrazione del background & 29.4414 ms & 3.16497 ms \\ \hline
+    Sottrazione del rumore & 2.80683 ms & 0.546563 ms \\ \hline
+    Algoritmo rilevamento contorni & 1.09507 ms & 0.211879 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 0.178409 ms & 0.026478 ms \\ \hline
     Frame Rate & 20.1 FPS & 30 FPS \\ \hline
 	\end{tabular}
     \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
 \end{table}
 
-Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando una webcam capace di fornire uno stream a 60 FPS:
+Si noti che il tempo di esecuzione del loop principale considera anche il tempo speso ad attendere i frame dalla telecamera.
+
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando una webcam capace di fornire uno stream a 60 FPS ma con la stessa risoluzione della precedente:
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Loop Principale, Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25
+\addplot 
+    coordinates {(46.7684,Loop Principale) (33.3335,Sottrazione background)
+         (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) (0.279599,Tracking oggetti)};
+% Sistema Linux
+\addplot 
+    coordinates {(15.7044,Loop Principale) (3.10198,Sottrazione background)
+         (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) (0.028581,Tracking oggetti)};
+\legend{ReliaGate 20-25, Sistema Linux}
+\end{axis}
+\end{tikzpicture}
+
+%% Interruzione di pagina
+\newpage
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|c|}
 	\hline
     & ReliaGate 20-25 & Sistema Linux \\ \hline
-    Tempo di esecuzione del loop principale & 0.0467684  s & 0.0157044 s \\ \hline
-    Algoritmo sottrazione del background & 0.0333335 s & 0.00310198 s \\ \hline
-    Sottrazione del rumore & 0.0027739 s & 0.000538276 s \\ \hline
-    Algoritmo rilevamento contorni & 0.00175694 s & 0.000233947 s \\ \hline
-    Rilevamento e tracking degli oggetti & 0.000279599 s & 2.85814e-05 s \\ \hline
+    Tempo di esecuzione del loop principale & 46.7684 ms & 15.7044 ms \\ \hline
+    Algoritmo sottrazione del background & 33.3335 ms & 3.10198 ms \\ \hline
+    Sottrazione del rumore & 2.7739 ms & 0.538276 ms \\ \hline
+    Algoritmo rilevamento contorni & 1.75694 ms & 0.233947 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 0.279599 ms & 0.028581 ms \\ \hline
     Frame Rate & 20.5 FPS & 60 FPS \\ \hline
 	\end{tabular}
     \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
 \end{table}
 
-Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale agire.
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazone.
+
+Infine \`e opportuno notare che, la durata del loop principale nel caso della telecamera a 30 FPS, \`e simile sui due sistemi poich\`e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 FPS poich\`e fornisce frame pi\`u velocemente.
 
 %% Interruzione di pagina
 \newpage
@@ -1463,7 +1518,7 @@ In questa sezione tratteremo la versione del contatore di passeggeri che utilizz
 Poich\`e questa versione \`e basata interamente sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
 
 \subsection{Struttura del codice}
-In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contantore a sottrazione del background:
+In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
 \begin{enumerate}
 \item \textbf{Passenger}: \`e la stessa classe usata nella versione precedente del programma.
