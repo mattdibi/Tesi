@@ -1734,14 +1734,14 @@ Otteniamo il risultato in figura \ref{fig:getColorMapStep1}.
 \begin{minipage}[b]{8.5cm}
   \centering
   \includegraphics[width=8cm]{getColorMapStep1.png}
-  \caption{getColorMap: Step 1}
+  \caption{getColorMap step 1}
   \label{fig:getColorMapStep1}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
   \includegraphics[width=8cm]{getColorMapStep2.png}
-  \caption{getColorMap: Step 2}
+  \caption{getColorMap step 2}
   \label{fig:getColorMapStep2}
 \end{minipage}
 \end{figure}
@@ -1756,14 +1756,14 @@ In figura \ref{fig:getColorMapStep3} il risultato dell'applicazione della funzio
 \begin{minipage}[b]{8.5cm}
   \centering
   \includegraphics[width=8cm]{getColorMapStep3.png}
-  \caption{getColorMap: Step 3}
+  \caption{getColorMap step 3}
   \label{fig:getColorMapStep3}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
   \includegraphics[width=8cm]{getColorMapStep4.png}
-  \caption{getColorMap: Step 4}
+  \caption{getColorMap step 4}
   \label{fig:getColorMapStep4}
 \end{minipage}
 \end{figure}
@@ -1776,6 +1776,86 @@ Si noti infine che durante questa elaborazione sono stati conservati i dati del 
 \newpage
 
 \subsection{Metodo getFrame()}
+Questo metodo \`e alla base del funzionamento di questa versione del Passenger Counter. Esso va a recuperare i dati forniti dalle telecamere RealSense e li converte in un formato che pu\`o essere dato in pasto allo stesso algoritmo usato a valle della sottrazione del background nella precedente versione del contatore.
+
+Qui di seguito \`e riportato il codice della funzione:
+
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getFrame()]
+Mat RSPCN::getFrame(Mat depthImage, int thresholdCentimeters) {
+    Mat frame;
+
+    // If depthImage(x,y) == NODATA, set it to 65535
+    depthImage.setTo(65535, depthImage == NODATA);
+
+    // Threshold only accepts CV_8U or CV_32F types
+    depthImage.convertTo(depthImage, CV_32FC1);
+
+    // Converting threshold from cm to pixel value
+    int threshPixel = thresholdCentimeters / (100*scale);
+
+    // Applying threshold
+    threshold(depthImage, depthImage, threshPixel, 65535, THRESH_BINARY);
+
+    // Convert to CV_8U (lossy conversion)
+    depthImage.convertTo(depthImage, CV_8UC1, 255.0 / 65535);
+
+    // Invert b&w: white = foreground, black= background.
+    frame = cv::Scalar::all(255) - depthImage;
+
+    return frame;
+}
+\end{lstlisting}
+
+In ingresso abbiamo sempre il formato immagine illustrato in figura \ref{fig:rawDepthImage} e la soglia espressa in centimetri da applicare all'immagine in ingresso.
+
+Come nel caso precedente partiamo applicando la funzione \verb|setTo()| per imporre tutti i pixel nulli a 65535. Quindi convertiamo l'immagine da 16 bit privi di segno a 32 bit floating point. Questo passaggio  \`e necessario per poter dare in pasto l'immagine alla funzione \verb|threshold()|, la quale accetta solamente immagini nel formato 8 bit privi di segno o 32 bit floating point. Il risultato di questo passaggio \`e visibile in figura \ref{fig:getFrameStep1}.
+
+Passiamo quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel rappresentano una distanza possiamo eliminare tutto ci\`o che si trova oltre una certa distanza dalla telecamera per mezzo della funzione \verb|threshold()|. Anzitutto \`e necessario convertire la soglia da cm al valore numerico applicabile sui pixel, quindi si passa all'applicazione della soglia vera e propria.
+
+\verb|scale| \`e la scala alla quale \`e impostata la telecamera e viene ricavata interrogandola per mezzo della libreria librealsense. Va moltiplicata per un fattore cento in quanto l'unit\`a di misura con la quale viene fornita sono i metri e noi abbiamo una soglia espressa in centimetri.
+
+%% Interruzione di pagina
+\newpage
+
+La soglia va quindi ad applicare la seguente operazione:
+
+\begin{equation}
+dstPixel(x,y) = \begin{cases} 65535, & \mbox{se } srcPixel(x,y) > threshPixel \\ 0, & \mbox{altrimenti } \end{cases}
+\end{equation}
+
+In sostanza vengono eliminati dall'immagine tutti gli oggetti che si trovano ad una distanza dalla telecamera maggiore della soglia impostata. Si noti che a questo punto si sono perse tutte le informazioni di distanza date dai valori dei pixel. 
+
+Ora \`e possibile convertire l'immagine al formato 8 bit privi di segno applicando un semplice fattore di scala per mezzo della funzione \verb|convertTo()|. In figura \ref{fig:getFrameStep2} \`e riportato il risultato dell'operazione di soglia e conversione nel formato 8 bit. Si pu\`o notare come lo sfondo sia stato completamente rimosso. 
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{getFrameStep1.png}
+  \caption{getFrame step 1}
+  \label{fig:getFrameStep1}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{getFrameStep2.png}
+  \caption{getFrame step 2}
+  \label{fig:getFrameStep2}
+\end{minipage}
+\end{figure}
+
+Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e gli oggetti dello sfondo neri, non ci resta che sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Il risultato \`e riportato in figura \ref{fig:getFrameStep3}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=9cm]{getFrameStep3.png}
+  \caption{getFrame step 3}
+  \label{fig:getFrameStep3}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Analisi del kernel del programma: funzione count()}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
