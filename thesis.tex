@@ -943,8 +943,7 @@ I punti rilevanti dell'header sono i seguenti:
 %% Interruzione di pagina
 \newpage
 
-% TODO: Da qui in poi aggiornare tutto il codice
-\subsection{Analisi del kernel del programma: funzione count()}
+\subsection{Analisi del kernel del programma: funzione count()}\label{kernelPCN}
 La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
@@ -1856,6 +1855,95 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
 \newpage
 
 \subsection{Analisi del kernel del programma: funzione count()}
+La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuore del programma. Il codice \`e suddivisibile ancora una volta in tre sezioni:
+
+\begin{enumerate}
+\item Estrazione degli oggetti in primo piano.
+\item Rilevamento e tracking degli oggetti di nostro interesse.
+\item Conteggio degli attraversamenti.
+\end{enumerate}
+
+\`E stato possibile riutilizzare il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Discorso a parte va fatto per il primo punto.
+
+\subsubsection{Estrazione degli oggetti in primo piano}
+
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count()]
+void RSPCN::count()
+{
+    // Streams
+    Mat frame;
+    Mat rawDepth;
+    Mat morphTrans;
+    Mat depthColorMap;
+
+    // Contours variables
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+
+    // Calibration
+    int thresholdCentimeters = MAX_RANGE_CM;
+    int blur_ksize = BLUR_KSIZE;
+    int areaMin = AREA_MIN;
+    int xNear = X_NEAR;
+    int yNear = Y_NEAR;
+    int maxPassengerAge = MAX_PASSENGER_AGE;
+
+    // Execution time
+    duration<double> loopTime;
+    bool firstLoop = true;
+
+    // Start streaming
+    dev->start();
+
+    while(!halt)
+    {
+        // Synchronization
+        if( dev->is_streaming( ) )
+        {
+            if(framerateStabilizationOn)
+                dev->wait_for_frames( );
+            else
+                dev->poll_for_frames(); // Non blocking option
+        }
+
+        // Get frame data
+        Mat color(Size(ImageWidth, ImageHeight), CV_8UC3, (void*)dev->get_frame_data(rs::stream::color), Mat::AUTO_STEP);
+        Mat depth(Size(ImageWidth, ImageHeight), CV_16U , (void*)dev->get_frame_data(rs::stream::depth), Mat::AUTO_STEP);
+
+        // -- CONVERTING DEPTH IMAGE AND THRESHOLDING
+        frame = getFrame(depth, thresholdCentimeters);
+
+        // -- DENOISING
+        blur(frame, morphTrans, Size(blur_ksize,blur_ksize));
+
+        // --FINDING CONTOURS
+        findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+
+        // For every detected object
+        for(unsigned int idx = 0; idx < contours.size(); idx++)
+        {
+            ...
+        }
+        ...
+    }
+    ...
+}
+\end{lstlisting}
+
+Il procedimento \`e pressoch\`e identico alla versione precedente:
+
+\begin{enumerate}
+\item Vengono catturati i frame dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense.
+\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente.
+\item Si effettua una veloce operazione di riduzione del rumore.
+\end{enumerate}
+
+Da questo punto in pou il codice rimane identico alla versione a sottrazione del background trattata nella sezione \ref{kernelPCN} a pagina \pageref{kernelPCN}.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Risultati ottenuti}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
