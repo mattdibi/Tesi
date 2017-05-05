@@ -128,9 +128,9 @@ Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico.
 %% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
 \subsection{Sviluppi futuri}
 \begin{figure}[h!]
+  \centering
   \includegraphics[width=\linewidth]{Internet_of_Things.png}
   \caption{Trend dell'internet of things}
-  \centering
   \label{fig:trendIoT}
 \end{figure}
 Secondo le proiezioni di Gartner, Inc. una corporation per la ricerca e advisory tecnologica, entro il 2020 ci saranno oltre 20 miliardi di device connesse all'Internet of Things. Si sta parlando di una Industria 4.0 dove l'automazione industriale integra l'IoT per migliorare le condizioni di lavoro e la produttivit\`a. La chiave di volta dell'Industria 4.0 sono i sistemi ciberfisici (CPS), ovvero sistemi fisici che sono strettamente connessi con i sistemi informatici e possono interagire e collaborare con altri sistemi CPS i quali costituiscono lo step evolutivo successivo delle device IoT. 
@@ -182,8 +182,8 @@ Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui f
 Il dispositivo deve essere in grado di effettuare il conteggio in modo non invasivo e contact-less, tenendo conto delle restrizioni dovute all'ambiente nel quale deve essere applicato.
 
 \begin{figure}[h!]
-  \includegraphics[width=9cm]{PassengerCountersz.jpg}
   \centering
+  \includegraphics[width=9cm]{PassengerCountersz.jpg}
   \caption{Schematizzazione del contatore di passeggeri}
   \label{fig:SchemPCN}
 \end{figure}
@@ -194,8 +194,8 @@ Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda
 \newpage
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{SchemaPCNIoT.png}
   \centering
+  \includegraphics[width=\textwidth]{SchemaPCNIoT.png}
   \caption{Schema Passenger Counter Eurotech}
   \label{fig:SchemPCNEurotech}
 \end{figure}
@@ -241,8 +241,8 @@ Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utili
 \section{Tecnologie PCN Eurotech}
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{StrutturaPCN.png}
   \centering
+  \includegraphics[width=\textwidth]{StrutturaPCN.png}
   \caption{Struttura del Passenger Counter di Eurotech}
   \label{fig:PCNEurotechHardware}
 \end{figure}
@@ -256,8 +256,8 @@ Il sistema di conteggio dei passeggeri consta di due componenti hardware fondame
 Il gateway \`e un'altro prodotto della Eurotech noto come ReliaGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\`e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud della Eurotech.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
   \centering
+  \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
   \caption{Dispositivo di acquisizione delle immagini 3D}
   \label{fig:DispAcqImm3D}
 \end{figure}
@@ -271,8 +271,8 @@ Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la 
 \subsection{Algoritmo per il tracciamento dei passeggeri}
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.75]{Algoritmov2.png}
   \centering
+  \includegraphics[scale=0.75]{Algoritmov2.png}
   \caption{Schematizzazione funzionamento algoritmo tracciamento passeggeri}
   \label{fig:SchemAlgrTrackPCNEurotech}
 \end{figure}
@@ -293,8 +293,8 @@ In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione
 \subsection{Infrastruttura software}
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{SoftwareStack.png}
   \centering
+  \includegraphics[width=\textwidth]{SoftwareStack.png}
   \caption{Schematizzazione stack software del sistema di Passenger Counting}
   \label{fig:StackSoftwarePCNEurotech}
 \end{figure}
@@ -329,9 +329,9 @@ Come dispositvi di acquisizione delle immagini sono state utilizzate le telecame
 \subsubsection{Intel RealSense R200}
 
 \begin{figure}[h!]
+  \centering
   \includegraphics[width=.49\textwidth]{R200.jpg}
   \includegraphics[width=.49\textwidth]{r200_module.png}
-  \centering
   \caption{Telecamera R200}
   \label{fig:R200}
 \end{figure}
@@ -339,8 +339,8 @@ Come dispositvi di acquisizione delle immagini sono state utilizzate le telecame
 Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{DepthDataFlowR200.png}
   \centering
+  \includegraphics[width=\textwidth]{DepthDataFlowR200.png}
   \caption{Schema funzionamento Intel RealSense R200}
   \label{fig:SchemaFunzR200}
 \end{figure}
@@ -368,9 +368,9 @@ Specifiche tecniche:
 \subsubsection{Intel RealSense SR300}
 
 \begin{figure}[h!]
+  \centering
   \includegraphics[width=.49\textwidth]{SR300.jpg}
   \includegraphics[width=.49\textwidth]{SR300_module.png}
-  \centering
   \caption{Telecamera SR300}
   \label{fig:SR300}
 \end{figure}
@@ -379,8 +379,8 @@ La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come
 Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando un circuito ASIC.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{DepthDataFlowSR300.png}
   \centering
+  \includegraphics[width=\textwidth]{DepthDataFlowSR300.png}
   \caption{Schema funzionamento Intel RealSense SR300}
   \label{fig:SchemaFunzSR300}
 \end{figure}
@@ -497,8 +497,8 @@ OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedde
 \newpage
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{yocto-environment.png}
   \centering
+  \includegraphics[width=\textwidth]{yocto-environment.png}
   \caption{Workflow progetto Yocto}
   \label{fig:WorkflowYocto}
 \end{figure}
@@ -518,8 +518,8 @@ Una volta che sono stati generati tutti i pacchetti richiesti procede alla gener
 Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario realizzare l'immagine della distribuzione Linux opportunamente modificata e la toolchain di cross-sviluppo prima di cominciare lo sviluppo dell'applicazione. Una volta completati questi passaggi si \`e potuti passare allo sviluppo dell'applicazione sulla SDKMachine. Siccome si \`e passati attraverso diverse tecnologie il processo \`e stato ripetuto pi\`u volte per poter integrare le nuove tecnologie all'interno della toolchain.
 
 \begin{figure}[h!]
-  \includegraphics[scale=1]{cross-development-toolchains.png}
   \centering
+  \includegraphics[scale=1]{cross-development-toolchains.png}
   \caption{Toolchain di cross-sviluppo del progetto Yocto}
   \label{fig:ToolchainYocto}
 \end{figure}
@@ -580,8 +580,8 @@ Purtroppo, avendo la scheda una sola porta HDMI disponibile solo in output \`e s
 In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{Zynq7000.jpg}
   \centering
+  \includegraphics[width=\textwidth]{Zynq7000.jpg}
   \caption{Diagramma del SoC Zynq-7000}
   \label{fig:Zynq7000}
 \end{figure}
@@ -593,8 +593,8 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 La piattaforma per lo sviluppo SDSoC permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
 
 \begin{figure}[h!]
-  \includegraphics[scale=1]{XilinxSDSoC.png}
   \centering
+  \includegraphics[scale=1]{XilinxSDSoC.png}
   \caption{Workflow SDSoC}
   \label{fig:SDSoC}
 \end{figure}
@@ -607,8 +607,8 @@ SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In f
 \subsubsection{Compatibilit\`a con OpenCV e liberia AuvizCV}
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{AuvizCV.jpg}
   \centering
+  \includegraphics[width=\textwidth]{AuvizCV.jpg}
   \caption{Risultati benchmark}
   \label{fig:BenchmarkAuvizCV}
 \end{figure}
@@ -640,8 +640,8 @@ Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardwa
 L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le telecamere Intel RealSense.
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.5]{ReliaGATE2025.jpg}
   \centering
+  \includegraphics[scale=0.5]{ReliaGATE2025.jpg}
   \caption{ReliaGate 20-25}
   \label{fig:ReliaGate2025}
 \end{figure}
@@ -728,9 +728,9 @@ Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazi
 Qui di seguito \`e riportato un esempio di funzionamento.
 
 \begin{figure}[h!]
+  \centering
   \includegraphics[width=.49\textwidth]{resframe.jpg}
   \includegraphics[width=.49\textwidth]{resmog2.jpg}
-  \centering
   \caption{Esempio funzionamento BackgroundSubtractorMOG2}
   \label{fig:EsempioBackSub}
 \end{figure}
@@ -746,8 +746,8 @@ Questo algoritmo per la rilevazione dei contorni \`e utilizzato anche nella seco
 Qui di seguito \`e riportato un esempio di funzionamento.
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.75]{findContours.png}
   \centering
+  \includegraphics[scale=0.75]{findContours.png}
   \caption{Esempio funzionamento findContours: l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni ricavati per mezzo dell'algoritmo sull'immagine a colori.}
   \label{fig:EsempioFindContours}
 \end{figure}
@@ -758,8 +758,8 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 \subsection{Struttura del codice}
 
 \begin{figure}[h!]
-  \includegraphics[width=\textwidth]{PCNUML.png}
   \centering
+  \includegraphics[width=\textwidth]{PCNUML.png}
   \caption{Diagramma UML del Passenger Counter a sottrazione del background}
   \label{fig:PCNUML}
 \end{figure}
@@ -1028,8 +1028,8 @@ Il codice esegue le seguenti operazioni:
 Risultato delle operazioni:
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCN1.png}
   \centering
+  \includegraphics[width=\linewidth]{PCN1.png}
   \caption{L'immagine a sinistra rappresenta l'input. L'immagine al centro \`e il risultato dell'applicazione della sottrazione del background. L'immagine a destra \`e l'output delle operazioni di sottrazione del rumore.}
   \label{fig:PCN1}
 \end{figure}
@@ -1090,8 +1090,8 @@ L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione
 Risultato delle operazioni:
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCN2.png}
   \centering
+  \includegraphics[width=\linewidth]{PCN2.png}
   \caption{L'immagine a sinistra rappresenta l'immagine in ingresso dopo la sottrazione del background. L'immagine al centro \`e l'output delle operazioni di sottrazione del rumore. L'immagine a destra \`e l'immagine di ingresso sulla quale sono stati disegnati il bounding rectangle e il centro del rettangolo.}
   \label{fig:PCN2}
 \end{figure}
@@ -1229,15 +1229,15 @@ Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato
 Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la soglia per l'attraversamento.
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.65]{PCNMano1.png}
   \centering
+  \includegraphics[scale=0.65]{PCNMano1.png}
   \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
   \label{fig:PCNMano1}
 \end{figure}
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.65]{PCNMano2.png}
   \centering
+  \includegraphics[scale=0.65]{PCNMano2.png}
   \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
   \label{fig:PCNMano2}
 \end{figure}
@@ -1246,8 +1246,8 @@ Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la sogli
 \newpage
 
 \begin{figure}[h!]
-  \includegraphics[scale=0.65]{PCNMano3.png}
   \centering
+  \includegraphics[scale=0.65]{PCNMano3.png}
   \caption{Risultato tracciamento sperimentale PCN. Secondo attraversamento.}
   \label{fig:PCNMano3}
 \end{figure}
@@ -1362,22 +1362,22 @@ In questo paragrafo vengono riportati i risultati dei test effettuati con questa
 Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuto in seguito alla sottrazione del background, a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore.
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCNTest1.png}
   \centering
+  \includegraphics[width=\linewidth]{PCNTest1.png}
   \caption{Risultato test PCN a sottrazione del background: frame 1.}
   \label{fig:PCNTest1}
 \end{figure}
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCNTest2.png}
   \centering
+  \includegraphics[width=\linewidth]{PCNTest2.png}
   \caption{Risultato test PCN a sottrazione del background: frame 2.}
   \label{fig:PCNTest2}
 \end{figure}
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCNTest3.png}
   \centering
+  \includegraphics[width=\linewidth]{PCNTest3.png}
   \caption{Risultato test PCN a sottrazione del background: frame 3.}
   \label{fig:PCNTest3}
 \end{figure}
@@ -1390,8 +1390,8 @@ In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del ru
 Inoltre, al centro del fotogramma, \`e possibile notare un ulteriore falso tracciamento dovuto ad un picco di rumore registrato dalla telecamera.
 
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{PCNTest4.png}
   \centering
+  \includegraphics[width=\linewidth]{PCNTest4.png}
   \caption{Risultato test PCN a sottrazione del background: frame 4.}
   \label{fig:PCNTest4}
 \end{figure}
@@ -1530,9 +1530,9 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 \newpage
 
 \begin{figure}[h!]
+  \centering
   \includegraphics[width=\textwidth]{RSPCNUML.png}
   \caption{Diagramma UML del Passenger Counter con telecamere RealSense}
-  \centering
   \label{fig:RSPCNUML}
 \end{figure}
 
