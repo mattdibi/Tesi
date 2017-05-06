@@ -1962,7 +1962,91 @@ Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o crear
 \subsection{Risultati ottenuti}
 In questo parametro sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare anche le prestazioni delle due telecamere.
 
+\subsubsection{Dimostrazione funzionamento telecamera R200}
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a(metodo \verb|getColorMap()|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (metodo \verb|getFrame()|).
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{R2001.png}
+  \caption{Risultato test RSPCN con telecamera R200: frame 1}
+  \label{fig:R2001}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{R2002.png}
+  \caption{Risultato test RSPCN con telecamera R200: frame 2}
+  \label{fig:R2002}
+\end{figure}
+
+Si noti ancora una volta come in figura \ref{fig:R2002} il rettangolo appare non centrato sulla testa del passeggero. Ci\`o \`e dovuto al fatto che la telecamera a colori e quelle a infrarossi hanno posizioni diverse.
+
+Inoltre \`e opportuno notare come il centro della testa del passeggero, sempre in figura \ref{fig:R2002}, sia oscurato. Questo \`e devuto al fatto che il modello R200, poich\`e basato sulla visione stereoscopica, ha un range di funzionamento minimo molto elevato (30cm ca.) e, in questo caso, una parte della testa si trova fuori dal range operativo della telecamera.
+
+%% Interruzione di pagina
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{R2003.png}
+  \caption{Risultato test RSPCN con telecamera R200: frame 3}
+  \label{fig:R2003}
+\end{figure}
+
+In figura \ref{fig:R2003} il pallino verde in alto a destra nell'immagine indica la registrazione dell'evento di attraversamento della soglia.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{R2004.png}
+  \caption{Risultato test RSPCN con telecamera R200: frame 4}
+  \label{fig:R2004}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
 \subsubsection{Dimostrazione funzionamento telecamera SR300}
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Il formato dei frame \`e lo stesso del caso precedente.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{SR3001.png}
+  \caption{Risultato test RSPCN con telecamera SR300: frame 1}
+  \label{fig:SR3001}
+\end{figure}
+
+Si noti che in questo caso nell'immagine coi dati di profondit\`a non viene rilevato il pavimento. Questo \`e dovuto al fatto che il range operativo della telecamera SR300 \`e inferiore a quello della R200. Ci\`o per\`o non influisce sul corretto funzionamento del contatore.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{SR3002.png}
+  \caption{Risultato test RSPCN con telecamera SR300: frame 2}
+  \label{fig:SR3002}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{SR3003.png}
+  \caption{Risultato test RSPCN con telecamera SR300: frame 3}
+  \label{fig:SR3003}
+\end{figure}
+
+Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un raggio minimo molto pi\`u basso poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a dell'immagine.
+
+%% Interruzione di pagina
+\newpage
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{SR3004.png}
+  \caption{Risultato test RSPCN con telecamera SR300: frame 4}
+  \label{fig:SR3004}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Problemi}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
