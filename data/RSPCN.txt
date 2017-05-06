@@ -1,0 +1,35 @@
+Telecamera SR300 sistema Linux:
+
+Loop execution time for Intel RealSense SR300: 32.2761 ms
+getFrame duration : 0.913448 ms
+denoise duration : 0.295688 ms
+find contours duration : 0.228186 ms
+tracking duration : 0.054902 ms
+Framerate : 30FPS
+
+Telecamera R200 sistema Linux:
+
+Loop execution time for Intel RealSense R200: 15.8996 ms
+getFrame duration : 0.517965 ms
+denoise duration : 0.162011 ms
+find contours duration : 0.095771 ms
+tracking duration : 1.29373e-4 ms
+Framerate : 60FPS
+
+Telecamera SR300 ReliaGate 20-25:
+
+Loop execution time for Intel RealSense SR300: 37.1384 ms
+getFrame duration : 7.80747 ms
+denoise duration : 8.69046 ms
+find contours duration : 2.0645 ms
+tracking duration : 0.033218 ms
+Framerate : 30FPS
+
+Telecamera R200 ReliaGate 20-25:
+
+Loop execution time for Intel RealSense R200: 16.4351 ms
+getFrame duration : 2.23713 ms
+denoise duration : 1.81564 ms
+find contours duration : 0.962472 ms
+tracking duration : 4.48531e-4 ms
+Framerate : 60FPS

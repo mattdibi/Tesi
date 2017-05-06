@@ -1414,24 +1414,24 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
   tickwidth         = 0pt,
   enlarge y limits  = 0.2,
   enlarge x limits  = 0.02,
-  symbolic y coords = {Loop Principale, Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
   nodes near coords,
 ]
 % ReliaGate 20-25
 \addplot 
-    coordinates {(41.254,Loop Principale) (29.4414,Sottrazione background)
-         (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) (0.178409,Tracking oggetti)};
+    coordinates {(29.4414,Sottrazione background) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
+                    (0.178409,Tracking oggetti)};
 % Sistema Linux
 \addplot 
-    coordinates {(31.1649,Loop Principale) (3.16497,Sottrazione background)
-         (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) (0.026478,Tracking oggetti)};
+    coordinates {(3.16497,Sottrazione background) (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) 
+                    (0.026478,Tracking oggetti)};
 \legend{ReliaGate 20-25, Sistema Linux}
 \end{axis}
 \end{tikzpicture}
 
 \begin{table}[h!]
     \centering
-	\begin{tabular}{|c|c|c|}
+	\begin{tabular}{|l|c|c|}
 	\hline
     & ReliaGate 20-25 & Sistema Linux \\ \hline
     Tempo di esecuzione del loop principale & 41.254 ms & 31.1649 ms \\ \hline
@@ -1456,17 +1456,17 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
   tickwidth         = 0pt,
   enlarge y limits  = 0.2,
   enlarge x limits  = 0.02,
-  symbolic y coords = {Loop Principale, Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
   nodes near coords,
 ]
 % ReliaGate 20-25
 \addplot 
-    coordinates {(46.7684,Loop Principale) (33.3335,Sottrazione background)
-         (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) (0.279599,Tracking oggetti)};
+    coordinates {(33.3335,Sottrazione background) (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) 
+                    (0.279599,Tracking oggetti)};
 % Sistema Linux
 \addplot 
-    coordinates {(15.7044,Loop Principale) (3.10198,Sottrazione background)
-         (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) (0.028581,Tracking oggetti)};
+    coordinates {(3.10198,Sottrazione background) (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) 
+                    (0.028581,Tracking oggetti)};
 \legend{ReliaGate 20-25, Sistema Linux}
 \end{axis}
 \end{tikzpicture}
@@ -1476,7 +1476,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
 
 \begin{table}[h!]
     \centering
-	\begin{tabular}{|c|c|c|}
+	\begin{tabular}{|l|c|c|}
 	\hline
     & ReliaGate 20-25 & Sistema Linux \\ \hline
     Tempo di esecuzione del loop principale & 46.7684 ms & 15.7044 ms \\ \hline
@@ -2047,6 +2047,99 @@ Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del
 \newpage
 
 \subsubsection{Performance}
+Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
+
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25
+\addplot 
+    coordinates {(7.80747,Metodo getFrame) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
+                    (0.033218,Tracking oggetti)};
+% Sistema Linux
+\addplot 
+    coordinates {(0.913448,Metodo getFrame) (0.295688,Sottrazione rumore) (0.228186,Rilevamento contorni)
+                    (0.054902,Tracking oggetti)};
+\legend{ReliaGate 20-25, Sistema Linux}
+\end{axis}
+\end{tikzpicture}
+
+\begin{table}[h!]
+    \centering
+	\begin{tabular}{|l|c|c|}
+	\hline
+    & ReliaGate 20-25 & Sistema Linux \\ \hline
+    Tempo di esecuzione del loop principale & 37.1384 ms & 32.2761 ms \\ \hline
+    Metodo getFrame & 7.80747 ms & 0.913448 ms \\ \hline
+    Sottrazione del rumore & 8.69046 ms & 0.295688 ms \\ \hline
+    Algoritmo rilevamento contorni & 2.0645 ms & 0.228186 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 0.033218 ms & 0.054902 ms \\ \hline
+    Frame Rate & 30 FPS & 30 FPS \\ \hline
+	\end{tabular}
+    \caption{Performance Passenger Counter con telecamera RealSense SR300}
+\end{table}
+
+Anche in questo caso all'interno del tempo di esecuzione del loop principale \`e considerato il tempo speso ad attendere i frame dalla telecamera.
+
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense R200:
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25
+\addplot 
+    coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
+                    (4.48531e-4,Tracking oggetti)};
+% Sistema Linux
+\addplot 
+    coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
+                    (1.29373e-4,Tracking oggetti)};
+\legend{ReliaGate 20-25, Sistema Linux}
+\end{axis}
+\end{tikzpicture}
+
+%% Interruzione di pagina
+\newpage
+
+\begin{table}[h!]
+    \centering
+	\begin{tabular}{|l|c|c|}
+	\hline
+    & ReliaGate 20-25 & Sistema Linux \\ \hline
+    Tempo di esecuzione del loop principale & 16.4351 ms & 15.8996 ms \\ \hline
+    Metodo getFrame & 2.23713 ms & 0.517965 ms \\ \hline
+    Sottrazione del rumore & 1.81564 ms & 0.162011 ms \\ \hline
+    Algoritmo rilevamento contorni & 0.962472 ms & 0.095771 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
+    Frame Rate & 60 FPS & 60 FPS \\ \hline
+	\end{tabular}
+    \caption{Performance Passenger Counter con telecamera RealSense R200}
+\end{table}
+
+Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore con sottrazione del background... \textbf{continuare}.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Problemi}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
