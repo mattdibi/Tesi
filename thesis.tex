@@ -89,7 +89,7 @@ Lo sviluppo si \`e diviso in quattro fasi principali:
 \begin{itemize}
 \item Una indagine preliminare sulle migliori piattaforme sulle quali sviluppare l'applicazione.
 \item Progettazione e implementazione del contatore usando solamente algoritmi di elaborazione delle immagini (Passenger Counter con background subtraction), individuando i passaggi pi\`u pesanti dal punto di vista computazionale.
-\item Progettazione e implementazione del contatore sfruttando telecamere a infrarossi Time-Of-Flight (Passenger counter con telecamere RealSense).
+\item Progettazione e implementazione del contatore sfruttando telecamere a infrarossi intel RealSense (Passenger counter con telecamere RealSense).
 \item Lo sviluppo della piattaforma software sulla quale integrare tutte le tecnologie utilizzate in fase di sviluppo per mezzo del progetto Yocto.
 \end{itemize}
 
@@ -2182,14 +2182,16 @@ Gli unici svantaggi di questa implementazione sono:
 \item \textbf{Costi}: il contatore con sottrazione dello sfondo non \`e vasato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
 \end{itemize}
 
+Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere a infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense. 
+
 %% Interruzione di pagina
 \newpage
 
-\subsection{Versioni realizzate}
-Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo principale per questi porting \`e stato quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech.
+\subsection{Versioni realizzate e porting}
+Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo principale per questi porting \`e stato quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech. Nel seguito analizzeremo le versioni del Passenger Counter con telecamere RealSense che sono state realizzate nel corso della tesi.
 
 \subsubsection{Versione C++}
-Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi.
+Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
 \subsubsection{Wrapping in Java}
 Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool \textbf{SWIG}.
@@ -2209,12 +2211,12 @@ SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo
 Questa versione conservava le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsubsection{Versione Java}
-Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse built-in l'interfacciamento a Java, per quanto riguarda la libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}.
+Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}.
 
 % TODO: Tradurre e dargli un senso
 JavaCPP provides efficient access to native C++ inside Java, not unlike the way some C/C++ compilers interact with assembly language. No need to invent new languages such as with SWIG, SIP, C++/CLI, Cython, or RPython as required by cppyy. Instead, it exploits the syntactic and semantic similarities between Java and C++. Under the hood, it uses JNI, so it works with all implementations of Java SE, in addition to Android, Avian, and RoboVM (instructions).
 
-More specifically, when compared to the approaches above or elsewhere (CableSwig, JNIGeneratorApp, cxxwrap, JNIWrapper, Platform Invoke, GlueGen, LWJGL Generator, JNIDirect, ctypes, JNA, JNIEasy, JniMarshall, JNative, J/Invoke, HawtJNI, JNR, BridJ, fficxx, etc.), it maps naturally and efficiently many common features afforded by the C++ language and often considered problematic, including overloaded operators, class and function templates, callbacks through function pointers, function objects (aka functors), virtual functions and member function pointers, nested struct definitions, variable length arguments, nested namespaces, large data structures containing arbitrary cycles, virtual and multiple inheritance, passing/returning by value/reference/string/vector, anonymous unions, bit fields, exceptions, destructors and shared or unique pointers (via either try-with-resources or garbage collection), and documentation comments. Obviously, neatly supporting the whole of C++ would require more work (although one could argue about the intrinsic neatness of C++), but we are releasing it here as a proof of concept.
+More specifically, when compared to the approaches above or elsewhere, it maps naturally and efficiently many common features afforded by the C++ language and often considered problematic, including overloaded operators, class and function templates, callbacks through function pointers, function objects (aka functors), virtual functions and member function pointers, nested struct definitions, variable length arguments, nested namespaces, large data structures containing arbitrary cycles, virtual and multiple inheritance, passing/returning by value/reference/string/vector, anonymous unions, bit fields, exceptions, destructors and shared or unique pointers (via either try-with-resources or garbage collection), and documentation comments. Obviously, neatly supporting the whole of C++ would require more work (although one could argue about the intrinsic neatness of C++), but we are releasing it here as a proof of concept.
 
 As a case in point, we have already used it to produce complete interfaces to OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, and others as part of the JavaCPP Presets subproject, also demonstrating early parsing capabilities of C/C++ header files that show promising and useful results.
 
@@ -2223,10 +2225,22 @@ Il progetto rende disponibile i file \verb|.jar| per l'interfacciamento alle lib
 Caratteristiche di questa implementazione:
 \begin{itemize}
 \item Utilizzo del tipo IplImage al posto di Mat per la rappresentazione dei frame
-\item Assenza colorMap
 \item Utilizzo del framework Java per il display delle immagini al posto del modulo HighGui di OpenCV assente in questa versione della libreria
+\item Parallelizzazione della computazione affidata a Java
+\item Aumento della portabili\`a del codice
 \end{itemize}
 
+Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla JVM ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
+
+\textbf{Aggiungere dati sulle performance della versione}
+
+\subsubsection{Versione OSGi}
+In pausa finch\`e non siamo sicuri di implementarla.
+
+%% Interruzione di pagina
+\newpage
+
+\section{Piattaforma Yocto: realizzazione e features}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
