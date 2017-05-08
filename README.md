@@ -205,7 +205,18 @@ Qui passo a descrivere cosa ho fatto per riuscire a realizzare una distro custom
 ##### 2) Deplyment dell'applicazione all'interno della piattaforma software
 * ...?
 
-## Sezione 4: Conclusioni
+## Sezione 4: Repository del progetto e manuale d'uso
+Qui spiego che c'è un repository online con tutti i componenti del progetto e traduco tutti i README che ho realizzato nel repository e spiego come fare per compilare/usare le parti realizzate del progetto.
+
+##### 1) cpp sources
+
+##### 2) java wrapper
+
+##### 3) java sources
+
+##### 4) yocto project
+
+## Sezione 5: Conclusioni
 
 ##### 1) Riassunto di quanto fatto
 
