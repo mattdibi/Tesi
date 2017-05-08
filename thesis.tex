@@ -2158,6 +2158,75 @@ In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti p
 \newpage
 
 \subsection{Confronto versioni Passenger Counter}
+Arrivati a questo punto \`e possibile effettuare un confronto tra le varie versioni implementate.
+
+Anzitutto \`e necessario considerare i vantaggi della versione con telecamere RealSense rispetto alla versione a sottrazione del background. Grazie alla nuova versione abbiamo ricavato i seguenti vantaggi:
+\begin{itemize}
+\item \textbf{Indipendenza dalle condizioni di luce}: la versione a sottrazione del background aveva una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante.
+\item \textbf{Minor numero di falsi positivi}: nell'implementazione con le telecamere a infrarossi le ombre non vengono pi\`u considerate come oggetto in movimento da tracciare.
+\item \textbf{Costo computazionale}: l'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
+\item \textbf{Precisione}: le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamenti.
+\item \textbf{Indipendenza dall'ambiente}: l'algoritmo di sottrazione del background basandosi sulla costruzione di un modello del backgrond costante necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile.
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{TrackRSPCN.png}
+  \caption{Dettaglio tracciamento con Passenger Counter con telecamere RealSense.}
+  \label{fig:TrackRSPCN}
+\end{figure}
+
+Gli unici svantaggi di questa implementazione sono:
+\begin{itemize}
+\item \textbf{Raggio di azione}: l'implementazione con sottrazione del background non ha problemi legati al range di funzionamento.
+\item \textbf{Costi}: il contatore con sottrazione dello sfondo non \`e vasato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Versioni realizzate}
+Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo principale per questi porting \`e stato quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech.
+
+\subsubsection{Versione C++}
+Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi.
+
+\subsubsection{Wrapping in Java}
+Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool \textbf{SWIG}.
+
+% TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
+SWIG (Simplified Wrapper and Interface Generator - Wrapper semplificato e generatore di interfacce) \`e un wrapper open source utilizzato per collegare i programmi per elaboratore o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
+
+L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da altri linguaggi di programmazione, passando tipi di dati complessi, mantenendo la memoria libera, ereditariet\`a delle classi dei vari linguaggi, ecc. Il programmatore scrive un file di interfaccia che contiene un elenco di funzioni C/C++ che devono essere rese visibili ad un interprete. SWIG compila il file di interfaccia e genera normale C/C++ ed il codice nel linguaggio di programmazione di destinazione. SWIG generer\`a codice di conversione o serializzazione per le funzioni con argomenti semplici; il codice di conversione per i tipi complessi di argomenti deve essere scritto dal programmatore. Lo strumento SWIG crea codice sorgente che fornisce il collante tra C/C++ e il linguaggio di destinazione. A seconda del linguaggio software, questo collante \`e disponibile in due forme:
+
+\begin{itemize}
+\item una libreria condivisa che un interprete esistente pu\`o collegare come una qualche forma di modulo di estensione, o
+\item una libreria condivisa che pu\`o essere collegata ad altri programmi compilati nel linguaggio di destinazione (ad esempio, utilizzando JNI in Java).
+\end{itemize}
+
+SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo, questo deve essere fatto dal programmatore manualmente.
+
+Questa versione conservava le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
+
+\subsubsection{Versione Java}
+Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse built-in l'interfacciamento a Java, per quanto riguarda la libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}.
+
+% TODO: Tradurre e dargli un senso
+JavaCPP provides efficient access to native C++ inside Java, not unlike the way some C/C++ compilers interact with assembly language. No need to invent new languages such as with SWIG, SIP, C++/CLI, Cython, or RPython as required by cppyy. Instead, it exploits the syntactic and semantic similarities between Java and C++. Under the hood, it uses JNI, so it works with all implementations of Java SE, in addition to Android, Avian, and RoboVM (instructions).
+
+More specifically, when compared to the approaches above or elsewhere (CableSwig, JNIGeneratorApp, cxxwrap, JNIWrapper, Platform Invoke, GlueGen, LWJGL Generator, JNIDirect, ctypes, JNA, JNIEasy, JniMarshall, JNative, J/Invoke, HawtJNI, JNR, BridJ, fficxx, etc.), it maps naturally and efficiently many common features afforded by the C++ language and often considered problematic, including overloaded operators, class and function templates, callbacks through function pointers, function objects (aka functors), virtual functions and member function pointers, nested struct definitions, variable length arguments, nested namespaces, large data structures containing arbitrary cycles, virtual and multiple inheritance, passing/returning by value/reference/string/vector, anonymous unions, bit fields, exceptions, destructors and shared or unique pointers (via either try-with-resources or garbage collection), and documentation comments. Obviously, neatly supporting the whole of C++ would require more work (although one could argue about the intrinsic neatness of C++), but we are releasing it here as a proof of concept.
+
+As a case in point, we have already used it to produce complete interfaces to OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, and others as part of the JavaCPP Presets subproject, also demonstrating early parsing capabilities of C/C++ header files that show promising and useful results.
+
+Il progetto rende disponibile i file \verb|.jar| per l'interfacciamento alle librerie librealsense. Purtroppo questa interfaccia fa uso del progetto JavaCV, il quale \`e un porting Java di OpenCV realizzato sempre dal progetto JavaCPP. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
+
+Caratteristiche di questa implementazione:
+\begin{itemize}
+\item Utilizzo del tipo IplImage al posto di Mat per la rappresentazione dei frame
+\item Assenza colorMap
+\item Utilizzo del framework Java per il display delle immagini al posto del modulo HighGui di OpenCV assente in questa versione della libreria
+\end{itemize}
+
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
