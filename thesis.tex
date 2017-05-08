@@ -360,6 +360,7 @@ Specifiche tecniche:
     \hline
 	\end{tabular}
     \caption{Specifiche tecniche Intel RealSense R200}
+    \label{table:R200Spec}
 \end{table}
 
 %% Interruzione di pagina
@@ -403,6 +404,7 @@ Specifiche tecniche:
     \hline
 	\end{tabular}
     \caption{Specifiche tecniche Intel RealSense SR300}
+    \label{table:SR300Spec}
 \end{table}
 
 \subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
@@ -2134,12 +2136,28 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Performance Passenger Counter con telecamera RealSense R200}
 \end{table}
 
-Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore con sottrazione del background... \textbf{continuare}.
+Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato, ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
+
+Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi, ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingressso dalla telecamera (anche in questo caso il metodo \verb|wait_for_frames()| \`e bloccante).
 
 %% Interruzione di pagina
 \newpage
 
 \subsection{Problemi}
+Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi, in questo caso sono pi\`u legati alle tecnologie impiegate.
+
+Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se presente la luce solare, la quale ha molte componenti infrarosse. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere notevolmente il funzionamento della telecamera.
+
+La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente outdoor poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione steroscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10m, il range minimo di 40cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
+
+Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori alla telecamera SR300, ci\`o aumenta ulteriormente le difficolt\`a di tracciamento.
+
+In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti per l'applicazione considerata in questa tesi, comunque il funzionameno \`e molto migliore rispetto al caso del Passenger Counter a sottrazione del background e i punti di forza di questa tecnologia sono di gran lunga maggiori dei punti deboli.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Confronto versioni Passenger Counter}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
