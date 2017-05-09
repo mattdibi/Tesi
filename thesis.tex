@@ -2162,8 +2162,8 @@ Nel corso della tesi sono state implementate diverse versioni del contatore, in 
 
 Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 \begin{itemize}
-\item BPCN: Passenger Counter a sottrazione del background.
-\item RPCN: Passenger Counter con telecamere RealSense.
+\item BPC: Passenger Counter a sottrazione del background.
+\item RPC: Passenger Counter con telecamere RealSense.
 \end{itemize}
 
 \subsection{Prestazioni}
@@ -2193,7 +2193,7 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
 \addplot 
     coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
                     (0.178409,Tracking oggetti)};
-\legend{RPCN, BPCN}
+\legend{RPC, BPC}
 \end{axis}
 \end{tikzpicture}
 
@@ -2216,14 +2216,14 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \begin{minipage}[b]{8.5cm}
   \centering
   \includegraphics[width=8cm]{OmbraPCN.png}
-  \caption{Dettaglio tracking ombra BPCN}
+  \caption{Dettaglio tracking ombra BPC}
   \label{fig:ombraPCN}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
   \includegraphics[width=8cm]{OmbraRSPCN.png}
-  \caption{Dettaglio tracking ombra RPCN}
+  \caption{Dettaglio tracking ombra RPC}
   \label{fig:ombraRSPCN}
 \end{minipage}
 \end{figure}
@@ -2231,7 +2231,7 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \subsubsection{Dipendenza dall'ambiente}
 La versione a sottrazione del background aveva una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
-Inoltre, in condizioni di scarsa illuminazione, il BPCN si trova ad avere a che fare con un rumore molto elevato fino a comprometterne il funzionamento. Essendo le telecamere RealSense dotate di proiettori di luce infrarossa, non risentono di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il loro funzionamento.
+Inoltre, in condizioni di scarsa illuminazione, il BPC si trova ad avere a che fare con un rumore molto elevato fino a comprometterne il funzionamento. Essendo le telecamere RealSense dotate di proiettori di luce infrarossa, non risentono di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il loro funzionamento.
 
 \subsubsection{Raggio di azione}
 L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, pu\`o compromettere il corretto funzionamento del programma.
