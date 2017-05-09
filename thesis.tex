@@ -2240,15 +2240,19 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \end{figure}
 
 \subsubsection{Dipendenza dall'ambiente}
-La versione a sottrazione del background aveva una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
+La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
-Inoltre, in condizioni di scarsa illuminazione, il BPC si trova ad avere a che fare con un rumore molto elevato fino a comprometterne il funzionamento. Essendo le telecamere RealSense dotate di proiettori di luce infrarossa, non risentono di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il loro funzionamento.
+Infine, in condizioni di bassa illuminazione, il BPC si trova ad avere a che fare con un rumore molto elevato e quindi un degrado delle prestazioni. D'altro canto, essendo le telecamere RealSense dotate di proiettori di luce infrarossa, il RPC non risente di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il suo funzionamento.
 
 \subsubsection{Raggio di azione}
-L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, pu\`o compromettere il corretto funzionamento del programma.
+L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, ci\`o pu\`o compromettere il corretto funzionamento del programma.
+
+Abbiamo visto infatti in figura \ref{fig:R2002} a pagina \pageref{fig:R2002} come l'eccessiva vicinanza dell'oggetto da tracciare non permetta alla telecamera di rilevare correttamente i dati di profondit\`a. Questo comporta un'area priva di dati al centro dell'oggetto da tracciare e, nel caso quest'area diventi troppo grande, un fallimento nel rilevamento dell'oggetto nell'immagine e/o un oggetto tracciato in modo non corretto.
 
 \subsubsection{Costi}
-Il contatore con sottrazione dello sfondo non \`e vasato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
+Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. L'RPC invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
+
+Bisogna altres\`\i\ considerare il fatto che il BPC necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
 \subsubsection{Conclusioni}
 Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere a infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense. 
@@ -2342,12 +2346,15 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
 \end{table}
 
 \subsubsection{Versione OSGi}
-In pausa finch\`e non siamo sicuri di implementarla.
+\textbf{In pausa finch\`e non siamo sicuri di implementarla.}
 
 %% Interruzione di pagina
 \newpage
 
 \section{Piattaforma Yocto: realizzazione e features}
+In questa sezione tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
+
+\subsection{Caratteristiche della distribuzione}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
