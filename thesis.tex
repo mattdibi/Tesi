@@ -2355,6 +2355,7 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
 In questa sezione tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
 
 \subsection{Caratteristiche della distribuzione}
+Il risultato finale di quanto si \`e realizzato \`e riportato in figura \ref{fig:SWStack}.
 
 \begin{figure}[h!]
   \centering
@@ -2363,6 +2364,22 @@ In questa sezione tratteremo la distribuzione Linux, realizzata per mezzo del pr
   \label{fig:SWStack}
 \end{figure}
 
+La distribuzione \`e formata da quattro parti fondamentali:
+
+\begin{enumerate}
+\item Poky: la reference distribution del progetto Yocto. Fa da template per la costruzione della propria distro Linux customizzata. Nel progetto si \`e usata la versione 2.2 - Morty a causa delle restrizioni dovute alle librerie RealSense.
+\item OpenCV: come visto in precedenza, fondamentale per l'image processing.
+\item librealsense: necessaria per l'interfacciamento con le telecamere RealSense.
+\item OpenJDK 8: necessario per l'esecuzione delle versioni basate su Java del Passenger Counter.
+\end{enumerate}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Realizzazione}
+Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro.
+
+Inizialmente, si \`e partiti aggiungendo solamente OpenCV all'immagine. Questo perch\`e bastava per supportare l'applicativo del Passenger Counter a sottrazione del background. Poich\`e in assenza di ulteriori restrizioni si \`e potuto installare l'ultima versione rilasciata della libreria: la 3.2.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
