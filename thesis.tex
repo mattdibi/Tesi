@@ -2169,6 +2169,34 @@ L'implementazione con le telecamere RealSense ha comportato i seguenti vantaggi 
 \item \textbf{Indipendenza dall'ambiente}: l'algoritmo di sottrazione del background basandosi sulla costruzione di un modello del backgrond costante necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile.
 \end{itemize}
 
+Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate. I tempi riportati sono in millisecondi.
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Rilevamento passeggeri, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25 RSPCN
+\addplot 
+    coordinates {(7.80747,Rilevamento passeggeri) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
+                    (0.033218,Tracking oggetti)};
+% ReliaGate 20-25 PCN
+\addplot 
+    coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
+                    (0.178409,Tracking oggetti)};
+\legend{RSPCN, PCN}
+\end{axis}
+\end{tikzpicture}
+
+%% Interruzione di pagina
+\newpage
+
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{TrackRSPCN.png}
