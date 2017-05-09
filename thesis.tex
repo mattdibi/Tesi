@@ -2204,27 +2204,38 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
 Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamente.
 
 \begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=\textwidth]{TrackRSPCN.png}
-  \caption{Dettaglio tracciamento con Passenger Counter con telecamere RealSense.}
-  \label{fig:TrackRSPCN}
+  \includegraphics[width=8cm]{TrackBPC.png}
+  \caption{Dettaglio tracking BPC}
+  \label{fig:trackBPC}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{TrackRPC.png}
+  \caption{Dettaglio tracking RPC}
+  \label{fig:trackRPC}
+\end{minipage}
 \end{figure}
+
+Il fatto che nel RPC venga tracciata solo la testa dei passeggeri permette un tracking molto pi\`u preciso. Infatti nel caso del BPC la forma del soggetto tracciato varia continuamente e, poich\`e il tracciamento \`e riferito al centro dell'area, ci\`o comporta un sacco di errori. In figura \ref{fig:trackBPC} possiamo notare come la traccia lasciata dal passeggero sia piena di discontinuit\`a e linee spezzate, d'altra parte in figura \ref{fig:trackRPC} la linea di tracciamento risulta molto pi\`u continua.
 
 Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso della sottrazione del background questo \`e un problema molto grave. Qui di seguito \`e riportato un confronto tra le due versioni.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=8cm]{OmbraPCN.png}
+  \includegraphics[width=8cm]{OmbraBPC.png}
   \caption{Dettaglio tracking ombra BPC}
-  \label{fig:ombraPCN}
+  \label{fig:ombraBPC}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
-  \includegraphics[width=8cm]{OmbraRSPCN.png}
+  \includegraphics[width=8cm]{OmbraRPC.png}
   \caption{Dettaglio tracking ombra RPC}
-  \label{fig:ombraRSPCN}
+  \label{fig:ombraRPC}
 \end{minipage}
 \end{figure}
 
