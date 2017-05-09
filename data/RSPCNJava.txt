@@ -1,0 +1,28 @@
+Sistema linux con R200:
+    mail loop duration: 16638261 ns
+    grabFrame duration: 238088 ns
+    denoise duration: 92920 ns
+    find contours duration: 17013 ns
+    tracking duration: 1483 ns
+
+Sistema linux con SR300:
+    mail loop duration: 33222639 ns
+    grabFrame duration: 1065715 ns
+    denoise duration: 378844 ns
+    find contours duration: 423019 ns
+    tracking duration: 136130 ns
+
+ReliaGate 20-25 R200:
+    mail loop duration: 16932457 ns
+    grabFrame duration: 4008504 ns
+    denoise duration: 1230020 ns
+    find contours duration: 163716 ns
+    tracking duration: 59985 ns
+
+ReliaGate 20-25 SR300:
+    mail loop duration: 32961934 ns
+    grabFrame duration: 9500416 ns
+    denoise duration: 3007777 ns
+    find contours duration: 562086 ns
+    tracking duration: 3901 ns
+

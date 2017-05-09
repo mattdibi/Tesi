@@ -2194,7 +2194,7 @@ Nel corso della tesi sono state realizzate molteplici versioni dello stesso codi
 Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
 \subsubsection{Wrapping in Java}
-Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool \textbf{SWIG}.
+Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}.
 
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
 SWIG (Simplified Wrapper and Interface Generator - Wrapper semplificato e generatore di interfacce) \`e un wrapper open source utilizzato per collegare i programmi per elaboratore o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
@@ -2232,7 +2232,48 @@ Caratteristiche di questa implementazione:
 
 Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla JVM ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
 
-\textbf{Aggiungere dati sulle performance della versione}
+Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni principali del Passenger Counter con telecamere RealSense in Java. I dati sono riferiti all'uso della telecamera R200 sul ReliaGate 20-25.
+
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  y axis line style = { opacity = 0 },
+  axis x line       = none,
+  tickwidth         = 0pt,
+  enlarge y limits  = 0.2,
+  enlarge x limits  = 0.02,
+  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+  nodes near coords,
+]
+% ReliaGate 20-25 C++
+\addplot 
+    coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
+                    (4.48531e-4,Tracking oggetti)};
+% ReliaGate 20-25 Java
+\addplot 
+    coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
+                    (1.29373e-4,Tracking oggetti)};
+\legend{ReliaGate 20-25, Sistema Linux}
+\end{axis}
+\end{tikzpicture}
+
+%% Interruzione di pagina
+\newpage
+
+\begin{table}[h!]
+    \centering
+	\begin{tabular}{|l|c|c|}
+	\hline
+    & ReliaGate 20-25 & Sistema Linux \\ \hline
+    Tempo di esecuzione del loop principale & 16.4351 ms & 15.8996 ms \\ \hline
+    Metodo getFrame & 2.23713 ms & 0.517965 ms \\ \hline
+    Sottrazione del rumore & 1.81564 ms & 0.162011 ms \\ \hline
+    Algoritmo rilevamento contorni & 0.962472 ms & 0.095771 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
+    Frame Rate & 60 FPS & 60 FPS \\ \hline
+	\end{tabular}
+    \caption{Performance Passenger Counter con telecamera RealSense R200}
+\end{table}
 
 \subsubsection{Versione OSGi}
 In pausa finch\`e non siamo sicuri di implementarla.
