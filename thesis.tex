@@ -42,7 +42,7 @@
 \lstset{style=customcpp}
 
 \usepackage{capt-of}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} }
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/}}
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -2157,8 +2157,17 @@ In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti p
 %% Interruzione di pagina
 \newpage
 
-\section{Confronto PCN a sottrazione del background e PCN con telecamere RealSense}
-Arrivati a questo punto \`e possibile effettuare un confronto tra le due versioni del Passenger Counter implementate. Nel seguito sono riportate le maggiori differenze tra le due implementazioni del contatore.
+\section{Confronto implementazioni del Passenger Counter}
+Nel corso della tesi sono state implementate diverse versioni del contatore, in diversi linguaggi. In questa sezione andremo ad analizzare quali sono queste implementazioni, come sono state realizzate  e quali sono le loro prestazioni.
+
+Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
+\begin{itemize}
+\item BPCN: Passenger Counter a sottrazione del background.
+\item RPCN: Passenger Counter con telecamere RealSense.
+\end{itemize}
+
+\subsection{Prestazioni}
+Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie ed algoritmi utilizzati del punto di vista delle prestazioni del programma.
 
 \subsubsection{Costo computazionale}
 L'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
@@ -2180,16 +2189,19 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
 \addplot 
     coordinates {(7.80747,Rilevamento passeggeri) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
                     (0.033218,Tracking oggetti)};
-% ReliaGate 20-25 PCN
+% ReliaGate 20-25 BSPCN
 \addplot 
     coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
                     (0.178409,Tracking oggetti)};
-\legend{RSPCN, PCN}
+\legend{RPCN, BPCN}
 \end{axis}
 \end{tikzpicture}
 
+%% Interruzione di pagina
+\newpage
+
 \subsubsection{Precisione nel tracciamento}
-Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamenti.
+Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamente.
 
 \begin{figure}[h!]
   \centering
@@ -2198,16 +2210,28 @@ Le prestazioni del Passenger Counter a sottrazione del background sono di gran l
   \label{fig:TrackRSPCN}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
-
 Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso della sottrazione del background questo \`e un problema molto grave. Qui di seguito \`e riportato un confronto tra le due versioni.
 
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{OmbraPCN.png}
+  \caption{Dettaglio tracking ombra BPCN}
+  \label{fig:ombraPCN}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{OmbraRSPCN.png}
+  \caption{Dettaglio tracking ombra RPCN}
+  \label{fig:ombraRSPCN}
+\end{minipage}
+\end{figure}
 
 \subsubsection{Dipendenza dall'ambiente}
 La versione a sottrazione del background aveva una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
-Inoltre, in condizioni di scarsa illuminazione, il PCN si trova ad avere a che fare con un rumore molto elevato fino a comprometterne il funzionamento. Essendo le telecamere RealSense dotate di proiettori di luce infrarossa, non risentono di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il loro funzionamento.
+Inoltre, in condizioni di scarsa illuminazione, il BPCN si trova ad avere a che fare con un rumore molto elevato fino a comprometterne il funzionamento. Essendo le telecamere RealSense dotate di proiettori di luce infrarossa, non risentono di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il loro funzionamento.
 
 \subsubsection{Raggio di azione}
 L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, pu\`o compromettere il corretto funzionamento del programma.
@@ -2215,7 +2239,7 @@ L'implementazione con sottrazione del background non ha problemi legati al range
 \subsubsection{Costi}
 Il contatore con sottrazione dello sfondo non \`e vasato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
 
-\subsection{Conclusioni}
+\subsubsection{Conclusioni}
 Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere a infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense. 
 
 %% Interruzione di pagina
