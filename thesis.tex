@@ -2194,7 +2194,7 @@ Nel corso della tesi sono state realizzate molteplici versioni dello stesso codi
 Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
 \subsubsection{Wrapping in Java}
-Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}.
+Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: http://www.swig.org/}.
 
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
 SWIG (Simplified Wrapper and Interface Generator - Wrapper semplificato e generatore di interfacce) \`e un wrapper open source utilizzato per collegare i programmi per elaboratore o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
@@ -2211,26 +2211,26 @@ SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo
 Questa versione conservava le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsubsection{Versione Java}
-Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}.
+Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp}.
 
-% TODO: Tradurre e dargli un senso
-JavaCPP provides efficient access to native C++ inside Java, not unlike the way some C/C++ compilers interact with assembly language. No need to invent new languages such as with SWIG, SIP, C++/CLI, Cython, or RPython as required by cppyy. Instead, it exploits the syntactic and semantic similarities between Java and C++. Under the hood, it uses JNI, so it works with all implementations of Java SE, in addition to Android, Avian, and RoboVM (instructions).
+JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Sfrutta la Java Nativi Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
 
-More specifically, when compared to the approaches above or elsewhere, it maps naturally and efficiently many common features afforded by the C++ language and often considered problematic, including overloaded operators, class and function templates, callbacks through function pointers, function objects (aka functors), virtual functions and member function pointers, nested struct definitions, variable length arguments, nested namespaces, large data structures containing arbitrary cycles, virtual and multiple inheritance, passing/returning by value/reference/string/vector, anonymous unions, bit fields, exceptions, destructors and shared or unique pointers (via either try-with-resources or garbage collection), and documentation comments. Obviously, neatly supporting the whole of C++ would require more work (although one could argue about the intrinsic neatness of C++), but we are releasing it here as a proof of concept.
+Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets}.
 
-As a case in point, we have already used it to produce complete interfaces to OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, and others as part of the JavaCPP Presets subproject, also demonstrating early parsing capabilities of C/C++ header files that show promising and useful results.
+JavaCPP Presets \`e un sottoprogetto di JavaCPP il quale rende disponibile le interfacce verso le librerie C++ pi\`u usate prodotte usando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
 
-Il progetto rende disponibile i file \verb|.jar| per l'interfacciamento alle librerie librealsense. Purtroppo questa interfaccia fa uso del progetto JavaCV, il quale \`e un porting Java di OpenCV realizzato sempre dal progetto JavaCPP. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
+Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
 Caratteristiche di questa implementazione:
 \begin{itemize}
-\item Utilizzo del tipo IplImage al posto di Mat per la rappresentazione dei frame
-\item Utilizzo del framework Java per il display delle immagini al posto del modulo HighGui di OpenCV assente in questa versione della libreria
+\item Utilizzo del framework Java per il display delle immagini al posto del modulo HighGui di OpenCV assente in questa versione della libreria.
 \item Parallelizzazione della computazione affidata a Java
 \item Aumento della portabili\`a del codice
 \end{itemize}
+Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla Java Virtual Machine ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
 
-Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla JVM ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
+%% Interruzione di pagina
+\newpage
 
 Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni principali del Passenger Counter con telecamere RealSense in Java. I dati sono riferiti all'uso della telecamera R200 sul ReliaGate 20-25.
 
@@ -2257,9 +2257,6 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
 \end{axis}
 \end{tikzpicture}
 
-%% Interruzione di pagina
-\newpage
-
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|l|c|c|}
@@ -2272,7 +2269,7 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 0.059985 ms \\ \hline
     Frame Rate & 60 FPS & 60 FPS \\ \hline
 	\end{tabular}
-    \caption{Performance Passenger Counter con telecamera RealSense R200}
+    \caption{Confronto performance versioni Passenger Counter con telecamera R200.}
 \end{table}
 
 \subsubsection{Versione OSGi}
