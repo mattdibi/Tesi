@@ -2251,9 +2251,9 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
                     (4.48531e-4,Tracking oggetti)};
 % ReliaGate 20-25 Java
 \addplot 
-    coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
-                    (1.29373e-4,Tracking oggetti)};
-\legend{ReliaGate 20-25, Sistema Linux}
+    coordinates {(4.008504,Metodo getFrame) (1.230020,Sottrazione rumore) (0.163716,Rilevamento contorni)
+                    (0.059985,Tracking oggetti)};
+\legend{Versione C++, Versione Java}
 \end{axis}
 \end{tikzpicture}
 
@@ -2264,12 +2264,12 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     \centering
 	\begin{tabular}{|l|c|c|}
 	\hline
-    & ReliaGate 20-25 & Sistema Linux \\ \hline
-    Tempo di esecuzione del loop principale & 16.4351 ms & 15.8996 ms \\ \hline
-    Metodo getFrame & 2.23713 ms & 0.517965 ms \\ \hline
-    Sottrazione del rumore & 1.81564 ms & 0.162011 ms \\ \hline
-    Algoritmo rilevamento contorni & 0.962472 ms & 0.095771 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
+    & Versione C++ & Versione Java \\ \hline
+    Tempo di esecuzione del loop principale & 16.4351 ms & 16.932457 ms \\ \hline
+    Metodo getFrame & 2.23713 ms & 4.008504 ms \\ \hline
+    Sottrazione del rumore & 1.81564 ms & 1.230020 ms \\ \hline
+    Algoritmo rilevamento contorni & 0.962472 ms & 0.163716 ms \\ \hline
+    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 0.059985 ms \\ \hline
     Frame Rate & 60 FPS & 60 FPS \\ \hline
 	\end{tabular}
     \caption{Performance Passenger Counter con telecamera RealSense R200}
