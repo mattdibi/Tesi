@@ -2730,8 +2730,14 @@ La patch si \`e resa necessaria in quanto questa operazione avveniva solamente n
 La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 
 \begin{itemize}
-\item
+\item Mancanza dei driver per l'hardware Eurotech: non \`e stato possibile aggiungere alla distribuzione i driver necessari all'interfacciamento con l'hardware proprietario Eurotech installato sul ReliaGate 20-25. Questo \`e dovuto alla scarsa conoscenza del tool Yocto e alla mancanza di tempo per la realizzazione di questo ultimo passaggio.
+\item Mancanza di tool: la distribuzione cos\`\i\ realizzata \`e molto barebone. Mancano moltissimi tool software adatti a farne una distribuzione completa.
+\item Incompatibilit\`a con le versioni pi\`u recenti del progetto Yocto: purtroppo il layer librealsense non viene aggiornato spesso e quindi siamo costretti ad utilizzare una versione di Poky che non \`e la pi\`u recente. Di conseguenza tutti pacchetti installati sono bloccati a versioni non aggiornate (es: OpenCV si trova alla versione 3.1 invece che alla 3.2).
+\item Mancanza del supporto ad OpenCL: inizialmente si prevedeva di accelerare parte della computazione sulla GPU. Purtroppo, per mancanza di supporto da parte di Intel, non \`e stato possibile installare OpenCL e quindi accelerare gli algoritmi di OpenCV sulla GPU integrata dell'Intel E3827.
 \end{itemize}
+
+%TODO: Cambiare questa frase. Non sapevo cosa scrivere.
+Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e stata ritenuta un ottimo proof of concept da parte di Eurotech.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
