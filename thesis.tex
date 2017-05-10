@@ -2752,13 +2752,37 @@ https://github.com/mattdibi/RSPassengerCounter
 \noindent La struttura della repo \`e la seguente:
 
 \begin{itemize}
-\item \verb|build_config|: here you will find the configuration files and instruction to build the Yocto project custom distro for the 20-25 platform. It will contain all the needed projects to run the code in this repository.
-\item \verb|cpp_src|: here you will find the C++ version of the code.
-\item \verb|java_wrap|: here you will find a java wrap of the an obsolete version of the C++ code. It uses SWIG to generate the Java wrapper.
-\item \verb|java_src|: here you will find the Java version of the code. It depends on the JavaCPP project.
+\item \verb|build_config|: qui sono raccolti i file di configurazione del progetto Yocto e le istruzioni per generare la distribuzione per il ReliaGate 20-25.
+\item \verb|cpp_src|: in questa cartella sono contenuti i sorgenti per la versione C++ del codice.
+\item \verb|java_wrap|: qui sono contenuti i file di configurazione di SWIG per generare il wrapper Java del progetto.
+\item \verb|java_src|: qui sono contenuti i sorgenti e i file .jar necessari per la versione Java dell'applicativo.
 \end{itemize}
 
 \section{Prerequisiti}
+Per poter eseguire l'applicativo sulla piattaforma target \`e necessario solamente disporre dell'immagine della distribuzione Yocto e la toolchain generata con il progetto Yocto.
+
+Per poter eseguire l'applicativo su una macchina host \`e necessario che su questa siano installati:
+
+\begin{itemize}
+\item OpenCV
+\item librealsense
+\item openjdk-8
+\end{itemize}
+
+Inoltre \`e necessario assicurarsi di avere delle porte USB 3.0 disponibili per il collegamento con le telecamere RealSense ed un hardware sufficientemente prestante.
+
+\section{Generazione dell'immagine Yocto}
+
+\section{Compilazione ed esecuzione dell'applicativo}
+
+\subsection{Versione C++}
+
+\subsection{Versione Java Wrap}
+
+\subsection{Versione Java}
+
+%% Interruzione di pagina
+\newpage
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
