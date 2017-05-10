@@ -2739,6 +2739,27 @@ La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 %TODO: Cambiare questa frase. Non sapevo cosa scrivere.
 Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e stata ritenuta un ottimo proof of concept da parte di Eurotech.
 
+\chapter{Manuale d'uso del progetto}
+In questo capitolo verr\`a riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
+
+\section{Repository Github}
+Il progetto \`e disponibile pubblicamente all'indirizzo:
+
+\begin{verbatim}
+https://github.com/mattdibi/RSPassengerCounter
+\end{verbatim}
+
+\noindent La struttura della repo \`e la seguente:
+
+\begin{itemize}
+\item \verb|build_config|: here you will find the configuration files and instruction to build the Yocto project custom distro for the 20-25 platform. It will contain all the needed projects to run the code in this repository.
+\item \verb|cpp_src|: here you will find the C++ version of the code.
+\item \verb|java_wrap|: here you will find a java wrap of the an obsolete version of the C++ code. It uses SWIG to generate the Java wrapper.
+\item \verb|java_src|: here you will find the Java version of the code. It depends on the JavaCPP project.
+\end{itemize}
+
+\section{Prerequisiti}
+
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
 
