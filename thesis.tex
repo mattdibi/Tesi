@@ -2584,12 +2584,12 @@ Questa versione \`e stata realizzata per supportare il Passenger Counter con tel
 
 Poich\`e si voleva rendere disponibile la API Java ufficiale di OpenCV \`e stato necessario modificare a mano la ricetta di OpenCV in quanto solo l'ultima versione di detta ricetta si occupava di generare tale API. Usando una versione pi\`u vecchia, per i problemi di compatibilit\`a delle librerie RealSense, la API non veniva generata.
 
-Lo stack software completo di questa versione della distribuzione \`e riportato in figura \ref{fig:SWStack} ed \`e la versione finale del progetto.
+Lo stack software completo di questa versione della distribuzione \`e riportato in figura \ref{fig:SWStack} ed \`e la versione finale della distribuzione.
 
 %% Interruzione di pagina
 \newpage
 
-\subsection{File di configurazione}
+\subsection{File di configurazione: local.conf}
 Qui di seguito riportiamo il file di configurazione della versione finale della distribuzione.
 
 \begin{lstlisting}[caption=local.conf]
@@ -2616,14 +2616,11 @@ PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 
 CONF_VERSION = "1"
 
-# Modify the following line accoring to your Host Machine setup
-# Example: CPU with 6 core 12 threads use the following configuration.
 BB_NUMBER_THREADS = '12'
 PARALLEL_MAKE = '-j 12'
 
 # Java installation
 IMAGE_INSTALL_append = " openjdk-8 "
-
 PREFERRED_PROVIDER_virtual/java-initial-native = "cacao-initial-native"
 PREFERRED_PROVIDER_virtual/java-native = "jamvm-native"
 PREFERRED_PROVIDER_virtual/javac-native = "ecj-bootstrap-native"
@@ -2666,6 +2663,51 @@ CORE_IMAGE_EXTRA_INSTALL += "librealsense-graphical-examples"
 \end{lstlisting}
 
 La keyword \verb|require| va a prendere la ricetta specificata nel seguito, necessaria all'installazione della libreria.
+
+\subsection{Modifica alla ricetta di OpenCV}
+Per aggiungere le API Java di OpenCV \`e stato necessario modificare la ricetta di OpenCV come segue:
+
+\begin{lstlisting}
+...
+- PACKAGECONFIG ??= "eigen jpeg png tiff v4l libv4l gstreamer samples tbb gphoto2 \
++ PACKAGECONFIG ??= "eigen jpeg png tiff v4l libv4l gstreamer samples tbb java gphoto2 \
+    ${@bb.utils.contains("DISTRO_FEATURES", "x11", "gtk", "", d)} \
+    ${@bb.utils.contains("LICENSE_FLAGS_WHITELIST", "commercial", "libav", "", d)}"
+...
+PACKAGECONFIG[jasper] = "-DWITH_JASPER=ON,-DWITH_JASPER=OFF,jasper,"
++ PACKAGECONFIG[java] = "-DJAVA_INCLUDE_PATH=${JAVA_HOME}/include -DJAVA_INCLUDE_PATH2=${JAVA_HOME}/include/linux -DJAVA_AWT_INCLUDE_PATH=${JAVA_HOME}/include -DJAVA_AWT_LIBRARY=${JAVA_HOME}/lib/amd64/libjawt.so -DJAVA_JVM_LIBRARY=${JAVA_HOME}/lib/amd64/server/libjvm.so,,ant-native fastjar-native openjdk-8-native,"
+PACKAGECONFIG[jpeg] = "-DWITH_JPEG=ON,-DWITH_JPEG=OFF,jpeg,"
+...
+PACKAGECONFIG[opencl] = "-DWITH_OPENCL=ON,-DWITH_OPENCL=OFF,opencl-headers,"
+- PACKAGECONFIG[oracle-java] = "-DJAVA_INCLUDE_PATH=${JAVA_HOME}/include -DJAVA_INCLUDE_PATH2=${JAVA_HOME}/include/linux -DJAVA_AWT_INCLUDE_PATH=${JAVA_HOME}/include -DJAVA_AWT_LIBRARY=${JAVA_HOME}/lib/amd64/libjawt.so -DJAVA_JVM_LIBRARY=${JAVA_HOME}/lib/amd64/server/libjvm.so,,ant-native oracle-jse-jdk oracle-jse-jdk-native,"
++ PACKAGECONFIG[oracle-java] = "-DJAVA_INCLUDE_PATH=${ORACLE_JAVA_HOME}/include -DJAVA_INCLUDE_PATH2=${ORACLE_JAVA_HOME}/include/linux -DJAVA_AWT_INCLUDE_PATH=${ORACLE_JAVA_HOME}/include -DJAVA_AWT_LIBRARY=${ORACLE_JAVA_HOME}/lib/amd64/libjawt.so -DJAVA_JVM_LIBRARY=${ORACLE_JAVA_HOME}/lib/amd64/server/libjvm.so,,ant-native oracle-jse-jdk oracle-jse-jdk-native,"
+PACKAGECONFIG[png] = "-DWITH_PNG=ON,-DWITH_PNG=OFF,libpng,"
+...
+export PYTHON="${STAGING_BINDIR_NATIVE}/python"
+- export JAVA_HOME="${STAGING_DIR_NATIVE}/usr/bin/java"
++ export ORACLE_JAVA_HOME="${STAGING_DIR_NATIVE}/usr/bin/java"
++ export JAVA_HOME="${STAGING_DIR_NATIVE}/usr/lib/jvm/openjdk-8-native"
+export ANT_DIR="${STAGING_DIR_NATIVE}/usr/share/ant/"
+...
+PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'oracle-java', '${PN}-java-dbg ${PN}-java', '', d)} \
++   ${@bb.utils.contains('PACKAGECONFIG', 'java', '${PN}-java-dbg ${PN}-java', '', d)} \ 
+    ${PN}-samples-dbg ${PN}-samples ${PN}-apps python-opencv"
+...$
+\end{lstlisting}
+
+Praticamente grazie a queste modifiche, se durante il processo di build, bitbake si accorge che l'immagine possiede un JDK, effettua le operazioni necessarie a generare le API Java di OpenCV.
+
+La patch si \`e resa necessaria in quanto questa operazione avveniva solamente nel caso in cui bitbake rilevasse il JDK di Oracle, ma per problemi di compatibilit\`a eravamo riusciti ad installare solamente il JDK OpenJDK-8. Quindi \`e stato necessario effettuare le modifiche di cui sopra le quali non fanno altro che rilevare la presenza del nuovo JDK e lo usano per implementare la API.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Problemi}
+La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
+
+\begin{itemize}
+\item
+\end{itemize}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
