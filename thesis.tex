@@ -2413,8 +2413,26 @@ It is also possible to place output and configuration files in a directory separ
 Le preferenze circa il software da installare nella distribuzione e il processo di build vanno specificate in due file di configurazione della Build Directory:
 
 \begin{itemize}
-\item \textbf{bblayers.conf}: contiene i path dei layers. Come spiegato in precedenza i layers sono collezioni logiche di ricette che rappresentano stack di applicazioni o BSP.
-\item \textbf{local.conf}: contiene il file di configurazione della build. Qui viene specificato quali software installare nella distribuzione e altre instruzioni circa il processo di build.
+\item \textbf{local.conf}: local.conf file contains documentation on the various configuration options. Any variable set here overrides any variable set elsewhere within the environment unless that variable is hard-coded within a file (e.g. by using '=' instead of '?='). Some variables are hard-coded for various reasons but these variables are relatively rare.
+
+Edit this file to set the \verb|MACHINE| for which you want to build, which package types you wish to use (\verb|PACKAGE_CLASSES|), and the location from which you want to access downloaded files (\verb|DL_DIR|).
+
+If local.conf is not present when you start the build, the OpenEmbedded build system creates it from local.conf.sample when you source the top-level build environment setup script (i.e. oe-init-build-env or oe-init-build-env-memres).
+
+The source local.conf.sample file used depends on the \verb|$TEMPLATECONF| script variable, which defaults to meta-poky/conf when you are building from the Yocto Project development environment and defaults to meta/conf when you are building from the OpenEmbedded Core environment. Because the script variable points to the source of the local.conf.sample file, this implies that you can configure your build environment from any layer by setting the variable in the top-level build environment setup script as follows:
+
+     \verb|TEMPLATECONF=your_layer/conf|
+            
+Once the build process gets the sample file, it uses sed to substitute final \verb|${OEROOT}| values for all \verb|##OEROOT##| values.
+\item \textbf{bblayers.conf}: This configuration file defines layers, which are directory trees, traversed (or walked) by BitBake. The bblayers.conf file uses the BBLAYERS variable to list the layers BitBake tries to find.
+
+If bblayers.conf is not present when you start the build, the OpenEmbedded build system creates it from bblayers.conf.sample when you source the top-level build environment setup script (i.e. oe-init-build-env or oe-init-build-env-memres).
+
+The source bblayers.conf.sample file used depends on the \verb|$TEMPLATECONF| script variable, which defaults to meta-poky/conf when you are building from the Yocto Project development environment and defaults to meta/conf when you are building from the OpenEmbedded Core environment. Because the script variable points to the source of the bblayers.conf.sample file, this implies that you can base your build from any layer by setting the variable in the top-level build environment setup script as follows:
+
+     \verb|TEMPLATECONF=your_layer/conf|
+            
+Once the build process gets the sample file, it uses sed to substitute final \verb|${OEROOT}| values for all \verb|##OEROOT##| values.
 \end{itemize}
 
 \subsubsection{documentation}
@@ -2422,6 +2440,7 @@ This directory holds the source for the Yocto Project documentation as well as t
 
 \subsubsection{meta}
 This directory contains the OpenEmbedded Core metadata. The directory holds recipes, common classes, and machine configuration for emulated targets (qemux86, qemuarm, and so forth.)
+Ad esempio all'interno di questa cartella \`e presente la folder meta/recipes-sato, la quale contiene Sato demo/reference UI/UX and its associated applications and configuration data.
 
 \subsubsection{meta-yocto}
 This directory contains the configuration for the Poky reference distribution.
@@ -2571,7 +2590,7 @@ Lo stack software completo di questa versione della distribuzione \`e riportato 
 \newpage
 
 \subsection{File di configurazione}
-Qui di seguito riportiamo i file principali di configurazione del build system per la realizzazione della distribuzione.
+Qui di seguito riportiamo il file di configurazione della versione finale della distribuzione.
 
 \begin{lstlisting}[caption=local.conf]
 MACHINE ??= "intel-corei7-64"
@@ -2618,12 +2637,35 @@ Questo \`e il file principale per la configurazione della build. Come detto in p
 %% Interruzione di pagina
 \newpage
 
-Vediamo ora nel dettaglio il significato di questi metadati:
+Vediamo ora nel dettaglio il significato di questi parametri:
 
 \begin{itemize}
-\item MACHINE: \`e la target machine per la build. Nel nostro caso stiamo costruendo una distribuzione per una architettura Intel 64-bit.
-\item DISTRO: 
+\item \verb|MACHINE|: Specifies the target device for which the image is built. The variable corresponds to a machine configuration file of the same name, through which machine-specific configurations are set. Thus, when MACHINE is set to "qemux86" there exists the corresponding qemux86.conf machine configuration file, which can be found in the Source Directory in meta/conf/machine. Nel nostro caso stiamo costruendo una distribuzione per una architettura Intel 64-bit.
+\item \verb|DISTRO|: The short name of the distribution. This variable corresponds to a distribution configuration file whose root name is the same as the variable's argument and whose filename extension is .conf. For example, the distribution configuration file for the Poky distribution is named poky.conf and resides in the meta-poky/conf/distro directory of the Source Directory. 
+\item \verb|PACKAGE_CLASSES|: specifies the package manager the OpenEmbedded build system uses when packaging data.
+\item \verb|SDKMACHINE|: The machine for which the SDK is built. In other words, the SDK is built such that it runs on the target you specify with the SDKMACHINE value. The value points to a corresponding .conf file under conf/machine-sdk/. You can use "\verb|i686|" and "\verb|x86_64|" as possible values for this variable. The variable defaults to "\verb|i686|" and is set in the local.conf file in the Build Directory.
+\item \verb|EXTRA_IMAGE_FEATURES|: A list of additional features to include in an image. "debug-tweaks" - Makes an image suitable for debugging. For example, allows root logins without passwords and enables post-installation logging.
+\item \verb|PATCHRESOLVE|: Determines the action to take when a patch fails. 
+\item \verb|BB_DISKMON_DIRS|: Monitors disk space and available inodes during the build and allows you to control the build based on these parameters.
+\item \verb|BB_NUMBER_THREADS|: The maximum number of tasks BitBake should run in parallel at any one time. The OpenEmbedded build system automatically configures this variable to be equal to the number of cores on the build system. For example, a system with a dual core processor that also uses hyper-threading causes the \verb|BB_NUMBER_THREADS| variable to default to "4".
+\item \verb|PARALLEL_MAKE|: Extra options passed to the make command during the \verb|do_compile| task in order to specify parallel compilation on the local build host. This variable is usually in the form "-j x", where x represents the maximum number of parallel threads make can run.
+\item \verb|IMAGE_INSTALL|: Specifies the packages to install into an image.
+\item \verb|CORE_IMAGE_EXTRA_INSTALL|: Specifies the list of packages to be added to the image.
 \end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+Si noti la mancanza della libreria RealSense tra i pacchetti installati nella distribuzione. Questo \`e dovuto al fatto che la sua installazione avviene usando un secondo file di configurazione "auto.conf", come specificato nelle istruzioni di installazione della libreria.
+
+\begin{lstlisting}[caption=auto.conf]
+require include/intel-librealsense.inc
+
+# Intel Realsense
+CORE_IMAGE_EXTRA_INSTALL += "librealsense-graphical-examples"
+\end{lstlisting}
+
+La keyword \verb|require| va a prendere la ricetta specificata nel seguito, necessaria all'installazione della libreria.
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
