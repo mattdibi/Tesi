@@ -2377,9 +2377,61 @@ La distribuzione \`e formata da quattro parti fondamentali:
 \newpage
 
 \subsection{Realizzazione}
-Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro.
+Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yocto \`e basato su "ricette". Queste ricette contengono dei metadati con le istruzioni su come installare il software nella distribuzione da realizzare. Ogni ricetta esegue le seguenti operazioni in ordine:
 
-Inizialmente, si \`e partiti aggiungendo solamente OpenCV all'immagine. Questo perch\`e bastava per supportare l'applicativo del Passenger Counter a sottrazione del background. Poich\`e in assenza di ulteriori restrizioni si \`e potuto installare l'ultima versione rilasciata della libreria: la 3.2.
+\begin{enumerate}
+\item Scarica i sorgenti del software.
+\item Effettua la cross-compilazione dei sorgenti.
+\item Realizza un pacchetto (.rpm, .deb, a seconda delle impostazioni).
+\item Installa il pacchetto software nella distribuzione.
+\end{enumerate}
+
+Una volta scaricate ed installate nella distribuzione tutte le ricette, viene creata l'immagine del sistema operativo che pu\`o essere scritta su un supporto di memoria e caricata sull'hardware.
+
+Queste operazioni vengono svolte in automatico dai tool resi disponibili dal progetto Yocto, ma \`e lasciato al programmatore il compito di scegliere il software da installare nella distribuzione. Tali preferenze vanno specificate in due file di configurazione del build system:
+
+\begin{itemize}
+\item \textbf{bblayers.conf}: contiene i path dei layers. Come spiegato in precedenza i layers sono collezioni logiche di ricette che rappresentano stack di applicazioni o BSP.
+\item \textbf{local.conf}: contiene il file di configurazione della build. Qui viene specificato quali software installare nella distribuzione e altre instruzioni circa il processo di build.
+\end{itemize}
+
+Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro. Ci\`o significava aggiungere gradualmente nuovi layer e nuove ricette al build system.
+
+Per lo sviluppo del progetto sono state realizzate principalmente tre versioni della distribuzione, verranno analizzate nel seguito in ordine cronologico.
+
+\subsubsection{Prima versione}
+La prima versione \`e stata realizzata per supportare l'applicazione del Passenger Counter a sottrazione del background, quindi prevedeva solamente l'installazione di OpenCV sul ReliaGate 20-25. Per questa versione sono stati aggiunti solamente due layer alla configurazione standard di Poky:
+
+\begin{itemize}
+\item \textbf{meta-intel}: layer contenente metadati per il supporto di hardware intel. Questo layer \`e necessario per poter targettare correttamente il processore Intel sul quale \`e basato il ReliaGate 20-25.
+\item \textbf{meta-openembedded}: \`e un layer contenente una collezione di layer dove sono riportate le ricette per i software pi\`u comuni. Questo layer era necessario in quanto contiene le ricette per l'installazione di OpenCV.
+\end{itemize}
+
+Poich\`e non vi erano problemi di compatibilit\`a fra i layer \`e stato possibile installare l'ultima versione disponibile di tutto il software. Quindi questa in questa versione della distribuzione era disponibile OpenCV 3.2.
+
+Inoltre, per visualizzare le finestre di OpenCV contenenti gli stream video dalle telecamere, era necessario disporre del Window System X11. Per questo motivo si \`e deciso di installare la Sato reference User Interface, resa disponibile dal layer \textbf{openembedded-core}, fornito assieme a Poky. Questa interfaccia utente \`e basata su GTK+ e rende disponibile X11.
+
+\subsubsection{Seconda versione}
+Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense. Per poter installare correttamente le librerie librealsense e i driver delle telecamere \`e stato necessario aggiungere un nuovo layer: \textbf{meta-intel-realsense}.
+
+Purtroppo questo layer risultava essere compatibile solamente con la versione 4.8 del kernel Linux, contenuta nella versione Morty di Poky. \`E stato quindi necessario effettuare un downgrade della versione di Poky con conseguente downgrade della versione di OpenCV. In questa versione della distribuzione erano quindi presenti OpenCV 3.1 e la libreria librealsense 1.12.1.
+
+Il downgrade di OpenCV ha richiesto qualche accorgimento in fase di cross-compilazione del Passenger Counter in quanto la versione 3.2 di OpenCV aveva ridotto il numero di moduli, integrando pi\`u funzionalit\`a in uno stesso modulo.
+
+\subsubsection{Terza versione}
+Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment e un JDK. Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
+
+\`E stato quindi necesario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
+
+Poich\`e si voleva rendere disponibile la API Java ufficiale di OpenCV \`e stato necessario modificare a mano la ricetta di OpenCV in quanto solo l'ultima versione di detta ricetta si occupava di generare tale API. Usando una versione pi\`u vecchia, per i problemi di compatibilit\`a delle librerie RealSense, la API non veniva generata.
+
+Lo stack software completo di questa versione della distribuzione \`e riportato in figura \ref{fig:SWStack}.
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{File di configurazione}
+
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
