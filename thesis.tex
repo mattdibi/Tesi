@@ -54,8 +54,6 @@
 		breaklines=true,                 
 		captionpos=b,                    
 		keepspaces=true,                 
-		numbers=left,                    
-		numbersep=5pt,                  
 		showspaces=false,                
 		showstringspaces=false,
 		showtabs=false,                  
@@ -2759,7 +2757,7 @@ https://github.com/mattdibi/RSPassengerCounter
 \end{itemize}
 
 \section{Prerequisiti}
-Per poter eseguire l'applicativo sulla piattaforma target \`e necessario solamente disporre dell'immagine della distribuzione Yocto e la toolchain generata con il progetto Yocto.
+Per poter eseguire l'applicativo sulla piattaforma target \`e necessario solamente disporre dell'immagine della distribuzione Yocto e il cross-compilatore generato con il progetto Yocto.
 
 Per poter eseguire l'applicativo su una macchina host \`e necessario che su questa siano installati:
 
@@ -2772,6 +2770,142 @@ Per poter eseguire l'applicativo su una macchina host \`e necessario che su ques
 Inoltre \`e necessario assicurarsi di avere delle porte USB 3.0 disponibili per il collegamento con le telecamere RealSense ed un hardware sufficientemente prestante.
 
 \section{Generazione dell'immagine Yocto}
+Qui sono riportati i passaggi per poter generare correttamente l'immagine dell'OS per il ReliaGate 20-25 a supporto del progetto.
+
+\subsubsection{Step 1: Clone needed repositories}
+
+\begin{verbatim}
+$ git clone git://git.yoctoproject.org/poky -b morty
+$ cd ~/poky
+$ git clone git://git.yoctoproject.org/meta-intel -b morty
+$ git clone git://git.openembedded.org/meta-openembedded -b morty
+$ git clone https://github.com/IntelRealSense/meta-intel-realsense.git -b morty
+$ git clone git://git.yoctoproject.org/meta-java
+\end{verbatim}
+
+\noindent Importante: \`e necessario impostare il branch del layer \textbf{meta-java} come segue:
+
+\begin{verbatim}
+$ git reset --hard 67e48693501bddb80745b9735b7b3d4d28dce9a1
+\end{verbatim}
+
+\subsubsection{Step 2: Build environment}
+
+\begin{verbatim}
+$ source oe-init-build-env
+\end{verbatim}
+
+\subsubsection{Step 3: Aggiungo layer}
+
+\begin{verbatim}
+$ cd $HOME/poky/build
+$ bitbake-layers add-layer "$HOME/poky/meta-intel"
+$ bitbake-layers add-layer "$HOME/poky/meta-openebemdded/meta-oe"
+$ bitbake-layers add-layer "$HOME/poky/meta-intel-realsense"
+$ bitbake-layers add-layer "$HOME/poky/meta-java"
+\end{verbatim}
+
+\subsubsection{Step 4: Modificare i file di configurazione}
+
+Modificare i file di configurazione \textbf{local.conf} e \textbf{auto.conf} come descritto nel paragrafo \ref{}. Nella repository sono disponibili i file corretti e possono essere copiati semplicemente nelle cartelle di destinazione.
+
+\subsubsection{Step 5: Modificare la ricetta OpenCV}
+
+Come descritto nel paragrafo \ref{} \`e necessario modificare la ricetta di OpenCV disponibile nella cartella:
+
+\begin{verbatim}
+$HOME/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
+\end{verbatim}
+
+\subsubsection{Step 6: Lanciare la build}
+
+\noindent Build the image:
+
+\begin{verbatim}
+$ bitbake core-image-sato
+\end{verbatim}
+
+\noindent Output files will be available in 
+
+\begin{verbatim}
+$HOME/poky/build/tmp/deploy/images/intel-corei7-64/ folder.
+\end{verbatim}
+
+\noindent Build the cross-compiler installer:
+
+\begin{verbatim}
+$ bitbake core-image-sato -c populate_sdk
+\end{verbatim}
+
+\noindent Output files will be available in 
+
+\begin{verbatim}
+$HOME/poky/build/tmp/deploy/sdk/
+\end{verbatim}
+
+\noindent Burn the image:
+
+\begin{verbatim}
+$ sudo dd if=tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic 
+    of=TARGET_DEVICE status=progress
+\end{verbatim}
+
+\subsection{Script di installazione}
+Per semplificare il processo di installazione del build system Yocto per la generazione dell'immagine per il 20-25 \`e stato realizzato uno script di installazione disponibile all'interno della repository del progetto.
+
+Per effettuare l'installazione \`e necessario eseguire:
+
+\begin{verbatim}
+$ chmod +x build_install
+$ ./build_install
+\end{verbatim}
+
+\noindent Inoltre prima di lanciare il processo di build \`e necessario impostare la build directory. Questo step non \`e necessario se si effettua l'installazione manuale del build system.
+
+\begin{verbatim}
+$ cd poky/
+$ set build
+$ source oe-init-build-env
+$ bitbake core-image-sato
+\end{verbatim}
+
+%% Interruzione di pagina
+\newpage
+
+\subsection{Problemi noti}
+Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interrompere il processo di build dell'immagine. Nel caso si presenti l'errore "\textbf{unrecognized command line option -fno-lifetime-dse}" \`e necessario modificare la ricetta \textbf{.../poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc} alla linea 224 come segue:
+
+\begin{lstlisting}[language=diff]
+# GCC 6 sets the default C++ standard to C++14 and introduces dead store
+# elimination by default. OpenJDK 8 is not ready for either of these
+# changes.
+- FLAGS_GCC6 = "-fno-lifetime-dse -fno-delete-null-pointer-checks"
++ FLAGS_GCC6 = "-fno-delete-null-pointer-checks"
+\end{lstlisting}
+
+\subsection{Configurazione risultante}
+
+\begin{verbatim}
+BB_VERSION        = "1.32.0"
+BUILD_SYS         = "x86_64-linux"
+NATIVELSBSTRING   = "universal-4.8"
+TARGET_SYS        = "x86_64-poky-linux"
+MACHINE           = "intel-corei7-64"
+DISTRO            = "poky"
+DISTRO_VERSION    = "2.2.1"
+TUNE_FEATURES     = "m64 corei7"
+TARGET_FPU        = ""
+meta              
+meta-poky         
+meta-yocto-bsp    = "morty:924e576b8930fd2268d85f0b151e5f68a3c2afce"
+meta-intel        = "morty:6add41510412ca196efb3e4f949d403a8b6f35d7"
+meta-oe           = "morty:fe5c83312de11e80b85680ef237f8acb04b4b26e"
+meta-intel-realsense = "morty:2c0dfe9690d2871214fba9c1c32980a5eb89a421"
+meta-java         = "master:67e48693501bddb80745b9735b7b3d4d28dce9a1"
+\end{verbatim}
+
+%% Interruzione di pagina
+\newpage
 
 \section{Compilazione ed esecuzione dell'applicativo}
 
