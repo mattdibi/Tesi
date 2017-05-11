@@ -2960,27 +2960,40 @@ $ $CXX -std=c++11 -lX11 -pthread -o RSPCN20-25 main.cpp  \
 \noindent Dove si presume che la cartella di installazione della toolchain sia quella di default.
 
 \subsubsection{Opzioni}
+L'applicativo supporta delle opzioni di esecuzione:
 
-\begin{verbatim}
-    - Without arguments: it opens the default webcam and captures the input stream.
--s  - Capture mode: it saves the color stream on file.
-\end{verbatim}
+\begin{itemize}
+\item Senza argomenti: apre tutte le telecamere collegate alla macchina di default e cattura gli input stream allocando un contatore per ogni telecamera.
+\item \verb|-s|: in aggiunta alle operazioni di cui sopra, salva in formato video gli stream in ingresso dalle telecamere nei vari passaggi intermedi dell'elaborazione.
+\end{itemize}
 
 \subsubsection{Comandi run-time}
+Una volta lanciato l'applicativo, il programma resta in attesa di input dall'utente perch\`e vengano immessi i comandi run-time. I comandi disponibili sono i seguenti e vengono applicati a tutti i contatori attivi:
 
-\begin{verbatim}
-> 0 - 5: selecting camera presets
-> r: resetting counters
-> p: get passenger count
-> c: toggle display color
-> C: toggle display calibration
-> d: toggle display depth view
-> D: toggle display raw depth view
-> f: toggle display frame view
-> s: toggle frame rate stabilization
-> q: exit program
-> h: display this help message
-\end{verbatim}
+\begin{itemize}
+\item \verb|r|: Resetta i contatori
+\item \verb|p|: Visualizza il conteggio attuale
+\item \verb|c|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream a colori con le informazioni di conteggio e tracking.
+\item \verb|C|: Abilita/Disabilita le trackbar per effettuare la calibrazione dei settaggi del contatore, tra questi settaggi sono disponibili:
+    \begin{itemize}
+    \item Threshold: soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
+    \item Blur: quantit\`a di offuscamento dell'immagine per ridurre il rumore.
+    \item xNear: numero di pixel dell'asse orizzontale per il tracking.
+    \item yNear: numero di pixel dell'asse verticale per il tracking.
+    \item Area min: area minima per la quale l'oggetto rilevato viene tracciato.
+    \item Passenger age: tempo per il quale i passeggeri tracciati vengono lasciati in memoria prima di essere cancellati quando non vengono pi\`u rilevati nel raggio visivo della telecamera.
+    \end{itemize}
+\item \verb|d|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream della colorMap.
+\item \verb|D|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a grezzi provenienti dalla telecamera RealSense.
+\item \verb|f|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a post processati e che vengono dati in pasto all'algoritmo di rilevamento dei contorni.
+\item \verb|s|: Abilita/Disabilita la stabilizzazione del framerate.
+\item \verb|q|: Termina il programma.
+\item \verb|h|: Visualizza il messaggio di aiuto.
+\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera a infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
 
 \subsection{Versione Java Wrap}
 
