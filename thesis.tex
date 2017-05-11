@@ -2788,7 +2788,7 @@ Inoltre \`e necessario assicurarsi di avere delle porte USB 3.0 disponibili per 
 \section{Generazione dell'immagine Yocto}
 Qui sono riportati i passaggi per poter generare correttamente l'immagine dell'OS per il ReliaGate 20-25 a supporto del progetto.
 
-\subsubsection{Step 1: Clone needed repositories}
+\subsubsection{Step 1: Clonare le repository dei layer}
 
 \begin{lstlisting}[language=bash]
 $ git clone git://git.yoctoproject.org/poky -b morty
@@ -2805,13 +2805,13 @@ $ git clone git://git.yoctoproject.org/meta-java
 $ git reset --hard 67e48693501bddb80745b9735b7b3d4d28dce9a1
 \end{lstlisting}
 
-\subsubsection{Step 2: Build environment}
+\subsubsection{Step 2: Impostare il build environment}
 
 \begin{lstlisting}[language=bash]
 $ source oe-init-build-env
 \end{lstlisting}
 
-\subsubsection{Step 3: Aggiungo layer}
+\subsubsection{Step 3: Aggiungere i layer}
 
 \begin{lstlisting}[language=bash]
 $ cd $HOME/poky/build
@@ -2835,34 +2835,34 @@ $HOME/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
 
 \subsubsection{Step 6: Lanciare la build}
 
-\noindent Build the image:
+\noindent Lanciare il processo di build:
 
 \begin{lstlisting}[language=bash]
 $ bitbake core-image-sato
 \end{lstlisting}
 
-\noindent Output files will be available in 
+\noindent I file dell'immagine del sistema operativo si trovano nella cartella:
 
 \begin{verbatim}
-$HOME/poky/build/tmp/deploy/images/intel-corei7-64/ folder.
+$HOME/poky/build/tmp/deploy/images/intel-corei7-64/
 \end{verbatim}
 
 %% Interruzione di pagina
 \newpage
 
-\noindent Build the cross-compiler installer:
+\noindent Lanciare il processo di build dell'installatore della toolchain di cross-compilazione:
 
 \begin{lstlisting}[language=bash]
 $ bitbake core-image-sato -c populate_sdk
 \end{lstlisting}
 
-\noindent Output files will be available in 
+\noindent L'installatore si trova nella cartella:
 
 \begin{verbatim}
 $HOME/poky/build/tmp/deploy/sdk/
 \end{verbatim}
 
-\noindent Burn the image:
+\noindent Scrivere l'immagine su supporto bootabile:
 
 \begin{lstlisting}[language=bash]
 $ sudo dd if=tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic 
@@ -2966,6 +2966,9 @@ L'applicativo supporta due modalit\`a di esecuzione:
 \item Senza argomenti: apre tutte le telecamere collegate alla macchina di default e cattura gli input stream allocando un contatore per ogni telecamera.
 \item \verb|-s|: in aggiunta alle operazioni di cui sopra, salva in formato video gli stream in ingresso dalle telecamere nei vari passaggi intermedi dell'elaborazione.
 \end{itemize}
+
+%% Interruzione di pagina
+\newpage
 
 \subsubsection{Comandi run-time}
 Una volta lanciato l'applicativo, il programma resta in attesa di input dall'utente perch\`e vengano immessi i comandi run-time. I comandi disponibili sono i seguenti e vengono applicati a tutti i contatori attivi:
