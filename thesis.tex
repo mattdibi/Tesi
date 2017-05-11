@@ -2410,17 +2410,19 @@ Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yo
 
 Una volta scaricate ed installate nella distribuzione tutte le ricette, viene creata l'immagine del sistema operativo che pu\`o essere scritta su un supporto di memoria e caricata sull'hardware.
 
-Il build system di Yocto \`e organizzato come segue: la directory principale \`e data dalla distribuzione template Poky. Al suo interno sono presenti i layer fondamentali per la costruzione della distribuzione template e qui andranno scaricati i layer per le ricette aggiuntive. All'interno di questa directory verr\`a creata la Build Directory, la quale contiene i file di configurazione del processo di build e conterr\`a l'immagine finale della distribuzione.
+Il build system di Yocto \`e organizzato in cartelle: la directory principale, o \textbf{Source Directory}, viene creata in seguito alla clonazione della repository Git di Poky. La Source Directory contiene BitBake, metadati, documentazione e altri file che supportanto il progetto Yocto. Al suo interno sono presenti i layer fondamentali per la costruzione della distribuzione template e qui andranno scaricati i layer per le ricette aggiuntive. Qui verr\`a creata la \textbf{Build Directory}. Questo termine si riferisce all'area usata dall'OpenEmbedded build system per effettuare la build della distribuzione.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.6]{YoctoDirectory.png}
-  \caption{Struttura della directory di lavoro del progetto Yocto}
+  \includegraphics[scale=0.5]{YoctoDirectory.png}
+  \caption{Struttura della Source Directory del progetto Yocto}
   \label{fig:YoctoDirectory}
 \end{figure}
 
 %% Interruzione di pagina
 \newpage
+
+Qui di seguito verr\`a analizzata la struttura delle cartelle principali della Source Directory e le loro funzioni.
 
 \subsubsection{bitbake}
 Questa directory include una copia di BitBake per facilitare l'uso del build system. Solitamente questa copia \`e riferita alla versione pi\`u recente di BitBake. BitBake \`e un interprete di metadati, legge i metadati del progetto Yocto ed esegue le task definite da quei dati. Quando viene eseguito il comando \verb|bitbake| che lancia il processo di build, viene chiamato l'eseguibile principale di BitBake, il quale risiede nella cartella bitbake/bin/. 
@@ -2428,6 +2430,8 @@ Questa directory include una copia di BitBake per facilitare l'uso del build sys
 Lanciare l'environment setup script (esempio: \verb|oe-init-build-end| o \verb|oe-init-build-env-memred|) inserisce gli script e la directory bitbake/bin nel PATH della shell.
 
 \subsubsection{build}
+Questa cartella rappresenta la Build Directory.
+
 Questa cartella contiene i file di configurazione dell'utente e l'output generato dal build system OpenEmbedded nella sua configurazione standard. La build directory viene creata inizialmente quando viene lanciato l'environment setup script di OpenEmbedded.
 
 Le preferenze circa il software da installare nella distribuzione e il processo di build vanno specificate in due file di configurazione della Build Directory:
