@@ -2752,6 +2752,7 @@ La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 %TODO: Cambiare questa frase. Non sapevo cosa scrivere.
 Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e stata ritenuta un ottimo proof of concept da parte di Eurotech.
 
+%% Capitolo 4: Manuale d'uso
 \chapter{Manuale d'uso del progetto}
 In questo capitolo verr\`a riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
 
@@ -2789,36 +2790,36 @@ Qui sono riportati i passaggi per poter generare correttamente l'immagine dell'O
 
 \subsubsection{Step 1: Clone needed repositories}
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ git clone git://git.yoctoproject.org/poky -b morty
-$ cd ~/poky
+$ cd $HOME/poky
 $ git clone git://git.yoctoproject.org/meta-intel -b morty
 $ git clone git://git.openembedded.org/meta-openembedded -b morty
 $ git clone https://github.com/IntelRealSense/meta-intel-realsense.git -b morty
 $ git clone git://git.yoctoproject.org/meta-java
-\end{verbatim}
+\end{lstlisting}
 
 \noindent Importante: \`e necessario impostare il branch del layer \textbf{meta-java} come segue:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ git reset --hard 67e48693501bddb80745b9735b7b3d4d28dce9a1
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Step 2: Build environment}
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ source oe-init-build-env
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Step 3: Aggiungo layer}
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ cd $HOME/poky/build
 $ bitbake-layers add-layer "$HOME/poky/meta-intel"
 $ bitbake-layers add-layer "$HOME/poky/meta-openebemdded/meta-oe"
 $ bitbake-layers add-layer "$HOME/poky/meta-intel-realsense"
 $ bitbake-layers add-layer "$HOME/poky/meta-java"
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Step 4: Modificare i file di configurazione}
 
@@ -2836,9 +2837,9 @@ $HOME/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
 
 \noindent Build the image:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ bitbake core-image-sato
-\end{verbatim}
+\end{lstlisting}
 
 \noindent Output files will be available in 
 
@@ -2846,11 +2847,14 @@ $ bitbake core-image-sato
 $HOME/poky/build/tmp/deploy/images/intel-corei7-64/ folder.
 \end{verbatim}
 
+%% Interruzione di pagina
+\newpage
+
 \noindent Build the cross-compiler installer:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ bitbake core-image-sato -c populate_sdk
-\end{verbatim}
+\end{lstlisting}
 
 \noindent Output files will be available in 
 
@@ -2860,29 +2864,29 @@ $HOME/poky/build/tmp/deploy/sdk/
 
 \noindent Burn the image:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ sudo dd if=tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic 
     of=TARGET_DEVICE status=progress
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Script di installazione}
 Per semplificare il processo di installazione del build system Yocto per la generazione dell'immagine per il 20-25 \`e stato realizzato uno script di installazione disponibile all'interno della repository del progetto.
 
 Per effettuare l'installazione \`e necessario eseguire:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ chmod +x build_install
 $ ./build_install
-\end{verbatim}
+\end{lstlisting}
 
 \noindent Inoltre prima di lanciare il processo di build \`e necessario impostare la build directory. Questo step non \`e necessario se si effettua l'installazione manuale del build system.
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 $ cd poky/
 $ set build
 $ source oe-init-build-env
 $ bitbake core-image-sato
-\end{verbatim}
+\end{lstlisting}
 
 %% Interruzione di pagina
 \newpage
@@ -2923,15 +2927,150 @@ meta-java         = "master:67e48693501bddb80745b9735b7b3d4d28dce9a1"
 \newpage
 
 \section{Compilazione ed esecuzione dell'applicativo}
+Nel seguito sono riportate le istruzioni per compilare ed eseguire le varie versioni dell'applicativo Passenger Counter con telecamere RealSense.
 
 \subsection{Versione C++}
 
+\subsubsection{Compilazione ed esecuzione della versione per la macchina host}
+Dopo essersi assicurati di aver installato tutto il software necessario basta eseguire i comandi:
+
+\begin{lstlisting}[language=bash]
+$ cd cpp_src/
+$ cmake .
+$ make
+$ ./RSPCN
+\end{lstlisting}
+
+\subsubsection{Compilazione ed esecuzione della versione per il ReliaGate 20-25}
+Dopo aver installato la toolchain di cross-compilazione resa disponibile dal progetto Yocto \`e sufficiente eseguire i seguenti comandi:
+
+\begin{lstlisting}[language=bash]
+$ source /opt/poky/2.2.1/environment-setup-corei7-64-poky-linux
+$ $CXX -std=c++11 -lX11 -pthread -o RSPCN20-25 main.cpp  \
+-lopencv_core \
+-lopencv_highgui \
+-lopencv_imgproc \
+-lopencv_ml \
+-lopencv_objdetect \
+-lopencv_videoio \
+-lopencv_video \
+-lrealsense
+\end{lstlisting}
+
+\noindent Dove si presume che la cartella di installazione della toolchain sia quella di default.
+
+\subsubsection{Opzioni}
+
+\begin{verbatim}
+    - Without arguments: it opens the default webcam and captures the input stream.
+-s  - Capture mode: it saves the color stream on file.
+\end{verbatim}
+
+\subsubsection{Comandi run-time}
+
+\begin{verbatim}
+> 0 - 5: selecting camera presets
+> r: resetting counters
+> p: get passenger count
+> c: toggle display color
+> C: toggle display calibration
+> d: toggle display depth view
+> D: toggle display raw depth view
+> f: toggle display frame view
+> s: toggle frame rate stabilization
+> q: exit program
+> h: display this help message
+\end{verbatim}
+
 \subsection{Versione Java Wrap}
 
-\subsection{Versione Java}
+\subsubsection{Compilazione ed esecuzione della versione per la macchina host}
+Per semplificare la compilazione sono stati resi disponibili degli script.
+
+\begin{lstlisting}[language=bash]
+$ cd java_wrap/
+$ sh swigwrapcmd.sh
+$ cd swig_output/
+$ javac *.java
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/swig_output
+$ java Main
+\end{lstlisting}
+
+\subsubsection{Compilazione ed esecuzione della versione per il ReliaGate 20-25}
+Dopo aver installato la toolchain di cross-compilazione generata dal progetto Yocto.
+
+\begin{lstlisting}[language=bash]
+$ source /opt/poky/2.2.1/environment-setup-corei7-64-poky-linux
+$ sh swigwrapcmd20-25.sh
+$ scp -r swig_output_20-25/ root@<ReliGATE 20-25 IP address>:
+\end{lstlisting}
+
+\noindent Anche qui si presume che la cartella di installazione della toolchain sia quella di default.
+
+Una volta connessi al ReliaGate 20-25:
+
+\begin{lstlisting}[language=bash]
+$ cd swig_output_2025/
+$ javac *.java
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/swig_output_2025
+$ java Main
+\end{lstlisting}
 
 %% Interruzione di pagina
 \newpage
+
+\subsection{Versione Java}
+I seguenti comandi sono gli stessi per la macchina host e per il ReliaGate 20-25.
+
+Compilazione degli eseguibili:
+
+\begin{lstlisting}[language=bash]
+$ cd java_src/
+$ javac -cp jar_files/ffmpeg-platform.jar: \
+    jar_files/javacpp.jar:jar_files/librealsense-platform.jar: \
+    jar_files/javacv.jar:jar_files/opencv-platform.jar:. Main.java
+\end{lstlisting}
+
+\noindent Esecuzione dell'applicativo:
+
+\begin{lstlisting}[language=bash]
+$ java -cp jar_files/ffmpeg-platform.jar: \
+    jar_files/javacpp.jar:jar_files/librealsense-platform.jar: \
+    jar_files/javacv.jar:jar_files/opencv-platform.jar:. Main
+\end{lstlisting}
+
+\subsubsection{Opzioni}
+
+\begin{verbatim}
+> M: bare metal mode.
+> N: normal mode.
+> V: video recording mode.
+> B: video recording in bare metal mode.
+\end{verbatim}
+
+\subsubsection{Comandi Run-time}
+
+\begin{verbatim}
+> q: exit program
+> r: resetting counters
+> c: get passenger count
+> p: set camera preset
+> t: set threshold centimeters
+> a: set max passenger age
+> b: set blur kernel size
+> x: set xNear
+> y: set yNear
+> h: display this help message
+\end{verbatim}
+
+% Capitolo 5: Conclusioni
+\chapter{Conclusioni}
+
+\section{Riassunto}
+
+\section{Risultati Passenger Counter}
+
+\section{Risultati distribuzione custom}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
@@ -2945,8 +3084,8 @@ Sed purus libero, vestibulum ut nibh vitae, mollis ultricies augue. Pellentesque
 \backmatter
 
 %% Riassunto (opzionale)
-\summary
-Maecenas tempor elit sed arcu commodo, dapibus sagittis leo egestas. Praesent at ultrices urna. Integer et nibh in augue mollis facilisis sit amet eget magna. Fusce at porttitor sapien. Phasellus imperdiet, felis et molestie vulputate, mauris sapien tincidunt justo, in lacinia velit nisi nec ipsum. Duis elementum pharetra lorem, ut pellentesque nulla congue et. Sed eu venenatis tellus, pharetra cursus felis. Sed et luctus nunc. Aenean commodo, neque a aliquam bibendum, mauris augue fringilla justo, et scelerisque odio mi sit amet diam. Nulla at placerat nibh, nec rutrum urna. Donec ut egestas magna. Aliquam erat volutpat. Phasellus vestibulum justo sed purus mattis, vitae lacinia magna viverra. Nulla rutrum diam dui, vel semper mi mattis ac. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec id vestibulum lectus, eget tristique est.
+%% \summary
+%% Maecenas tempor elit sed arcu commodo, dapibus sagittis leo egestas. Praesent at ultrices urna. Integer et nibh in augue mollis facilisis sit amet eget magna. Fusce at porttitor sapien. Phasellus imperdiet, felis et molestie vulputate, mauris sapien tincidunt justo, in lacinia velit nisi nec ipsum. Duis elementum pharetra lorem, ut pellentesque nulla congue et. Sed eu venenatis tellus, pharetra cursus felis. Sed et luctus nunc. Aenean commodo, neque a aliquam bibendum, mauris augue fringilla justo, et scelerisque odio mi sit amet diam. Nulla at placerat nibh, nec rutrum urna. Donec ut egestas magna. Aliquam erat volutpat. Phasellus vestibulum justo sed purus mattis, vitae lacinia magna viverra. Nulla rutrum diam dui, vel semper mi mattis ac. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec id vestibulum lectus, eget tristique est.
 
 %% Bibliografia (opzionale)
 \bibliographystyle{plain_\languagename}%% Carica l'omonimo file .bst, dove \languagename è la lingua attiva.
