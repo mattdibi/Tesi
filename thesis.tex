@@ -2959,8 +2959,8 @@ $ $CXX -std=c++11 -lX11 -pthread -o RSPCN20-25 main.cpp  \
 
 \noindent Dove si presume che la cartella di installazione della toolchain sia quella di default.
 
-\subsubsection{Opzioni}
-L'applicativo supporta delle opzioni di esecuzione:
+\subsubsection{Modalit\`a di esecuzione}
+L'applicativo supporta due modalit\`a di esecuzione:
 
 \begin{itemize}
 \item Senza argomenti: apre tutte le telecamere collegate alla macchina di default e cattura gli input stream allocando un contatore per ogni telecamera.
@@ -3052,29 +3052,35 @@ $ java -cp jar_files/ffmpeg-platform.jar: \
     jar_files/javacv.jar:jar_files/opencv-platform.jar:. Main
 \end{lstlisting}
 
-\subsubsection{Opzioni}
+\subsubsection{Modalit\`a di esecuzione}
+La versione Java del Passenger Counter supporta quattro modalit\`a di esecuzione. La scelta su quale avviare viene effettuata una volta lanciata l'applicazione.
 
-\begin{verbatim}
-> M: bare metal mode.
-> N: normal mode.
-> V: video recording mode.
-> B: video recording in bare metal mode.
-\end{verbatim}
+Anche in questo caso, all'avvio, viene instanziato un contatore per telecamera collegata.
+
+\begin{enumerate}
+\item \verb|M|: \textbf{Bare metal mode}. Non vengono visualizzate le finestre contenenti gli stream video. 
+\item \verb|N|: \textbf{Normal mode}. Vengono visualizzate le finestre contenenti gli stream video.
+\item \verb|V|: \textbf{Video recording mode}. Vengono visualizzate le finestre contenenti gli stream video e salvati gli stream su file.
+\item \verb|B|: \textbf{Video recording in bare metal mode}. Vengono salvati su file gli stream video ma non vengono visualizzati in run-time.
+\end{enumerate}
+
+L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le fineste di questa versione basate sul framework Java e non su X, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
 
 \subsubsection{Comandi Run-time}
+Anche in questo caso le opzioni vengono applicate a tutti i contatori attualmente attivi sulla macchina.
 
-\begin{verbatim}
-> q: exit program
-> r: resetting counters
-> c: get passenger count
-> p: set camera preset
-> t: set threshold centimeters
-> a: set max passenger age
-> b: set blur kernel size
-> x: set xNear
-> y: set yNear
-> h: display this help message
-\end{verbatim}
+\begin{itemize}
+\item \verb|q|: Termina il programma.
+\item \verb|r|: Resetta i contatori
+\item \verb|c|: Visualizza il conteggio attuale
+\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera a infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\item \verb|t|: Imposta la soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
+\item \verb|x|: Imposta il numero di pixel dell'asse orizzontale per il tracking.
+\item \verb|x|: Imposta il numero di pixel dell'asse verticale per il tracking.
+\item \verb|b|: Imposta la quantit\`a di offuscamento dell'immagine per ridurre il rumore.
+\item \verb|a|: Imposta il tempo per il quale i passeggeri tracciati vengono lasciati in memoria prima di essere cancellati quando non vengono pi\`u rilevati nel raggio visivo della telecamera.
+\item \verb|h|: Visualizza il messaggio di aiuto.
+\end{itemize}
 
 % Capitolo 5: Conclusioni
 \chapter{Conclusioni}
