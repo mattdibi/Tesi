@@ -327,7 +327,7 @@ Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione 
 %% Interruzione di pagina
 \newpage
 
-\subsection{Problematiche di questa soluzione}
+\subsection{Problematiche di questa soluzione}\label{ProblemiPCNEurotech}
 Questo sistema di conteggio dei passeggeri non \`e per\`o esente da problematiche, le quali sono state il punto di partenza per il mio lavoro. Le principali sono le seguenti:
 
 \begin{enumerate}
@@ -3068,9 +3068,35 @@ A questo punto dello sviluppo si \`e ritenuto il progetto completato e ci si \`e
 %% Interruzione di pagina
 \newpage
 
-\section{Risultati Passenger Counter}
+\section{Risultati Passenger Counter con telecamere RealSense}
+I risultati ottenuti da questa versione del contatore sono stati ritenuti molto buoni. \`E stato possibile infatti migliorare tutti i punti deboli della versione del contatore attualmente implementata da Eurotech.
 
-\section{Risultati distribuzione custom}
+Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte tutte come segue:
+
+\begin{enumerate}
+\item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel sembra intenzionata a fornire supporto a questa tencologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
+\item \textbf{Utilizzo di FPGA}: \`e stato risolto per mezzo dell'utilizzo delle telecamere RealSense. Non \`e pi\`u necessario fare affidamento alla FPGA per la ricostruzione delle informazioni di profondit\`a in quanto questo compito \`e assolto dall'ASIC presente all'interno delle telecamere. Questo permette un abbassamento dei costi di produzione del sistema.
+\item \textbf{Numero di unit\`a computazionali}: nella versione attuale del Passenger Counter di Eurotech \`e necessario che vi sia una unit\`a computazionale per dispositivo di acquisizione delle immagini. Con la versione realizzata in questa tesi \`e sufficiente un RealiaGate per pi\`u telecamere. Questo \`e possibile grazie al ridotto costo computazionale dell'applicativo e alla parallelizzazione delle istanze del contatore. Si noti che per poter sfruttare appieno questo vantaggio \`e necessario che l'applicativo sia eseguito su una macchina sufficientemente potente.
+\item \textbf{Dimensioni}: l'ingombro di queste telecamere \`e molto pi\`u basso rispetto al dispositivo usato da Eurotech, questo aumenta la facilit\`a di installazione e l'appetibilit\`a sul mercato.
+\end{enumerate}
+
+In conclusione si pu\`o affermare che la soluzione adottata da questo Passenger Counter sembra essere promettente e raggiunge tutti gli obiettivi che ci si era prefissati all'inizio della tesi.
+
+\subsection{Possibili miglioramenti e sviluppi futuri}
+Nonostante si ritenga questa soluzione soddisfacente sotto molti punti di vista, sono sicuramente possibili dei miglioramenti:
+
+\begin{itemize}
+\item Implementazione di algoritmi pi\`u sofisticati per il rilevamento dei passeggeri: l'implementazione realizzata in questa tesi \`e sicuramente un solido proof of concept ma per una applicazione nel mondo reale \`e necessario implementare un rilevamento dei passeggeri pi\`u solido. Una soluzione interessante sarebbe quella di adottare algoritmi di machine learning per il riconoscimento delle sagome dei passeggeri che transitano sotto la telecamera. Questo permetterebbe una maggior precisione diminuendo il numero di falsi positivi rilevati dalla telecamera.
+\item Carico computazionale: al momento il carico computazionale \`e interamente assorbito dalla CPU del ReliaGate. Scaricare parte di questo carico sulla GPU potrebbe permettere di aumentare il numero massimo di istanze del contatore contemporaneamente presenti sull'unit\`a computazionale abbassando ulteriormente i costi di produzione del sistema.
+\item Test e calibrazioni: i mezzi a mia disposizione per effettuare test e calibrazioni non sono adeguati ad ottenere risultati adeguati per l'applicazione in ambito industriale del sistema e questo \`e un punto in cui investire risorse per effettuare dei miglioramenti.
+\end{itemize}
+
+Purtroppo la mancanza di tempo per portare avanti lo sviluppo del sistema non ha permesso di implementare questi miglioramenti. \`E stata data la precedenza ad altri aspetti che hanno sottratto tempo e risorse, quindi questi miglioramenti sono lasciati ad implementazioni future del progetto.
+
+%% Interruzione di pagina
+\newpage
+
+\section{Risultati distribuzione Yocto}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
