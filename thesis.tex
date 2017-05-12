@@ -801,7 +801,7 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni
 \subsection{Classe Passenger}
 Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
 
-\begin{lstlisting}[language=C++, caption=passenger.h]
+\begin{lstlisting}[language=C++, caption=passenger.h, style=customcpp]
 class Passenger {
 
   public:
@@ -833,7 +833,7 @@ class Passenger {
 };
 \end{lstlisting}
 
-\begin{lstlisting}[language=C++, caption=passenger.cpp]
+\begin{lstlisting}[language=C++, caption=passenger.cpp, style=customcpp]
 Passenger::Passenger(int id, Point center, int newAge = 0)
 {
     pid = id;
@@ -894,7 +894,7 @@ Questa classe ha come obiettivi principali:
 \end{itemize}
 
 Qui di seguito \`e riportato l'header della classe PCN:
-\begin{lstlisting}[language=C++, caption=PCN.h]
+\begin{lstlisting}[language=C++, caption=PCN.h, style=customcpp]
 class PCN {
 
   public:
@@ -977,7 +977,7 @@ La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo 
 
 \subsubsection{Estrazione degli oggetti in movimento}
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 1]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 1, style=customcpp]
 void PCN::count()
 {
     // Streams
@@ -1059,7 +1059,7 @@ Risultato delle operazioni:
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2, style=customcpp]
 while(!halt)
 {
     ...
@@ -1126,7 +1126,7 @@ Risultato delle operazioni:
 \subsubsection{Conteggio degli attraversamenti}
 Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3, style=customcpp]
 if(areaCurrentObject > areaMin)
 {
     // Getting bounding rectangle
@@ -1214,7 +1214,7 @@ Il codice riportato esegue le seguenti operazioni:
 Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
 Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4, style=customcpp]
 // For every passenger in passengers DB
 for(unsigned int i = 0; i < passengers.size(); i++)
 {
@@ -1282,7 +1282,7 @@ Dalla successione delle immagini si pu\`o notare come il tracciamento sia buono 
 
 \subsection{main.cpp}
 
-\begin{lstlisting}[language=C++, caption=main.cpp]
+\begin{lstlisting}[language=C++, caption=main.cpp, style=customcpp]
 int main(int argc, char * argv[])
 {
     bool stop = false;
@@ -1572,7 +1572,7 @@ Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Co
 
 Qui di seguito \`e riportato l'header della classe RSPCN:
 
-\begin{lstlisting}[language=C++, caption=RSPCN.h]
+\begin{lstlisting}[language=C++, caption=RSPCN.h, style=customcpp]
 class RSPCN {
 
 public:
@@ -1673,7 +1673,7 @@ I punti rilevanti dell'header sono i seguenti:
 \subsection{Metodo getColorMap()}
 Questo metodo \`e stato molto utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno quindi \`e opportuno spiegarne il funzionamento.
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap()]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
 Mat RSPCN::getColorMap(Mat depthImage) {
     Mat depthColorMap;
 
@@ -1803,7 +1803,7 @@ Questo metodo \`e alla base del funzionamento di questa versione del Passenger C
 
 Qui di seguito \`e riportato il codice della funzione:
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getFrame()]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getFrame(), style=customcpp]
 Mat RSPCN::getFrame(Mat depthImage, int thresholdCentimeters) {
     Mat frame;
 
@@ -1891,7 +1891,7 @@ La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuor
 
 \subsubsection{Estrazione degli oggetti in primo piano}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count()]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count(), style=customcpp]
 void RSPCN::count()
 {
     // Streams
