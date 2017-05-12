@@ -322,7 +322,7 @@ In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione
 \end{figure}
 
 La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi (Per affrondire questo framework si veda il paragrafo \ref{OSGi}). Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
-Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\`e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessari alla nuova versione del Passenger Counter.
+Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\'e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessari alla nuova versione del Passenger Counter.
 
 %% Interruzione di pagina
 \newpage
@@ -449,7 +449,7 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
 Siccome una parte centrale della tesi verteva sull'elaborazione delle immagini \`e stato necessario integrare nel progetto l'uso della libreria OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
-OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multipiattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di image processing, comupter visione e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
+OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di image processing, computer visione e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
 \subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
@@ -462,7 +462,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
     \item Funzioni per il disegno: permettono di disegnare semplici forme sulle immagini che vengono manipolate
     \item Funzioni per l'analisi delle immagini: istogrammi, analisi strutturale e descrittori di forme, motion analysis e tracking di oggetti.
     \end{itemize}
-\item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\`e analisi di video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
+\item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\'e analisi di video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
 \item \textbf{Modulo objdetect}: rilevazione di oggetti. Implementa funzioni e classi per il rilevamento e tracciamento di oggetti all'interno di immagini e flussi video. OpenCV ottiene tutto ci\`o facendo leva sui Haar Feature-based Cascade Classifier e Histogram of Oriented Gradients object detector.
 \item \textbf{Modulo ml}: machine learning. La Machine Learning Library (MLL) \`e un insieme di classi e funzioni per la classificazione statistica, regressione e clustering dei dati. La maggior parte degli algoritmi di classificazione e regressione sono implementati come classi C++. Algoritmi implementati dal modulo:
     \begin{itemize}
@@ -507,12 +507,12 @@ Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione
 
 Le architettura supportate dal progetto sono le pi\`u diffuse nell'ambito embedded: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
 
-OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette.
+OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette.
 
 \subsubsection{Componenti del progetto Yocto}
 \begin{itemize}
 \item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
-\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sottoforma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
+\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
 \item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata.
 \item Layers: il build system del progetto Yocto \`e composto da layer. I layer sono una collezione logica di ricette che rappresentano stack di applicazioni o Board Support Packaged (BSP). I BSP contengono i pacchetti e i driver fondamentali necessari per costruire una distribuzione Linux per una specifica board o architettura. Solitamente questi BSP sono mantenuti dai produttori dell'hardware e sono l'interfaccia tra l'OS e l'hardware che lo esegue.
 \end{itemize}
@@ -576,7 +576,7 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
     \caption{Riassunto componenti ambiente di sviluppo Xilinx}
 \end{table}
 
-Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possible sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
+Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possibile sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
 %% Interruzione di pagina
 \newpage
@@ -637,7 +637,7 @@ SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In f
   \label{fig:BenchmarkAuvizCV}
 \end{figure}
 
-Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, la quale non \`e altro che un subset delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx. Questa libreria sfrutta le potenzialit\`a di SDSoC in quanto \`e stata scritta interamente in codice di alto livello e, in fase di compilazione, le funzioni utilizzate vengono sintetizzate sulla FPGA. Questa API si mantiene coerente con OpenCV per facilitare l'implementazione e l'accelerazione in harware. In figura \ref{fig:BenchmarkAuvizCV} sono riportati i risultati dei benchmark confrontando l'accelerazione di alcuni algoritmi di OpenCV usando varie tecnologie.
+Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, la quale non \`e altro che un sottoinsieme delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx. Questa libreria sfrutta le potenzialit\`a di SDSoC in quanto \`e stata scritta interamente in codice di alto livello e, in fase di compilazione, le funzioni utilizzate vengono sintetizzate sulla FPGA. Questa API si mantiene coerente con OpenCV per facilitare l'implementazione e l'accelerazione in harware. In figura \ref{fig:BenchmarkAuvizCV} sono riportati i risultati dei benchmark confrontando l'accelerazione di alcuni algoritmi di OpenCV usando varie tecnologie.
 
 %% Interruzione di pagina
 \newpage
@@ -791,7 +791,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni dei vari componenti del progetto sono le seguenti:
 \begin{enumerate}
 \item \textbf{Passenger}: la quale implementa la struttura adatta a rappresentare i passeggeri all'interno del programma.
-\item \textbf{PCN}: la quale implementa il contatore di passeggeri vero e proprio. Questa implementazione permette la parallelizzazione dei contatori, \`e quindi possibile instanziare un contatore per telecamera.
+\item \textbf{PCN}: la quale implementa il contatore di passeggeri vero e proprio. Questa implementazione permette la parallelizzazione dei contatori, \`e quindi possibile istanziare un contatore per telecamera.
 \item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN sfruttando i metodi pubblici resi disponibili dalla classe PCN.
 \end{enumerate}
 
@@ -867,7 +867,7 @@ Questa classe ha tre obiettivi principali:
 \begin{enumerate}
 \item Identificare univocamente le entit\`a che entrano nel raggio visivo della telecamera.
 \item Memorizzare lo storico delle posizione occupate da tali entit\`a all'interno del raggio visivo della telecamera.
-\item Tenere traccia del tempo per il quale l'entit\`a rimane all'intenro del raggio visivo della telecamera.
+\item Tenere traccia del tempo per il quale l'entit\`a rimane all'interno del raggio visivo della telecamera.
 \end{enumerate}
 
 Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
@@ -877,7 +877,7 @@ Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
 \end{enumerate}
 
-Inolte \`e stata implementata la variabile: \verb|trackColor|. \verb|trackColor| \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
+Inoltre \`e stata implementata la variabile: \verb|trackColor|. \verb|trackColor| \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
 
 %% Interruzione di pagina
 \newpage
@@ -1103,7 +1103,7 @@ Il codice esegue le seguenti operazioni:
 \item Per ogni contorno completo rilevato dalla funzione eseguiamo le seguenti operazioni:
     \begin{enumerate}
     \item Ne calcoliamo l'area. Se supera una certa area minima, ricava sperimentalmente, decidiamo che si tratta di una persona.
-    \item Ne ricaviamo il rettangolo che inscrive i controrni rilevati in precedenza tramite la funzione boundingRectangle.
+    \item Ne ricaviamo il rettangolo che inscrive i contorni rilevati in precedenza tramite la funzione boundingRectangle.
     \item Di questo rettangolo rileviamo il centro.
     \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e questo centro sull'immagine a colori.
     \end{enumerate}
@@ -1369,7 +1369,7 @@ int main(int argc, char * argv[])
 
 Il codice effettua le seguenti operazioni:
 \begin{enumerate}
-\item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera, quindi, viene instanziato un oggetto della classe PCN.
+\item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera, quindi, viene istanziato un oggetto della classe PCN.
 \item Vengono fatti partire in parallelo i contatori per mezzo del metodo \verb|start()|.
 \item Viene fatto partire un loop all'interno del quale si aspettano i comandi da eseguire su tutti i contatori immessi dall'utente.
 \end{enumerate}
@@ -1408,7 +1408,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
 %% Interruzione di pagina
 \newpage
 
-In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del rumore ed eliminazione dell'ombra ottenuti. Nonostrante ci\`o l'ombra proiettata lateralmente sul muro viene rilevata erroneamente come oggetto in movimento. Essa viene quindi tracciata dal programma e rilevata come passeggero.
+In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del rumore ed eliminazione dell'ombra ottenuti. Nonostante ci\`o l'ombra proiettata lateralmente sul muro viene rilevata erroneamente come oggetto in movimento. Essa viene quindi tracciata dal programma e rilevata come passeggero.
 
 Inoltre, al centro del fotogramma, \`e possibile notare un ulteriore falso tracciamento dovuto ad un picco di rumore registrato dalla telecamera.
 
@@ -1513,7 +1513,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
 \end{table}
 
-Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazone.
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
 
 Infine \`e opportuno notare che, la durata del loop principale nel caso della telecamera a 30 FPS, \`e simile sui due sistemi poich\`e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 FPS poich\`e fornisce frame pi\`u velocemente.
 
@@ -1546,7 +1546,7 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 \begin{enumerate}
 \item \textbf{Passenger}: \`e la stessa classe usata nella versione precedente del programma.
 \item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense}.
-\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time delle telecamere e del contatore. Si noti inoltre che rileva automaticamente il numero di telecamere collegate e instanzia un contatore per ogniuna di esse.
+\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time delle telecamere e del contatore. Si noti inoltre che rileva automaticamente il numero di telecamere collegate e istanzia un contatore per ognuna di esse.
 \end{enumerate}
 
 %% Interruzione di pagina
@@ -2005,7 +2005,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
 
 Si noti ancora una volta come in figura \ref{fig:R2002} il rettangolo appare non centrato sulla testa del passeggero. Ci\`o \`e dovuto al fatto che la telecamera a colori e quelle a infrarossi hanno posizioni diverse.
 
-Inoltre \`e opportuno notare come il centro della testa del passeggero, sempre in figura \ref{fig:R2002}, sia oscurato. Questo \`e devuto al fatto che il modello R200, poich\`e basato sulla visione stereoscopica, ha un range di funzionamento minimo molto elevato (30cm ca.) e, in questo caso, una parte della testa si trova fuori dal range operativo della telecamera.
+Inoltre \`e opportuno notare come il centro della testa del passeggero, sempre in figura \ref{fig:R2002}, sia oscurato. Questo \`e dovuto al fatto che il modello R200, poich\`e basato sulla visione stereoscopica, ha un range di funzionamento minimo molto elevato (30cm ca.) e, in questo caso, una parte della testa si trova fuori dal range operativo della telecamera.
 
 %% Interruzione di pagina
 \newpage
@@ -2160,7 +2160,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
 
 Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato, ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
 
-Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi, ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingressso dalla telecamera (anche in questo caso il metodo \verb|wait_for_frames()| \`e bloccante).
+Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi, ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingresso dalla telecamera (anche in questo caso il metodo \verb|wait_for_frames()| \`e bloccante).
 
 %% Interruzione di pagina
 \newpage
@@ -2170,11 +2170,11 @@ Nonostante i miglioramenti anche questa versione del software non \`e esente da 
 
 Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se presente la luce solare, la quale ha molte componenti infrarosse. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere notevolmente il funzionamento della telecamera.
 
-La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente outdoor poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione steroscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10m, il range minimo di 40cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
+La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente outdoor poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione stereoscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10m, il range minimo di 40cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
 
 Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori alla telecamera SR300, ci\`o aumenta ulteriormente le difficolt\`a di tracciamento.
 
-In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti per l'applicazione considerata in questa tesi, comunque il funzionameno \`e molto migliore rispetto al caso del Passenger Counter a sottrazione del background e i punti di forza di questa tecnologia sono di gran lunga maggiori dei punti deboli.
+In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti per l'applicazione considerata in questa tesi, comunque il funzionamento \`e molto migliore rispetto al caso del Passenger Counter a sottrazione del background e i punti di forza di questa tecnologia sono di gran lunga maggiori dei punti deboli.
 
 %% Interruzione di pagina
 \newpage
@@ -2312,7 +2312,7 @@ JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso effi
 
 Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets}.
 
-JavaCPP Presets \`e un sottoprogetto di JavaCPP il quale rende disponibile le interfacce verso le librerie C++ pi\`u usate prodotte usando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
+JavaCPP Presets \`e un sotto progetto di JavaCPP il quale rende disponibile le interfacce verso le librerie C++ pi\`u usate prodotte usando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
 
 Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
@@ -2410,7 +2410,7 @@ Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yo
 
 Una volta scaricate ed installate nella distribuzione tutte le ricette, viene creata l'immagine del sistema operativo che pu\`o essere scritta su un supporto di memoria e caricata sull'hardware.
 
-Il build system di Yocto \`e organizzato in cartelle: la directory principale, o \textbf{Source Directory}, viene creata in seguito alla clonazione della repository Git di Poky. La Source Directory contiene BitBake, metadati, documentazione e altri file che supportanto il progetto Yocto. Al suo interno sono presenti i layer fondamentali per la costruzione della distribuzione template e qui andranno scaricati i layer per le ricette aggiuntive. Qui verr\`a creata la \textbf{Build Directory}. Questo termine si riferisce all'area usata dall'OpenEmbedded build system per effettuare la build della distribuzione.
+Il build system di Yocto \`e organizzato in cartelle: la directory principale, o \textbf{Source Directory}, viene creata in seguito alla clonazione della repository Git di Poky. La Source Directory contiene BitBake, metadati, documentazione e altri file che supportando il progetto Yocto. Al suo interno sono presenti i layer fondamentali per la costruzione della distribuzione template e qui andranno scaricati i layer per le ricette aggiuntive. Qui verr\`a creata la \textbf{Build Directory}. Questo termine si riferisce all'area usata dall'OpenEmbedded build system per effettuare la build della distribuzione.
 
 \begin{figure}[h!]
   \centering
@@ -2453,7 +2453,7 @@ La sorgente del file bblayers.conf.sample dipende dalla variabile \verb|$TEMPLAT
 \end{itemize}
 
 \subsubsection{documentation}
-Questa directoru contiene i sorgenti della documentazione del progetto Yocto e template e tootl necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sottocartella.
+Questa directory contiene i sorgenti della documentazione del progetto Yocto e template e tootl necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sotto cartella.
 
 \subsubsection{meta}
 Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder meta/recipes-sato, la quale contiene Sato demo/reference UI/UX and its associated applications and configuration data.
@@ -2535,7 +2535,7 @@ Il downgrade di OpenCV ha richiesto qualche accorgimento in fase di cross-compil
 \subsubsection{Terza versione}
 Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment e un JDK. Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
 
-\`E stato quindi necesario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
+\`E stato quindi necessario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
 
 Poich\`e si voleva rendere disponibile la API Java ufficiale di OpenCV \`e stato necessario modificare a mano la ricetta di OpenCV in quanto solo l'ultima versione di detta ricetta si occupava di generare tale API. Usando una versione pi\`u vecchia, per i problemi di compatibilit\`a delle librerie RealSense, la API non veniva generata.
 
@@ -2595,12 +2595,12 @@ Vediamo ora nel dettaglio il significato di questi parametri:
 \item \verb|MACHINE|: Specifica la target device per la quale l'immagine viene costruita. La variabile corrisponde ad un file di configurazione della macchina con lo stesso nome, attraverso il quale le configurazioni specifiche per quella macchina vengono impostate. Di conseguenza, quando \verb|MACHINE| \`e impostato a \verb|quemux86| esister\`a un file qemux86.conf corrispondente nella directory meta/conf/machine. Nel nostro caso stiamo costruendo una distribuzione per una architettura Intel 64-bit e il file di configurazione della macchina si trova nel layer \textbf{meta-intel}.
 \item \verb|DISTRO|: Il nome della distribuzione. Questa variabile corrisponde ad un file di configurazione di distribuzione la cui radice del nome \`e la stessa dell'argomento della variabile e la cui esensione \`e .conf. Per esempio, il file di configurazione della distribuzione Poky \`e poky.conf e risiede in meta-poky/conf/distro.
 \item \verb|PACKAGE_CLASSES|: specifica il package manager che viene usato dal build system di OpenEmbedded quando vengono creati i pacchetti del software in fase di build.
-\item \verb|SDKMACHINE|: La macchina per la quale \`e costruita la toolchain di cross-sviluppo. In altre parole, il SDK \`e costruito in modo tale che possa essere esguito su un target specifico con il valore \verb|SDKMACHINE|. Il valore punta ad un file .conf corrispondente sotto la cartella conf/machine-sdk/. Possono essere usati "\verb|i686|" e "\verb|x86_64|" come possibili valori per questa variabile.
+\item \verb|SDKMACHINE|: La macchina per la quale \`e costruita la toolchain di cross-sviluppo. In altre parole, il SDK \`e costruito in modo tale che possa essere eseguito su un target specifico con il valore \verb|SDKMACHINE|. Il valore punta ad un file .conf corrispondente sotto la cartella conf/machine-sdk/. Possono essere usati "\verb|i686|" e "\verb|x86_64|" come possibili valori per questa variabile.
 \item \verb|EXTRA_IMAGE_FEATURES|: Una lista di feature addizionali da includere nell'immagine. Ad esempio "debug-tweaks" rende l'immagine adatta al debugging, permettendo il login come root senza l'uso di password e abilitando il logging post-installazione.
 \item \verb|PATCHRESOLVE|: Determina che azione intraprendere quanto la patch fallisce. In questo caso \`e stato lasciato al valore di default.
 \item \verb|BB_DISKMON_DIRS|: Monitora lo spazio su disco e gli inode disponibili durante la build permettendo di controllare il processo di build per mezzo di questi parametri.
 \item \verb|BB_NUMBER_THREADS|: Il massimo numero di task che BitBake pu\`o eseguire in parallelo contemporaneamente. Il build system di OpenEmbedded imposta automaticamente questo valore al numero di core disponibili sulla macchina host del build system. Per esempio un sistema con un processore dual-core che fa anche uso dell'hyper-threading implica che la variabile \verb|BB_NUMBER_THREADS| venga impostata a "4".
-\item \verb|PARALLEL_MAKE|: Opzioni extra passate al comando \verb|make| durante la task \verb|do_compile| task in modo tale da specificare la compilazione parallela sulla macchina del build system. Questa variabile solitamente \`e nella forma "-j x", dove x rappresenta il numero massimo di thread paralleli che il comando make pu\`o instanziare.
+\item \verb|PARALLEL_MAKE|: Opzioni extra passate al comando \verb|make| durante la task \verb|do_compile| task in modo tale da specificare la compilazione parallela sulla macchina del build system. Questa variabile solitamente \`e nella forma "-j x", dove x rappresenta il numero massimo di thread paralleli che il comando make pu\`o istanziare.
 \item \verb|IMAGE_INSTALL|: Specifica i pacchetti da installare in una immagine.
 \item \verb|CORE_IMAGE_EXTRA_INSTALL|: Specifica la lista di pacchetti che devono essere aggiunti all'immagine.
 \end{itemize}
@@ -3008,7 +3008,7 @@ $ java -cp jar_files/ffmpeg-platform.jar: \
 \subsubsection{Modalit\`a di esecuzione}
 La versione Java del Passenger Counter supporta quattro modalit\`a di esecuzione. La scelta su quale avviare viene effettuata una volta lanciata l'applicazione.
 
-Anche in questo caso, all'avvio, viene instanziato un contatore per telecamera collegata.
+Anche in questo caso, all'avvio, viene istanziato un contatore per telecamera collegata.
 
 \begin{enumerate}
 \item \verb|M|: \textbf{Bare metal mode}. Non vengono visualizzate le finestre contenenti gli stream video. 
@@ -3017,7 +3017,7 @@ Anche in questo caso, all'avvio, viene instanziato un contatore per telecamera c
 \item \verb|B|: \textbf{Video recording in bare metal mode}. Vengono salvati su file gli stream video ma non vengono visualizzati in run-time.
 \end{enumerate}
 
-L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le fineste di questa versione basate sul framework Java e non su X, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
+L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le finestre di questa versione basate sul framework Java e non su X, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
 
 \subsubsection{Comandi Run-time}
 Anche in questo caso le opzioni vengono applicate a tutti i contatori attualmente attivi sulla macchina.
@@ -3074,7 +3074,7 @@ I risultati ottenuti da questa versione del contatore sono stati ritenuti molto 
 Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte tutte come segue:
 
 \begin{enumerate}
-\item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel sembra intenzionata a fornire supporto a questa tencologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
+\item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel sembra intenzionata a fornire supporto a questa tecnologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
 \item \textbf{Utilizzo di FPGA}: \`e stato risolto per mezzo dell'utilizzo delle telecamere RealSense. Non \`e pi\`u necessario fare affidamento alla FPGA per la ricostruzione delle informazioni di profondit\`a in quanto questo compito \`e assolto dall'ASIC presente all'interno delle telecamere. Questo permette un abbassamento dei costi di produzione del sistema.
 \item \textbf{Numero di unit\`a computazionali}: nella versione attuale del Passenger Counter di Eurotech \`e necessario che vi sia una unit\`a computazionale per dispositivo di acquisizione delle immagini. Con la versione realizzata in questa tesi \`e sufficiente un RealiaGate per pi\`u telecamere. Questo \`e possibile grazie al ridotto costo computazionale dell'applicativo e alla parallelizzazione delle istanze del contatore. Si noti che per poter sfruttare appieno questo vantaggio \`e necessario che l'applicativo sia eseguito su una macchina sufficientemente potente.
 \item \textbf{Dimensioni}: l'ingombro di queste telecamere \`e molto pi\`u basso rispetto al dispositivo usato da Eurotech, questo aumenta la facilit\`a di installazione e l'appetibilit\`a sul mercato.
