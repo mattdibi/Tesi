@@ -3097,14 +3097,32 @@ Purtroppo la mancanza di tempo per portare avanti lo sviluppo del sistema non ha
 \newpage
 
 \section{Risultati distribuzione Yocto}
+Anche in questo caso i risultati ottenuti sono stati molto buoni. Uno degli obiettivi della distribuzione era dimostrare che il RealiaGate potesse supportare librerie e tool software di largo uso come OpenCV e hardware specializzato come le telecamere RealSense. Questo permette di aumentare l'apppetibilit\`a del gateway sul mercato e ne amplia gli ambiti di utilizzo.
+
+La distribuzione realizzata supporta:
+
+\begin{itemize}
+\item OpenCV 3.1: di cui sono rese disponibili le API Java, Python e C++. Inoltre \`e possibile sfruttare l'accelerazione hardware per mezzo delle librerie Intel IPP ed Eigen.
+\item Librealsense 1.12.1
+\item OpenJDK-8
+\item Eurotech ESF 4.1
+\end{itemize}
+
+\subsection{Possibili miglioramenti e sviluppi futuri}
+Anche in questo caso sono possibili dei miglioramenti:
+
+\begin{itemize}
+\item Installazione del supporto al calcolo parallelo su GPU: da specifiche sappiamo che il processore installato sul ReliaGate possiede una GPU integrata e, per poter scaricare parte del carico computazionale su di essa, sarebbe necessario installare ulteriori componenti sulla distribuzione. Uno dei componenti fondamentali \`e OpenCL, il quale viene usato pesantemente da OpenCV per accelerare i suoi algoritmi. Purtroppo per inesperienza con il tool e per mancanza di supporto ufficiale da parte di Intel non \`e stato possibile effettuare questo passaggio. \`E sicuramente un miglioramento da tenere in considerazione per gli sviluppi futuri del progetto.
+\item Integrazione delle feature nella distribuzione ufficiale di Eurotech: i prossimi passi nello sviluppo del progetto prevedono l'integrazione delle feature presenti sull'immagine realizzata nel corso di questa tesi nell'immagine del sistema operativo ufficiale di Eurotech. Questo comporterebbe l'integrazione delle interfacce verso l'hardware proprietario di Eurotech per mezzo dei driver dell'azienda a cui non si \`e avuto accesso durante la tesi. Questa integrazione non \`e banale visti i vincoli di compatiblit\`a imposti dalle telecamere RealSense.
+\end{itemize}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
 \appendix
 
 \part{Appendici}
 
-\chapter{Altro capitolo}
-Sed purus libero, vestibulum ut nibh vitae, mollis ultricies augue. Pellentesque velit libero, tempor sed pulvinar non, fermentum eu leo. Duis posuere eleifend nulla eget sagittis. Nam laoreet accumsan rutrum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur eget libero quis leo porttitor vehicula eget nec odio. Proin euismod interdum ligula non ultricies. Maecenas sit amet accumsan sapien.
+%% \chapter{Altro capitolo}
+%% Sed purus libero, vestibulum ut nibh vitae, mollis ultricies augue. Pellentesque velit libero, tempor sed pulvinar non, fermentum eu leo. Duis posuere eleifend nulla eget sagittis. Nam laoreet accumsan rutrum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur eget libero quis leo porttitor vehicula eget nec odio. Proin euismod interdum ligula non ultricies. Maecenas sit amet accumsan sapien.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
