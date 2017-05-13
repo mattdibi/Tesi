@@ -822,6 +822,7 @@ class Passenger {
     // Methods
     void updateCoords(Point newCenter);
     void updateAge(){age++;return;};
+    void resetAge(){age = 0; return;};
 
   private:
     int pid;    // Passenger ID
@@ -834,30 +835,20 @@ class Passenger {
 \end{lstlisting}
 
 \begin{lstlisting}[language=C++, caption=passenger.cpp, style=customcpp]
-Passenger::Passenger(int id, Point center, int newAge = 0)
-{
+Passenger::Passenger(int id, Point center, int newAge = 0) {
     pid = id;
     age = newAge;
 
     tracks.push_back(center);
-    int r = rand() % 255;
-    int g = rand() % 255;
-    int b = rand() % 255;
-    trackColor = Scalar(r,g,b);
+    trackColor = Scalar(rand() % 255, rand() % 255, rand() % 255);
 }
 
-void Passenger::updateCoords(Point newCenter)
-{
+void Passenger::updateCoords(Point newCenter) {
     tracks.push_back(newCenter);
 
     // If too many tracking points remove older points
-    if(tracks.size() > MAX_TRACK_LENGTH) {
+    if(tracks.size() > MAX_TRACK_LENGTH)
         tracks.erase(tracks.begin());
-    }
-
-    // Reset age
-    // If the object is being tracked it means it's active we don't want it to disappear
-    age = 0;
 
     return;
 }
@@ -1148,6 +1139,7 @@ if(areaCurrentObject > areaMin)
             // Update coordinates
             newPassenger = false;
             passengers[i].updateCoords(mc);
+            passengers[i].resetAge();
 
             // --COUNTER
             if(passengers[i].getTracks().size() > 1)
@@ -1944,13 +1936,91 @@ void RSPCN::count()
         findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
         // For every detected object
-        for(unsigned int idx = 0; idx < contours.size(); idx++)
-        {
-            ...
+        for(unsigned int idx = 0; idx < contours.size(); idx++) {
+            // -- AREA
+            // Calculating area
+            double areaCurrentObject = contourArea(contours[idx]);
+
+            // If calculated area is big enough begin tracking the object
+            if(areaCurrentObject > areaMin) {
+                // Get bounding rectangle
+                Rect br = boundingRect(contours[idx]);
+                Point2f objCenter = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
+
+                // Draw mass center and bounding rectangle
+                rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
+                circle( color, objCenter, 5, RED, 2, 8, 0 );
+
+                // --PASSENGERS DB UPDATE
+                bool newPassenger = true;
+
+                for(unsigned int i = 0; i < passengers.size(); i++) {
+
+                    // If the passenger is near a known passenger assume they are the same one
+                    if( abs(objCenter.x - passengers[i].getCurrentPoint().x) <= xNear &&
+                        abs(objCenter.y - passengers[i].getCurrentPoint().y) <= yNear ) {
+
+                        // Update coordinates
+                        newPassenger = false;
+                        passengers[i].updateCoords(objCenter);
+                        // If the object is being tracked it means its active we don't want it to disappear
+                        passengers[i].resetAge();
+
+                        break;
+                    }
+                }
+
+                // If wasn't near any known object is a new passenger
+                if(newPassenger) {
+                    Passenger p(pid, objCenter);
+                    passengers.push_back(p);
+                    pid++;
+                }
+            }
         }
-        ...
-    }
-    ...
+
+        // For every passenger in passengers DB
+        for(unsigned int i = 0; i < passengers.size(); i++) {
+            
+            if(passengers[i].getTracks().size() > 1) {
+
+                // -- DRAWING PASSENGER TRAJECTORIES
+                polylines(color, passengers[i].getTracks(), false, passengers[i].getTrackColor(),2);
+
+                // -- COUNTING
+                if(passengers[i].getTracks().size() > 1) {
+                    // Up to down
+                    if( (passengers[i].getLastPoint().y < frame.rows/2 && passengers[i].getCurrentPoint().y >= frame.rows/2) ||
+                        (passengers[i].getLastPoint().y <= frame.rows/2 && passengers[i].getCurrentPoint().y > frame.rows/2) ) {
+
+                        cnt_out++;
+
+                        // Visual feedback
+                        circle(color, Point(color.cols - 20, 20), 8, RED, CV_FILLED);
+                    }
+
+                    // Down to up
+                    if( (passengers[i].getLastPoint().y > frame.rows/2 && passengers[i].getCurrentPoint().y <= frame.rows/2) ||
+                        (passengers[i].getLastPoint().y >= frame.rows/2 && passengers[i].getCurrentPoint().y < frame.rows/2) ) {
+
+                        cnt_in++;
+
+                        // Visual feedback
+                        circle(color, Point(color.cols - 20, 20), 8, GREEN, CV_FILLED);
+                    }
+
+                }
+                
+            }
+
+            // --UPDATE PASSENGER STATS
+            // Updating age
+            passengers[i].updateAge();
+
+            // Removing older passengers
+            if(passengers[i].getAge() > (maxPassengerAge * fps) )
+                passengers.erase(passengers.begin() + i);
+        }
 }
 \end{lstlisting}
 
