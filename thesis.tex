@@ -1203,6 +1203,8 @@ Il codice riportato esegue le seguenti operazioni:
 \item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Procediamo quindi ad aggiornare il database aggiungendo il nuovo passeggero.
 \end{enumerate}
 
+Considerando il funzionamento di \verb|findContours()|, la quale cerca di rilevare l'oggetto pi\`u grande nel frame, avremo che due persone nello stesso frame vengono unite nello stesso blob. Quindi per rilevare correttamente l'attraversamento di pi\`u persone contemporaneamente si sfrutta l'area rilevata nei passaggi precedenti: se l'area dell'entit\`a rilevata supera una certa soglia, ricavata sperimentalmente, la si considera un blob formato da due passeggeri. Quindi al rilevamento dell'attraversamento della soglia si aggiorna il contatore aggiungendo due attraversamenti invece che uno. Allo stesso modo si procede per il rilevamento di tre passeggeri.
+
 Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
 Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
 
@@ -1237,9 +1239,6 @@ putText(frame, "Count OUT: " + to_string(cnt_out), Point(0, frame.rows - 10) , F
 \end{lstlisting}
 
 Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato anche per aggiornare la variabile \verb|age| dei passeggeri. Quando questo parametro supera un certo valore di soglia, dovuto al fatto che i passeggeri sono usciti dal raggio visivo della telecamera da troppo tempo, vengono rimossi dal database.
-
-%% Interruzione di pagina
-\newpage
 
 Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la soglia per l'attraversamento.
 
@@ -1874,8 +1873,6 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
 
 \subsection{Analisi del kernel del programma: funzione count()}
 
-\textbf{\color{codered}AGGIORNARE!}
-
 La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuore del programma. Il codice \`e suddivisibile ancora una volta in tre sezioni:
 
 \begin{enumerate}
@@ -1884,11 +1881,11 @@ La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuor
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
-\`E stato possibile riutilizzare il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Discorso a parte va fatto per il primo punto.
+\`E stato possibile riutilizzare il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Vi sono per\`o alcune differenze nel codice che vedremo nel seguito.
 
 \subsubsection{Estrazione degli oggetti in primo piano}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count(), style=customcpp]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 1, style=customcpp]
 void RSPCN::count()
 {
     // Streams
@@ -1937,6 +1934,19 @@ void RSPCN::count()
         // -- DENOISING
         blur(frame, morphTrans, Size(blur_ksize,blur_ksize));
 
+\end{lstlisting}
+
+Come nel caso precedente, in questa fase abbiamo l'estrazione degli oggetti in primo piano.
+
+\begin{enumerate}
+\item Vengono catturati i frame dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense.
+\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente.
+\item Si effettua una veloce operazione di riduzione del rumore.
+\end{enumerate}
+
+\subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
+
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2, style=customcpp]
         // --FINDING CONTOURS
         findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
@@ -1983,7 +1993,25 @@ void RSPCN::count()
                 }
             }
         }
+\end{lstlisting}
 
+A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato calcoliamo l'area. Se l'area supera un valore minimo ricavato sperimentalmente viene considerato un passeggero.
+
+\noindent Quindi si passa ad aggiornare la posizione dei passeggeri.
+
+\begin{itemize}
+\item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel da un passeggero gi\`a nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
+\item Se il passeggero non \`e vicono a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
+\end{itemize}
+
+\noindent Infine si va ad effettuare il conteggio degli attraversamenti.
+
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Conteggio degli attraversamenti}
+
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3, style=customcpp]
         // For every passenger in passengers DB
         for(unsigned int i = 0; i < passengers.size(); i++) {
             
@@ -1999,8 +2027,6 @@ void RSPCN::count()
 
                     cnt_out++;
 
-                    // Visual feedback
-                    circle(color, Point(color.cols - 20, 20), 8, RED, CV_FILLED);
                 }
 
                 // Down to up
@@ -2009,8 +2035,6 @@ void RSPCN::count()
 
                     cnt_in++;
 
-                    // Visual feedback
-                    circle(color, Point(color.cols - 20, 20), 8, GREEN, CV_FILLED);
                 }
             }
 
@@ -2025,18 +2049,23 @@ void RSPCN::count()
 }
 \end{lstlisting}
 
-Il procedimento \`e pressoch\`e identico alla versione precedente:
-
-\begin{enumerate}
-\item Vengono catturati i frame dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense.
-\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente.
-\item Si effettua una veloce operazione di riduzione del rumore.
-\end{enumerate}
-
-Da questo punto in poi il codice rimane identico alla versione a sottrazione del background trattata nella sezione \ref{kernelPCN} a pagina \pageref{kernelPCN}.
-
 %% Interruzione di pagina
 \newpage
+
+Una volta aggiornate le posizioni dei passeggeri viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
+
+\begin{itemize}
+\item Se ne disegna la traccia dello storico delle posizioni.
+\item Si rilevano gli attraversamenti della soglia:
+    \begin{itemize}
+    \item Se l'ultima posizione si trovava a sud della soglia e la nuova posizione rilevata a nord, si aggiorna il contatore in ingresso. 
+    \item Se l'ultima posizione si trovava a nord della soglia e la nuova posizione rilevata a sud, si aggiorna il contatore in uscita. 
+    \end{itemize}
+\item Si effettua l'update del parametro \verb|age| dei passeggeri.
+\item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\`e troppo a lungo fuori dal raggio visivo della telecamera.
+\end{itemize}
+
+Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\`e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera figura del passeggero.
 
 Come nel caso precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
 
