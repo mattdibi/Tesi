@@ -1050,7 +1050,7 @@ Risultato delle operazioni:
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2, style=customcpp]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2, style=customcpp, firstnumber=47]
 while(!halt)
 {
     ...
@@ -1117,7 +1117,7 @@ Risultato delle operazioni:
 \subsubsection{Conteggio degli attraversamenti}
 Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3, style=customcpp]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3, style=customcpp, firstnumber=62]
 if(areaCurrentObject > areaMin)
 {
     // Getting bounding rectangle
@@ -1208,7 +1208,7 @@ Considerando il funzionamento di \verb|findContours()|, la quale cerca di rileva
 Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
 Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4, style=customcpp]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4, style=customcpp, firstnumber=134]
 // For every passenger in passengers DB
 for(unsigned int i = 0; i < passengers.size(); i++)
 {
@@ -1946,7 +1946,7 @@ Come nel caso precedente, in questa fase abbiamo l'estrazione degli oggetti in p
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2, style=customcpp]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2, style=customcpp, firstnumber=48]
         // --FINDING CONTOURS
         findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
@@ -2011,7 +2011,7 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 
 \subsubsection{Conteggio degli attraversamenti}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3, style=customcpp]
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3, style=customcpp, firstnumber=94]
         // For every passenger in passengers DB
         for(unsigned int i = 0; i < passengers.size(); i++) {
             
