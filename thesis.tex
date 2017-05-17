@@ -356,14 +356,22 @@ Come dispositivi di acquisizione delle immagini sono state utilizzate le telecam
 \subsubsection{Intel RealSense R200}
 
 \begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=.49\textwidth]{R200.jpg}
-  \includegraphics[width=.49\textwidth]{r200_module.png}
+  \includegraphics[width=8cm]{R200.jpg}
   \caption{Telecamera R200}
   \label{fig:R200}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{r200_module.png}
+  \caption{Componenti telecamera R200}
+  \label{fig:fig:R200Module}
+\end{minipage}
 \end{figure}
 
-Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento delle telecamere. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
+Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
 
 \begin{figure}[h!]
   \centering
@@ -371,6 +379,9 @@ Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurote
   \caption{Schema funzionamento Intel RealSense R200}
   \label{fig:SchemaFunzR200}
 \end{figure}
+
+%% Interruzione di pagina
+\newpage
 
 Specifiche tecniche:
 
@@ -396,11 +407,19 @@ Specifiche tecniche:
 \subsubsection{Intel RealSense SR300}
 
 \begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=.49\textwidth]{SR300.jpg}
-  \includegraphics[width=.49\textwidth]{SR300_module.png}
+  \includegraphics[width=8cm]{SR300.png}
   \caption{Telecamera SR300}
   \label{fig:SR300}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{SR300_module.png}
+  \caption{Componenti telecamera SR300}
+  \label{fig:SR300Module}
+\end{minipage}
 \end{figure}
 
 La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. Il proiettore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti ed ottenere altre informazioni sulla superficie. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera.
@@ -412,9 +431,6 @@ Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando
   \caption{Schema funzionamento Intel RealSense SR300}
   \label{fig:SchemaFunzSR300}
 \end{figure}
-
-%% Interruzione di pagina
-\newpage
 
 Specifiche tecniche:
 
@@ -433,6 +449,9 @@ Specifiche tecniche:
     \caption{Specifiche tecniche Intel RealSense SR300}
     \label{table:SR300Spec}
 \end{table}
+
+%% Interruzione di pagina
+\newpage
 
 \subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
 Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tecnologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
