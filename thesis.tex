@@ -752,7 +752,7 @@ Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato re
 \section{Passenger Counter con sottrazione del background}
 In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
-Inizialmente, descriveremo l'hardware utilizzato, tratteremo le tecniche utilizzate, quindi passeremo a descrivere la struttura del codice il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
 \subsection{Componenti hardware}\label{HardwarePCN}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
@@ -783,11 +783,11 @@ Essendo driverless veniva riconosciuta senza problemi dal ReliaGate ed \`e stato
 % TODO: Approfondire? La matematica dietro il metodo \`e spiegata sufficientemente bene nella pagina di wikipedia
 % link: 
 \subsection{Algoritmo per la sottrazione del background}
-La sottrazione del background \`e una tecnica, molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per essere ulteriormente manipolato. La background subtraction \`e una tecnica largamente utilizzata per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
+La sottrazione del background \`e una tecnica molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per essere ulteriormente manipolato. La background subtraction \`e una tecnica largamente utilizzata per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
 
-L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, "Improved adaptive Gausian mixture model for background subtraction" del 2004 e "Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction" del 2006.
+L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
 
-Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che probabilmente appartengono al background sono quelli che rimangono per pi\`u tempo all'interno della scena e sono i pi\`u statici.
+Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
 
 %% Interruzione di pagina
 \newpage
