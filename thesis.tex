@@ -910,11 +910,23 @@ Questa classe ha tre obiettivi principali:
 Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \begin{enumerate}
 \item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
-\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Il massimo numero di posizioni mantenute in memoria \`e stato deciso sperimentalmente.
+\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si voleva mantere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
 \end{enumerate}
 
-Inoltre \`e stata implementata la variabile: \verb|trackColor|. \verb|trackColor| \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento sia avvenuto correttamente.
+Inoltre \`e stata implementata la variabile: \verb|trackColor|. \verb|trackColor| \`e un vettore di interi che vanno a rappresentare un colore RGB randomizzato. Viene usato per disegnare le tracce lasciate dal transito dei passeggeri nel raggio visivo della telecamera con colori diversi, in modo tale che sia facile verificare che il tracciamento \`e avvenuto correttamente.
+
+Infine gli altri metodi implementati sono i seguenti:
+
+\begin{itemize}
+\item \verb|getTracks()|: ritorna l'intero storico delle posizioni rilevate del passeggero.
+\item \verb|getTrackColor()|: ritorna il colore col quale tracciare la cornologia delle posizioni del passeggero.
+\item \verb|getCurrentPoint()|: ritorna la posizione corrente assunta dal passeggero all'interno del raggio visivo della telecamera. Questa posizione \`e salvata come \verb|Point|, tipo definito da OpenCV, il quale rappresenta una coordinata in pixel.
+\item \verb|getLastPoint()|: ritorna l'ultima posizione conosciuta del passeggero.
+\item \verb|updateCoords()|: aggiorna l'ultima coordinata conosciuta del passeggero.
+\item \verb|updateAge()|: aggiorna la variabile \verb|age| del passeggero.
+\item \verb|resetAge()|: resetta a zero la variabile \verb|age| del passeggero.
+\end{itemize}
 
 %% Interruzione di pagina
 \newpage
