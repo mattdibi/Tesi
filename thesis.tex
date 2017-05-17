@@ -910,7 +910,9 @@ Questa classe ha tre obiettivi principali:
 Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \begin{enumerate}
 \item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
-\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si voleva mantere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
+\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. La classe template \verb|vector| implementa una struttura a pila, ci\`o signigica che per mezzo dei metodi esposti dalla classe \`e possibile fare in modo che le posizioni pi\`u vecchie si trovino in fondo alla pila, le posizioni pi\`u recenti in cima. Questo facilita la cancellazione delle posizioni pi\`u vecchie quando si \`e raggiunto il limite massimo di posizioni da memorizzare.
+
+Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si voleva mantere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore.
 \end{enumerate}
 
@@ -928,15 +930,13 @@ Infine gli altri metodi implementati sono i seguenti:
 \item \verb|resetAge()|: resetta a zero la variabile \verb|age| del passeggero.
 \end{itemize}
 
-%% Interruzione di pagina
-\newpage
-
 Qusta classe permette ai contatori di creare un vettore di oggetti \verb|Passenger|, il quale implementa la memoria dei passeggeri tracciati dal contatore. Al comparire di un nuovo passeggero nel raggio visivo della telecamera baster\`a aggiornare questo vettore.
 
 Il parametro \verb|age| ha molte utilit\`a per quanto riguarda il tracciamento. Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizone conosciuta e "invecchiano" ad ogni frame poich\`e viene loro aggiornata la \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria.
 
 Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha una telecamera da 30fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
 
+\subsubsection{Utilizzo della classe Passenger}
 Si noti che questa rappresentazione dei passeggeri all'interno del contatore \`e stata usata anche dalla versione successiva del Passenger Counter con telecamere RealSense. Per dettagli si veda il paragrafo \ref{StrutturaRSPCN} a pagina \pageref{StrutturaRSPCN}.
 
 %% Interruzione di pagina
