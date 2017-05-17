@@ -454,10 +454,10 @@ Specifiche tecniche:
 \newpage
 
 \subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
-Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tecnologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
+Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame e i dati di profondit\`a dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream video disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tecnologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
 
 Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
-Vi \`e una eccezione a questa codifica in quanto, il valore del pixel 0, \`e attribuito ai pixel per i quali non \`e stato possibile ricavare informazione sulla distanza, ci\`o pu\`o essere dovuto a problemi di range o esposizione dell'immagine.
+Vi \`e una eccezione a questa codifica in quanto, un valore nullo \`e attribuito ai pixel per i quali non \`e stato possibile ricavare informazione sulla distanza, ci\`o pu\`o essere dovuto a problemi di range o esposizione dell'immagine.
 
 Vi sono per\`o delle minime differenze tra le due telecamere per quanto riguarda la risoluzione della distanza calcolata:
 \begin{itemize}
@@ -473,7 +473,7 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
 Siccome una parte centrale della tesi verteva sull'elaborazione delle immagini \`e stato necessario integrare nel progetto l'uso della libreria OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
-OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di image processing, computer visione e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
+OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. La libreria \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali. Contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di image processing, computer vision e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
 \subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
@@ -483,7 +483,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
     \begin{itemize}
     \item Image Filtering: funzioni per la convoluzione di immagini con un kernel, dilatazione di immagini, filtro Sobel, GaussianBlur ecc...
     \item Trasformazioni geometriche: ridimensionamenti, warping ecc...
-    \item Funzioni per il disegno: permettono di disegnare semplici forme sulle immagini che vengono manipolate
+    \item Funzioni per il disegno: permettono di disegnare semplici forme sulle immagini che vengono manipolate.
     \item Funzioni per l'analisi delle immagini: istogrammi, analisi strutturale e descrittori di forme, motion analysis e tracking di oggetti.
     \end{itemize}
 \item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\'e analisi di video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
@@ -512,7 +512,7 @@ Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente d
 \subsubsection{Storia}
 Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa Intel finalizzata all'avanzamento delle applicazioni CPU-intensive che includeva ray tracing real-time e display 3D. Inizialmente le finalit\`a del progetto erano descritte come:
 \begin{itemize}
-\item Permettere l'avanzamento della computer vision fornendo non solo una libreria di codice open-source ma anche pre ottimizzato per costruire l'infrastruttura base di applicazioni di computer visione.
+\item Permettere l'avanzamento della computer vision fornendo non solo una libreria di codice open-source ma anche pre ottimizzato per costruire l'infrastruttura base di applicazioni di computer vision.
 \item Condividere conoscenza sulla computer vision fornendo una infrastruttura comune sulla quale tutti gli sviluppatori potessero costruire.
 \item Far avanzare le applicazioni commerciali basate sulla computer vision rendendo il codice portabile, ottimizzato per le performance.
 \end{itemize}
@@ -525,13 +525,13 @@ Per lo sviluppo dell'applicazione di Passenger Counter la scelta di utilizzare q
 
 %% TODO: Rivedi cosa hai scritto e amplia ancora se riesci
 \subsection{Ambiente di sviluppo per l'OS: Yocto Project}\label{Yocto}
-Per integrare nella piattaforma target gli strumenti necessari al funzionamento dell'applicativo \`e stato necessario realizzare una distribuzione Linux customizzata adatta alle nostre esigenze. Per farlo \`e stato utilizzato il progetto Yocto, standard industriale de facto per realizzare distribuzioni Linux embedded.
+Per integrare nella piattaforma hardware gli strumenti software necessari al funzionamento dell'applicativo \`e stato indispensabile realizzare una distribuzione Linux customizzata adatta alle nostre esigenze. Per farlo \`e stato utilizzato il progetto Yocto, standard industriale de facto per realizzare distribuzioni Linux embedded.
 
 Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi embedded, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Yocto Project \`e quindi un ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux embedded.
 
 Le architettura supportate dal progetto sono le pi\`u diffuse nell'ambito embedded: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
 
-OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette.
+OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution.
 
 \subsubsection{Componenti del progetto Yocto}
 \begin{itemize}
@@ -563,7 +563,7 @@ Una volta che sono stati generati tutti i pacchetti richiesti procede alla gener
 %% Interruzione di pagina
 \newpage
 
-Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario realizzare l'immagine della distribuzione Linux opportunamente modificata e la toolchain di cross-sviluppo prima di cominciare lo sviluppo dell'applicazione. Una volta completati questi passaggi si \`e potuti passare allo sviluppo dell'applicazione sulla SDKMachine. Siccome si \`e passati attraverso diverse tecnologie il processo \`e stato ripetuto pi\`u volte per poter integrare le nuove tecnologie all'interno della toolchain.
+Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario realizzare l'immagine della distribuzione Linux opportunamente modificata e la toolchain di cross-sviluppo adattandole alle necessit\`a dell'applicazione. Siccome si \`e passati attraverso diverse tecnologie il processo \`e stato ripetuto pi\`u volte per poter integrare le nuove tecnologie all'interno della toolchain.
 
 \begin{figure}[h!]
   \centering
