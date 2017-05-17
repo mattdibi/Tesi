@@ -64,6 +64,8 @@
 
 %% Setting globale per i listing: stile di default customcpp
 \lstset{style=plain}
+% Traduzione didascalia listati: sostituisce Listing > Listato
+\renewcommand{\lstlistingname}{Listato}
 
 \usepackage{capt-of}
 \graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/} {img/CorpoTesi/5_Yocto/} {img/Manuale/}}
@@ -834,8 +836,8 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 
 In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni dei vari componenti del progetto sono le seguenti:
 \begin{enumerate}
-\item \textbf{Passenger}: la quale implementa la struttura adatta a rappresentare i passeggeri all'interno del programma.
-\item \textbf{PCN}: la quale implementa il contatore di passeggeri vero e proprio. Questa implementazione permette la parallelizzazione dei contatori, \`e quindi possibile istanziare un contatore per telecamera.
+\item \textbf{Passenger}: implementa la struttura adatta a rappresentare e memorizzare i passeggeri all'interno del programma.
+\item \textbf{PCN}: implementa il contatore di passeggeri vero e proprio. Questa classe si incarica dell'interfacciamento con le telecamere, l'elaborazione delle immagini e dei dati, espone metodi per controllare il funzionamento real-time ed effettua il conteggio degli attraversamenti. Permette inoltre la parallelizzazione dei contatori: \`e infatti possibile istanziare un contatore per telecamera.
 \item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN sfruttando i metodi pubblici resi disponibili dalla classe PCN.
 \end{enumerate}
 
