@@ -5,6 +5,7 @@
 \documentclass[target=mst]{thud}[2014/03/11]
 
 %% Aggiunta pacchetto per inserimento di immagini
+\usepackage{makecell}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{mathtools}
@@ -347,7 +348,7 @@ Vedremo che nella versione del Passenger Counter realizzata nel corso di questa 
 %% Interruzione di pagina
 \newpage
 
-\section{Tecnologie utilizzate durante lo sviluppo della tesi}
+\section{Tecnologie utilizzate durante lo sviluppo della tesi}\label{TecnologieTesi}
 In questa sezione andremo ad esaminare le tecnologie che sono state utilizzate per realizzare la nuova versione del Passenger Counter.
 
 %%TODO: Aggiungere nella bibliografia i riferimenti ai Datasheet delle telecamere
@@ -701,41 +702,46 @@ Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardwa
 \subsubsection{Hardware}
 L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le telecamere Intel RealSense.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.5]{ReliaGATE2025.jpg}
-  \caption{ReliaGate 20-25}
-  \label{fig:ReliaGate2025}
-\end{figure}
-
-Specifiche tecniche:
-
-\begin{table}[h!]
+\begin{table}[ht]
+\begin{minipage}[b]{0.56\linewidth}
+\centering
     \centering
-	\begin{tabular}{|c|c|}
+	\begin{tabular}{|l|c|}
 	\hline
-    ReliaGate 20-25-33 & Processore Intel E3827 Dual Core 1.75GHz x86-64 \\ \hline
-    Memoria & 2GB 1333MHz DDR3L ECC + 8GB eMMC \\ \hline
-    Connettivit\`a & 1x USB 3.0 + 2x USB 2.0 + 2x RS-232/RS-422/RS-485 \\ \hline
+    ReliaGate 20-25-33 & \makecell{Processore Intel E3827  \\ Dual Core 1.75GHz x86-64} \\ \hline
+    Memoria & \makecell{2GB 1333MHz DDR3L ECC \\ 8GB eMMC} \\ \hline
+    Connettivit\`a & \makecell{1x USB 3.0 \\ 2x USB 2.0 \\ 2x RS-232/RS-422/RS-485} \\ \hline
     Video & mini DisplayPort \\
     \hline
 	\end{tabular}
     \caption{Specifiche tecniche ReliaGate 20-25-33}
+    \label{table:SpecificheWebcam}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.4\linewidth}
+  \centering
+  \includegraphics[width=60mm]{ReliaGATE2025.jpg}
+  \captionof{figure}{ReliaGate 20-25}
+  \label{fig:ReliaGate2025}
+\end{minipage}
 \end{table}
 
 \subsubsection{Software e piattaforma per lo sviluppo}
-Gli strumenti che si sarebbe andati ad utilizzare sono quelli di cui si \`e parlato nel capitolo 2. Yocto per la realizzazione della distribuzione Linux, la toolchain di Yocto per la cross-compilazione dei sorgenti, OpenCV per l'image processing e le telecamere RealSense con annessa libreria.
+Gli strumenti che si sarebbe andati ad utilizzare sono quelli di cui si \`e parlato nel paragrafo \ref{TecnologieTesi} a pagina \pageref{TecnologieTesi}: Yocto per la realizzazione della distribuzione Linux, la toolchain di Yocto per la cross-compilazione dei sorgenti, OpenCV per l'image processing.
+
+Solo in un secondo momento sono state integrate nel sistema le telecamere RealSense con annessa libreria a causa delle prestazioni non soddisfacenti della prima versione del software.
+
+I vantaggi di questa piattaforma sono dovuti in gran parte all'architettura del processore Intel: avendo a disposizione un x86 il software disponibile \`e molto ampio e si \`e in grado di avere grande flessibilit\`a nello sviluppo dell'applicazione.
 
 %% Interruzione di pagina
 \newpage
 
 \subsection{Motivazioni per la scelta finale}
-Si è infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
+Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
 \begin{itemize}
-\item Flessibilit\`a: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
-\item Completezza: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate.
-\item Performance: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
-\item Compatibilit\`a: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software.
+\item \textbf{Flessibilit\`a}: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
+\item \textbf{Completezza}: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate.
+\item \textbf{Performance}: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
+\item \textbf{Compatibilit\`a}: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software.
 \end{itemize}
 
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
@@ -754,7 +760,7 @@ Per questa prima implementazione del contatore di passeggeri \`e stata utilizzat
 \begin{table}[ht]
 \begin{minipage}[b]{0.56\linewidth}
 \centering
-\begin{tabular}{ | c | c | }
+\begin{tabular}{ | l | c | }
     \hline
     Risoluzione & 640 x 480 \\ \hline
     Framerate & 30fps \\ \hline
