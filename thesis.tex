@@ -277,17 +277,18 @@ Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utili
 \subsection{Hardware}
 Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione delle immagini.
 
-Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\'e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud della Eurotech.
+Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\'e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud di Eurotech.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
-  \caption{Dispositivo di acquisizione delle immagini 3D}
-  \label{fig:DispAcqImm3D}
+  \caption{Sistema di conteggio dei passeggeri Eurotech, DynaPCN 10-20}
+  \label{fig:DynaPCN1020}
 \end{figure}
 
-Il dispositivo di acquisizione video visibile in figura \ref{fig:DispAcqImm3D}. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
-Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la scena, le telecamere a infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica accelerate in hardware permette di generare delle immagini in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
+Il cuore del sistema \`e il DynaPCN 10-20, visibile in figura \ref{fig:DynaPCN1020}, il quale si incarica dell'elaborazione video e conteggio degli attraversamenti. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
+
+Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la scena, le telecamere ad infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica, accelerate in hardware, permette di generare una immagine in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
 
 %% Interruzione di pagina
 \newpage
@@ -297,12 +298,12 @@ Il funzionamento \`e il seguente: i proiettori di luce infrarosse illuminano la 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{Algoritmov2.png}
-  \caption{Schematizzazione funzionamento algoritmo tracciamento passeggeri}
+  \caption{Funzionamento algoritmo tracciamento passeggeri Passenger Counter Eurotech}
   \label{fig:SchemAlgrTrackPCNEurotech}
 \end{figure}
 
 %% TODO: Chiedere al prof se il conteggio viene effettuato sul ReliaGate o sul DynaPCN
-L'unit\`a di elaborazione centrale si vede arrivare in ingresso una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
+L'unit\`a di elaborazione centrale riceve in ingresso una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
 Il cuore dell'algoritmo opera come segue:
 \begin{enumerate}
 \item Vengono rilevati i massimi locali all'interno dell'immagine in scala di grigi, i quali rappresentano le teste delle persone.
@@ -310,6 +311,8 @@ Il cuore dell'algoritmo opera come segue:
 \item Rileva quando questi massimi locali attraversano una linea di demarcazione virtuale, la quale indica l'ingresso o uscita dalla soglia e aggiorna i contatori.
 \end{enumerate}
 In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione di quanto accade durante il conteggio.
+
+I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al gateway ReliGate 50-21 per interfacciarsi alla rete IoT Eurotech, il quale li invia sulla cloud. \`E altres\`\i\ possibile sfruttare il GPIO presente sul contatore per interfacciarsi, ad esempio, alle porte automatiche di un'ambiente, per bloccarle qualora si sia raggiunto il limite massimo di occupanti di detto ambiente.
 
 %% Interruzione di pagina
 \newpage
@@ -323,19 +326,19 @@ In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione
   \label{fig:StackSoftwarePCNEurotech}
 \end{figure}
 
-La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi (Per affrondire questo framework si veda il paragrafo \ref{OSGi}). Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
-Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\'e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessari alla nuova versione del Passenger Counter.
+La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\'e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessarie alla nuova versione del Passenger Counter.
 
 %% Interruzione di pagina
 \newpage
 
 \subsection{Problematiche di questa soluzione}\label{ProblemiPCNEurotech}
-Questo sistema di conteggio dei passeggeri non \`e per\`o esente da problematiche, le quali sono state il punto di partenza per il mio lavoro. Le principali sono le seguenti:
+Questo sistema di conteggio dei passeggeri non \`e esente da problematiche, le quali sono state il punto di partenza di questa tesi. I problemi principali sono i seguenti:
 
 \begin{enumerate}
 \item Le ottiche del dispositivo di acquisizione delle immagini sono costose e difficili da reperire.
 \item L'utilizzo di una FPGA per la ricostruzione delle informazioni di profondit\`a fa aumentare i costi di produzione.
-\item Per come \`e stata implementata la soluzione \`e necessario installare una unit\`a computazionale per dispositivo di acquisizione delle immagini. Anche questo contribuisce ad aumentare i costi di produzione di un sistema PCN.
+\item Per come \`e stata implementata la soluzione \`e necessario installare un gateway per ogni DynaPCN 10-20 presente nell'amibente. Anche questo contribuisce ad aumentare i costi di produzione di un sistema PCN e ne diminuisce l'appetibilit\`a sul mercato.
 \end{enumerate}
 
 Vedremo che nella versione del Passenger Counter realizzata nel corso di questa tesi sono stati risolti in buona parte tutte queste problematiche, con vari gradi di successo.
