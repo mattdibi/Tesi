@@ -5,6 +5,7 @@
 \documentclass[target=mst]{thud}[2014/03/11]
 
 %% Aggiunta pacchetto per inserimento di immagini
+\usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{mathtools}
 \usepackage{pgfplots}
@@ -600,7 +601,7 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
     \caption{Riassunto componenti ambiente di sviluppo Xilinx}
 \end{table}
 
-Inizialmente si era pensato usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possibile sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto forniscono anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
+Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possibile sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo per accelerare in hardware le parti dell'applicativo pi\`u pesanti dal punto di vista computazionale, in modo semplice e con un approccio di alto livello. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto vengono fornite anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
 %% Interruzione di pagina
 \newpage
@@ -638,16 +639,29 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 \newpage
 
 \subsubsection{Piattaforma per lo sviluppo SDSoC}
-La piattaforma per lo sviluppo SDSoC permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
+La piattaforma per lo sviluppo SDSoC (Software-defined system-on-chip) permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=1]{XilinxSDSoC.png}
-  \caption{Workflow SDSoC}
-  \label{fig:SDSoC}
-\end{figure}
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=1]{XilinxSDSoC.png}
+%   \caption{Workflow SDSoC}
+%   \label{fig:SDSoC}
+% \end{figure}
 
-SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, \`e possibile eseguire l'applicazione sull'ARM Cortex ed eseguire le task pi\`u pesanti dal punto di vista computazionale sulla FPGA.
+\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{center}
+  \includegraphics[width=0.48\textwidth]{XilinxSDSoC.png}
+\end{center}
+\caption{Workflow SDSoC}
+\end{wrapfigure}
+
+SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, viene generato il bitstream necessario alla programmazione della FPGA assieme all'applicativo destinato alla CPU. 
+
+I compilatori del sistema SDSoC analizzano il programma per determinare il data flow tra le funzioni hardware e software e generano un application specific system-on-chip per realizzare il programma. Per raggiungere alte performance ogni funzione in hardware viene eseguita su un thread indipendente; il compilatore genera i componenti hardware e software che assicurano la sincronizzazione tra i thread hardware e software, mentre abilita la computazione e comunicazione in pipeline. Il codice applicativo pu\`o includere pi\`u funzioni hardware, molteplici istanze di una specifica funzione hardware, e chiamare la funzione hardware da parti diverse del programma.
+
+L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo "what if" permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
+
+I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un systema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano segli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione a driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
 
 %% Interruzione di pagina
 \newpage
