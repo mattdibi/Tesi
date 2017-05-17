@@ -931,6 +931,17 @@ Infine gli altri metodi implementati sono i seguenti:
 %% Interruzione di pagina
 \newpage
 
+Qusta classe permette ai contatori di creare un vettore di oggetti \verb|Passenger|, il quale implementa la memoria dei passeggeri tracciati dal contatore. Al comparire di un nuovo passeggero nel raggio visivo della telecamera baster\`a aggiornare questo vettore.
+
+Il parametro \verb|age| ha molte utilit\`a per quanto riguarda il tracciamento. Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizone conosciuta e "invecchiano" ad ogni frame poich\`e viene loro aggiornata la \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria.
+
+Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha una telecamera da 30fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
+
+Si noti che questa rappresentazione dei passeggeri all'interno del contatore \`e stata usata anche dalla versione successiva del Passenger Counter con telecamere RealSense. Per dettagli si veda il paragrafo \ref{StrutturaRSPCN} a pagina \pageref{StrutturaRSPCN}.
+
+%% Interruzione di pagina
+\newpage
+
 \subsection{Classe PCN}
 
 Questa classe ha come obiettivi principali:
@@ -1591,7 +1602,7 @@ In questa sezione tratteremo la versione del contatore di passeggeri che utilizz
 
 Poich\`e questa versione \`e basata interamente sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
 
-\subsection{Struttura del codice}
+\subsection{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
 \begin{enumerate}
