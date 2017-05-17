@@ -116,7 +116,7 @@
     Via delle Scienze, 206\\
     33100 Udine --- Italia\\
     +39 0432 558400\\
-    \@ifundefined{url}\texttt\url{http://www.dimi.uniud.it/}
+    \@ifundefined{url}\texttt\url{http://www.dpia.uniud.it}
 }
 
 \def\@true{true}
