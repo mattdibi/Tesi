@@ -1013,17 +1013,69 @@ private:
 };
 \end{lstlisting}
 
-I punti rilevanti dell'header sono i seguenti:
+\noindent Variabili:
 \begin{itemize}
-\item La funzione \verb|count()| rappresenta il kernel del programma e verr\`a analizzata in seguito.
-\item Le funzioni toggle vengono usate per aprire e chiudere le finestre che visualizzano gli stream video nei quali sono riportati  i vari step dell'elaborazione dell'input.
-\item La funzione \verb|toggleCalibration()| abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
-\item Il vettore di passeggeri rappresenta la memoria del contatore finalizzata al tracciamento dei passeggeri. Vedremo come verr\`a utilizzato nella funzione \verb|count()|.
+\item \verb|cap|: questa variabile appartiene alla classe \verb|VideoCapture|, data da OpenCV, e rappresenta la telecamera utilizzata come ingresso dal contatore. Come vedremo viene inizializzata dal costruttore della classe.
+\item \verb|pMOG2|: questa struttura \`e definita da OpenCV e implementa l'oggetto che va ad applicare l'algoritmo di sottrazione del background di cui abbiamo parlato in precedenza.
+\item \verb|halt|: \`e la variabile booleana che ci permette di chiudere il loop principale di cattura dei frame. Questa variabile \`e manipolata solamente dal metodo \verb|stop()|.
 \item \verb|cnt_in| e \verb|cnt_out| sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
-\item \verb|thread_| e \verb|threadID| sono usati per la parallelizzazione del conteggio. Si noti che threadID viene usato per identificare univocamente le finestre degli stream video, questo si \`e reso necessario perch\`e OpenCV utilizza il nome delle finestre come identificatore e, nel caso di accesso a pi\`u telecamere contemporaneamente, ci\`o comportava problemi di non univocit\`a dei nomi e sovrapposizione di pi\`u stream in una stessa finestra.
-\item \verb|pMOG2| implementa la sottrazione del background di cui abbiamo parlato in precedenza.
+\item \verb|pid|: \`e l'intero che viene aumentato al rilevamento di ogni nuovo passeggero. Ci permette di assegnare un identificativo univoco a tutti gli oggetti rilevati dal contatore.
+\item \verb|passengers|: \`e il vettore che implementa la memoria del programma. Qui vengono salvati i passeggeri tracciati dal contatore come spiegato nel paragrafo \ref{ClassePassenger} a pagina \pageref{ClassePassenger}.
+
+%% Interruzione di pagina
+\newpage
+
+\item Opzioni: questi booleani permettono di modificare il comportamento del Passenger Counter in real-time.
+    \begin{itemize}
+    \item \verb|displayColor|, \verb|displayBacksub|, \verb|displayDenoise|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
+    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
+    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
+    \end{itemize}
 \end{itemize}
 
+\noindent Metodi:
+\begin{itemize}
+\item Costruttore: qui di seguito \`e riportato il codice del costruttore della classe PCN.
+
+\begin{lstlisting}[language=C++, caption=PCN(), style=customcpp]
+PCN::PCN(int device)
+{
+    cap.open(device);
+
+    int history = 1000;
+    double varThreshold = BACKGROUN_SUB_THRESHOLD;
+    bool detectShadows = true;
+
+#ifdef ReliaGate
+    pMOG2 = createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
+#else
+    pMOG2 = new BackgroundSubtractorMOG2(history, varThreshold, detectShadows);
+#endif
+}
+\end{lstlisting}
+
+Come \`e possibile notare al costrutture viene passato un intero che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
+
+Nel seguito sono riportati i parametri di impostazione della funzione che implementa l'algoritmo di sottrazione del background:
+    \begin{itemize}
+    \item \verb|history|: lunghezza della storia sulla quale costruire il modello del background.
+    \item \verb|varThreshold|: soglia sulla distanza quadratica di Mahalanobis per decidere se \`e ben descritta dal modello dello sfondo. Si \`e lasciato il valore associato a 4 sigma.
+    \item \verb|detectShadows|: questo booleano imposta il sottrattore in modo tale che cerchi di rilevare le ombre. Le ombre saranno contrassegnate dal colore grigio.
+    \end{itemize}
+
+Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\`e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione ed utilizza una sintassi diversa.
+
+\item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
+\item \verb|count()|: \`e il kernel del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel seguito.
+\end{itemize}
+
+\subsubsection{Utilizzo della classe PCN}
+La sequenza necessaria al funzionamento \`e la seguente:
+\begin{itemize}
+\item Costruttore: per ogni telecamera va creato un oggetto della classe PCN assegnandogli, per mezzo dell'argomento passato al costruttore, una telecamera diversa dagli altri contatori.
+\item \verb|start()|: ogni oggetto della classe PCN va lanciato utilizzando il metodo \verb|start()|, questo far\`a in modo che tutti i contatori vengano eseguiti in parallelo su thread diversi.
+\item \verb|stop()|: per chiudere il programma bisogna effettuare la chiamata al metodo \verb|stop()| per ogni istanza di contatore attiva.
+\end{itemize}
 %% Interruzione di pagina
 \newpage
 
@@ -1624,7 +1676,7 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 %% Interruzione di pagina
 \newpage
 
-\subsection{Classe RSPCN}
+\subsection{Classe RSPCN}\label{ClassePassenger}
 Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Counter a sottrazione del background, con qualche aggiunta. Essa deve infatti:
 
 \begin{itemize}
