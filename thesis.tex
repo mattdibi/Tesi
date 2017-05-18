@@ -1066,7 +1066,7 @@ Nel seguito sono riportati i parametri di impostazione della funzione che implem
 Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\`e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione ed utilizza una sintassi diversa.
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
-\item \verb|count()|: \`e il kernel del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel seguito.
+\item \verb|count()|: \`e il kernel del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel prossimo paragrafo.
 \end{itemize}
 
 \subsubsection{Utilizzo della classe PCN}
@@ -1138,36 +1138,64 @@ void PCN::count()
 }
 \end{lstlisting}
 
-Il codice esegue le seguenti operazioni:
+\noindent Variabili:
+\begin{itemize}
+\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Rappresenta l'input che si andr\`a a manipolare per rilevare gli oggetti in movimento.
+\item \verb|fgMaskMOG2|: questa \`e la matrice che conterr\`a i frame in uscita dall'algoritmo di sottrazione del background.
+\item \verb|denoisedMat|: questa \`e la matrice che conterr\`a i frame in uscita dall'algoritmo di sottrazione del background dopo che sono stati passati attraverso le funzioni di riduzione del rumore.
+\item \verb|morphTrans|: \`e una copia di \verb|denoisedMat| che verr\`a usata per ricavare i dati di tracciamento. \`E stato necessario creare una copia per poter visualizzare i risultati di riduzione del rumore prima che il flusso video fosse processato ulteriormente.
+\end{itemize}
+
+\noindent Variabili di calibrazione del contatore:
+\begin{itemize}
+\item \verb|learningRate|: coefficiente con il quale viene aggiornato il modello del background all'interno dell'algoritmo di sottrazione dello sfondo.
+\item \verb|whiteThreshold|: soglia utilizzata nella funzione per la sottrazione delle ombre.
+\item \verb|dilateAmount|: valore che regola l'intensit\`a della funzione di dilatazione.
+\item \verb|erodeAmount|: valore che regola l'intensit\`a della funzione di erosione.
+\item \verb|blur_ksize|: valore che regola l'intensit\`a della funzione di blur.
+\item \verb|areaMin|: area minima per la quale l'oggetto viene tracciato dal programma.
+\item \verb|xNear|: coordinata orizzontale entro la quale due entit\`a vengono identificate come lo stesso passeggero.
+\item \verb|yNear|: coordinata verticale entro la quale due entit\`a vengono identificate come lo stesso passeggero.
+\item \verb|maxPassengerAge|: valore massimo di \verb|age| permesso. Quando un passeggero supera questo valore viene rimosso dalla memoria.
+\end{itemize}
+
+\noindent Il codice esegue le seguenti operazioni:
 \begin{enumerate}
-\item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo \verb|Mat| per poter essere manipolati facilmente da OpenCV. Tutto questo \`e implementato dal metodo \verb|read()| della classe \verb|VideoCapture|.
-\item I frame vengono passati alla funzione che applica la sottrazione del background. OpenCV prevede la creazione di un oggetto \verb|BackgroundSubtractor| il quale ha tra i suoi metodi l'applicazione della sottrazione del background. Questo metodo produce come output una immagine in scala di grigi nella quale i pixel bianchi appartengono al primo piano, i pixel neri appartengono al background, i pixel grigi alle ombre. Un parametro fondamentale della funzione \verb|apply()| \`e il \verb|learningRate|: esso rappresenta il peso con il quale viene aggiornato il modello del background.
-\item Seguono delle trasformazioni  sui frame necessarie a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevazione dei contorni.
+\item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo \verb|Mat| per poter essere manipolati facilmente da OpenCV. Tutto questo \`e implementato dal metodo \verb|read()| della classe \verb|VideoCapture|. La matrice \verb|color| va a raccogliere questi dati di ingresso.
+\item I frame vengono passati alla struttura che applica la sottrazione del background \verb|pMOG2|. OpenCV prevede la creazione di un oggetto \verb|BackgroundSubtractor| il quale ha tra i suoi metodi l'applicazione della sottrazione del background. Questo metodo produce come output una immagine in scala di grigi nella quale i pixel bianchi appartengono al primo piano, i pixel neri appartengono al background, i pixel grigi alle ombre. Il risultato di questa operazione \`e salvato nella matrice \verb|fgMaskMOG2|.
+\item Seguono delle trasformazioni sui frame atte a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevamento dei contorni.
     \begin{enumerate}
-    \item Threshold: viene applicata una soglia per eliminare le ombre. Come abbiamo visto in precedenza l'algoritmo di sottrazione del background rileva le ombre e le colora di grigio. \`E possibile eliminarle imponendo una soglia che agisca sul colore dell'immagine. \verb|threshold()| fa in modo che ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (\verb|whiteThreshold|) viene portato al valore \verb|MAXRGBVAL| cio\`e 255. Ogni pixel che si trova sotto la soglia viene posto a 0. Ovvero:
+    \item Threshold: viene applicata una soglia per eliminare le ombre. Come abbiamo visto in precedenza l'algoritmo di sottrazione del background rileva le ombre e le colora di grigio. \`E possibile eliminarle imponendo una soglia che agisca sul colore dell'immagine. \verb|threshold()| fa in modo che ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (\verb|whiteThreshold|) viene portato al valore \verb|MAXRGBVAL| cio\`e bianco. Ogni pixel che si trova sotto la soglia viene posto a 0. Ovvero:
     
     \begin{equation}
     dstPixel(x,y) = \begin{cases} MAXRGBVAL, & \mbox{se } srcPixel(x,y) > threshold \\ 0, & \mbox{altrimenti } \end{cases}
     \end{equation}
 
-    Cos\`\i\ facendo le ombre, che hanno un colore il cui valore in pixel \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti.
+    Cos\`\i\ facendo le ombre, che hanno un colore il cui valore in pixel \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti, diminuiendo cos\`\i\ gli errori nel conteggio.
     \item Erosione: Questa operazione ha come risultato quello di espandere le regioni scure dell'immagine. L'obiettivo \`e quello di eliminare il rumore bianco gaussiano dall'immagine.
     \item Dilatazione: Questa operazione ha come risultato quello di far "crescere" le regioni luminose dell'immagine. L'obiettivo \`e quello di rendere pi\`u facilmente rilevabili gli oggetti del primo piano.
     \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore dell'immagine. Questa funzione utilizza una semplice filtro lineare.
     \end{enumerate}
 \end{enumerate}
 
-%% Interruzione di pagina
-\newpage
-
-Risultato delle operazioni:
+\noindent Risultato delle operazioni di riduzione del rumore.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\linewidth]{PCN1.png}
-  \caption{L'immagine a sinistra rappresenta l'input. L'immagine al centro \`e il risultato dell'applicazione della sottrazione del background. L'immagine a destra \`e l'output delle operazioni di sottrazione del rumore.}
+  \caption{Risultato delle operazioni di riduzione del rumore nel Passenger Counter a sottrazione del background.}
   \label{fig:PCN1}
 \end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+\noindent In figura \ref{fig:PCN1} sono riportati i vari step di elaborazione dell'immagine:
+\begin{itemize}
+\item L'immagine a sinistra \`e il contenuto della variabile \verb|color| prima di essere ulteriormente processata.
+\item L'immagine al centro rappresenta il contenuto della variabile \verb|fgMaskMOG2|.
+\item L'immagine a destra riporta il contenuto della matrice \verb|denoisedMat|.
+\end{itemize}
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
