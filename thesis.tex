@@ -1424,14 +1424,14 @@ Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la sogli
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=8cm]{PCNMano1.png}
+  \includegraphics[width=9cm]{PCNMano1.png}
   \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
   \label{fig:}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
-  \includegraphics[width=8cm]{PCNMano2.png}
+  \includegraphics[width=9cm]{PCNMano2.png}
   \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
   \label{fig:}
 \end{minipage}
@@ -1453,7 +1453,7 @@ Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la sogli
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.5]{PCNMano3.png}
+  \includegraphics[width=9cm]{PCNMano3.png}
   \caption{Risultato tracciamento sperimentale PCN. Secondo attraversamento.}
   \label{fig:PCNMano3}
 \end{figure}
@@ -1464,6 +1464,7 @@ Dalla successione delle immagini si pu\`o notare come il tracciamento sia buono 
 \newpage
 
 \subsection{main.cpp}
+Qui di seguito \`e riportato il main dell'applicazione.
 
 \begin{lstlisting}[language=C++, caption=main.cpp, style=customcpp]
 int main(int argc, char * argv[])
@@ -1562,7 +1563,6 @@ Il codice effettua le seguenti operazioni:
 %% Interruzione di pagina
 \newpage
 
-%TODO: Tirare fuori immagini a sbrega con i risultati ottenuti
 \subsection{Risultati ottenuti}
 In questo paragrafo vengono riportati i risultati dei test effettuati con questa versione del contatore di passeggeri.
 
@@ -1609,7 +1609,6 @@ In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzi
 %% Interruzione di pagina
 \newpage
 
-%TODO: Inserire grafico per vedere meglio le performance
 \subsubsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
