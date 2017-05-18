@@ -1239,16 +1239,16 @@ while(!halt)
 Il codice esegue le seguenti operazioni:
 
 \begin{enumerate}
-\item Ricava i contorni per mezzo della funzione di cui abbiamo discusso l'algoritmo nella sezione precedente.
+\item Ricava i contorni per mezzo della funzione \verb|findContours| di cui abbiamo discusso l'algoritmo nella sezione precedente.
 \item Per ogni contorno completo rilevato dalla funzione eseguiamo le seguenti operazioni:
     \begin{enumerate}
-    \item Ne calcoliamo l'area. Se supera una certa area minima, ricava sperimentalmente, decidiamo che si tratta di una persona.
-    \item Ne ricaviamo il rettangolo che inscrive i contorni rilevati in precedenza tramite la funzione boundingRectangle.
-    \item Di questo rettangolo rileviamo il centro.
-    \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e questo centro sull'immagine a colori.
+    \item Ne calcoliamo l'area per mezzo della funzione OpenCV \verb|contourArea|. Se supera una certa area minima (\verb|areaMin|), ricavata sperimentalmente, decidiamo che si tratta di una persona.
+    \item Ne ricaviamo il rettangolo che inscrive i contorni rilevati in precedenza tramite la funzione \verb|boundingRectangle|.
+    \item Di questo rettangolo rileviamo il centro \verb|mc| grazie ad una semplice operazione geometrica.
+    \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e questo centro sull'immagine a colori per mezzo delle funzioni \verb|recrangle| e \verb|circle|.
     \end{enumerate}
 \end{enumerate}
-L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione del centro di questo rettangolo che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
+L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione del centro di questo rettangolo, contenuto nella variabile \verb|mc|, che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
 
 Risultato delle operazioni:
 
