@@ -1347,23 +1347,30 @@ if(areaCurrentObject > areaMin)
 }
 \end{lstlisting}
 
-Il codice riportato esegue le seguenti operazioni:
+\noindent Il codice riportato esegue le seguenti operazioni:
 \begin{enumerate}
-\item Se l'entit\`a rilevata si trova entro una certa distanza massima da un passeggero che si trova all'interno del database assumiamo che siano lo stesso passeggero.
-\item Di questo passeggero aggiorniamo la nuova coordinata e, nel caso abbia uno storico maggiore ad una singola coordinata, verifichiamo che non abbia superato la soglia virtuale rappresentata dalla met\`a del raggio visivo della telecamera. Il superamento della soglia \`e verificato come segue:
+\item Se l'entit\`a rilevata si trova entro una certa distanza massima da un passeggero che si trova all'interno del database assumiamo che siano lo stesso passeggero. Questa distanza \`e data dalle variabili \verb|xNear| e \verb|yNear| e in figura \ref{fig:NearRect} \`e visualizzato il rettangolo formato da questi due parametri. Dunque, alla ricezione di un nuovo frame dalla telecamere, se il nuovo centro dell'oggetto si trova all'interno del rettangolo pi\`u scuro, si assume che sia lo stesso oggetto rilevato precedentemente che si \`e spostato.
+\item Nel caso si trattasse di un passeggero gi\`a presente in memoria ne aggiorniamo la posizione per mezzo del metodo \verb|updateCoord()| e ne resettiamo il parametro \verb|age|. Nel caso abbia uno storico maggiore ad una singola coordinata, verifichiamo che non abbia superato la soglia virtuale rappresentata dalla met\`a del raggio visivo della telecamera. Il superamento della soglia \`e verificato come segue:
     \begin{itemize}
     \item Nel caso la penultima coordinata registrata si trovasse al di sotto della soglia visiva e l'ultima coordinata sopra, aggiorniamo il contatore degli ingressi.
     \item Nel caso la penultima coordinata registrata si trovasse al di sopra della soglia visiva e l'ultima coordinata sotto, aggiorniamo il contatore delle uscite.
     \end{itemize}
-\item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Procediamo quindi ad aggiornare il database aggiungendo il nuovo passeggero.
+\item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto, ovvero non ricade all'interno del rettangolo formato da \verb|xNear| e \verb|yNear| per nessuno dei passeggeri in memoria, si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Procediamo quindi ad aggiornare il database creando  nuovo oggetto appartenente alla classe \verb|passenger| e aggiungendolo in memoria.
 \end{enumerate}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.65]{NearRect.png}
+  \caption{Visualizzazione del rettangolo dato dai parametri xNear e yNear}
+  \label{fig:NearRect}
+\end{figure}
 
 Considerando il funzionamento di \verb|findContours()|, la quale cerca di rilevare l'oggetto pi\`u grande nel frame, avremo che due persone nello stesso frame vengono unite nello stesso blob. Quindi per rilevare correttamente l'attraversamento di pi\`u persone contemporaneamente si sfrutta l'area rilevata nei passaggi precedenti: se l'area dell'entit\`a rilevata supera una certa soglia, ricavata sperimentalmente, la si considera un blob formato da due passeggeri. Quindi al rilevamento dell'attraversamento della soglia si aggiorna il contatore aggiungendo due attraversamenti invece che uno. Allo stesso modo si procede per il rilevamento di tre passeggeri.
 
 Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
 Questa parte di plot delle informazioni \`e stata implementata per mezzo del codice seguente:
 
-\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4, style=customcpp, firstnumber=134]
+\begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4, style=customcpp, firstnumber=134, label=countpt4]
 // For every passenger in passengers DB
 for(unsigned int i = 0; i < passengers.size(); i++)
 {
@@ -1393,30 +1400,60 @@ putText(frame, "Count IN: "  + to_string(cnt_in), Point(0,frame.rows - 30) , FON
 putText(frame, "Count OUT: " + to_string(cnt_out), Point(0, frame.rows - 10) , FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2);
 \end{lstlisting}
 
-Si noti che oltre a disegnare le tracce dei passeggeri, il ciclo for viene usato anche per aggiornare la variabile \verb|age| dei passeggeri. Quando questo parametro supera un certo valore di soglia, dovuto al fatto che i passeggeri sono usciti dal raggio visivo della telecamera da troppo tempo, vengono rimossi dal database.
+\noindent Il codice riportato nel listato \ref{countpt4} effettua le seguenti operazioni:
+\begin{itemize}
+\item Per ogni passeggero in memoria:
 
-Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la soglia per l'attraversamento.
+\begin{enumerate}
+\item Disegna la traccia per mezzo della funzione \verb|polylines|.
+\item Visualizza l'identificatore univoco tramite la funzione \verb|putText|.
+\item Aggiorna il parametro \verb|age|.
+\item Nel caso il parametro \verb|age| sia maggiore di 1 ci\`o significa che non si trova pi\`u all'interno del raggio visivo della telecamera, allora si aggiorna la nuova posizione del passeggero con l'ultima posizione nota. Questo evita il rilevamento di falsi attraversamenti.
+\item Nel caso il parametro \verb|age| abbia superato il valore massimo, viene rimosso dalla memoria del contatore.
+\end{enumerate}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.65]{PCNMano1.png}
-  \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
-  \label{fig:PCNMano1}
-\end{figure}
+\item Infine vengono aggiunti i feedback visivi necessari a comprendere meglio il funzionamento del programma: contatori a schermo, la linea che rappresenta la soglia virtuale, e il contatore dei frame al secondo.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.65]{PCNMano2.png}
-  \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
-  \label{fig:PCNMano2}
-\end{figure}
+\end{itemize}
 
 %% Interruzione di pagina
 \newpage
 
+Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la soglia per l'attraversamento.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{PCNMano1.png}
+  \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
+  \label{fig:}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{PCNMano2.png}
+  \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
+  \label{fig:}
+\end{minipage}
+\end{figure}
+
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.5]{PCNMano1.png}
+%   \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
+%   \label{fig:PCNMano1}
+% \end{figure}
+% 
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.5]{PCNMano2.png}
+%   \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
+%   \label{fig:PCNMano2}
+% \end{figure}
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.65]{PCNMano3.png}
+  \includegraphics[scale=0.5]{PCNMano3.png}
   \caption{Risultato tracciamento sperimentale PCN. Secondo attraversamento.}
   \label{fig:PCNMano3}
 \end{figure}
