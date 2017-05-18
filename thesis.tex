@@ -1657,7 +1657,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Rilevamento e tracking degli oggetti & 0.178409 ms & 0.026478 ms \\ \hline
     Frame Rate & 20.1 FPS & 30 FPS \\ \hline
 	\end{tabular}
-    \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
+    \caption{Risultati Passenger Counter a sottrazione del background con telecamera 30 FPS}
 \end{table}
 
 Si noti che il tempo di esecuzione del loop principale considera anche il tempo speso ad attendere i frame dalla telecamera.
@@ -1710,7 +1710,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Rilevamento e tracking degli oggetti & 0.279599 ms & 0.028581 ms \\ \hline
     Frame Rate & 20.5 FPS & 60 FPS \\ \hline
 	\end{tabular}
-    \caption{Risultati Passenger Counter a sottrazione del background con webcam 60 FPS}
+    \caption{Risultati Passenger Counter a sottrazione del background con telecamera 60 FPS}
 \end{table}
 
 Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
