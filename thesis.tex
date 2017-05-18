@@ -1219,11 +1219,11 @@ while(!halt)
         {
             // Getting bounding rectangle
             Rect br = boundingRect(contours[idx]);
-            Point2f mc = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
+            Point2f objCenter = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
 
             // Drawing mass center and bounding rectangle
             rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
-            circle( color, mc, 5, RED, 2, 8, 0 );
+            circle( color, objCenter, 5, RED, 2, 8, 0 );
 
             ...
         }
@@ -1244,20 +1244,27 @@ Il codice esegue le seguenti operazioni:
     \begin{enumerate}
     \item Ne calcoliamo l'area per mezzo della funzione OpenCV \verb|contourArea|. Se supera una certa area minima (\verb|areaMin|), ricavata sperimentalmente, decidiamo che si tratta di una persona.
     \item Ne ricaviamo il rettangolo che inscrive i contorni rilevati in precedenza tramite la funzione \verb|boundingRectangle|.
-    \item Di questo rettangolo rileviamo il centro \verb|mc| grazie ad una semplice operazione geometrica.
+    \item Di questo rettangolo rileviamo il centro \verb|objCenter| grazie ad una semplice operazione geometrica.
     \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e questo centro sull'immagine a colori per mezzo delle funzioni \verb|recrangle| e \verb|circle|.
     \end{enumerate}
 \end{enumerate}
-L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione del centro di questo rettangolo, contenuto nella variabile \verb|mc|, che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
+L'informazione fondamentale per il resto dell'algoritmo \`e data dalla posizione del centro di questo rettangolo, contenuto nella variabile \verb|objCenter|, che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
 
 Risultato delle operazioni:
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\linewidth]{PCN2.png}
-  \caption{L'immagine a sinistra rappresenta l'immagine in ingresso dopo la sottrazione del background. L'immagine al centro \`e l'output delle operazioni di sottrazione del rumore. L'immagine a destra \`e l'immagine di ingresso sulla quale sono stati disegnati il bounding rectangle e il centro del rettangolo.}
+  \caption{Risultato delle operazioni di image processing nel Passenger Counter a sottrazione del background}
   \label{fig:PCN2}
 \end{figure}
+
+\noindent In figura \ref{fig:PCN2} sono riportati i vari step di elaborazione dell'immagine descritti nel paragrafo precedente:
+\begin{itemize}
+\item L'immagine a sinistra \`e il contenuto della variabile \verb|fgMaskMOG2|.
+\item L'immagine al centro rappresenta il contenuto della variabile \verb|denoisedMat| dove sono stati disegnati i contorni rilevati dalla funzione \verb|findContours|.
+\item L'immagine a destra riporta l¿immagine di ingresso sulla quale sono stati disegnati il bounding rectangle e il centro del rettangolo.
+\end{itemize}
 
 %% Interruzione di pagina
 \newpage
