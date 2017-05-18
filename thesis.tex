@@ -1684,11 +1684,11 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     xlabel = {Tempo di esecuzione [ms]},
     ]
     % ReliaGate 20-25
-    \addplot 
+    \addplot[green!20!black,fill=green!80!white] 
     coordinates {(33.3335,Sottrazione background) (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) 
                     (0.279599,Tracking oggetti)};
     % Sistema Linux
-    \addplot 
+    \addplot[yellow!20!black,fill=yellow!80!white] 
     coordinates {(3.10198,Sottrazione background) (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) 
                     (0.028581,Tracking oggetti)};
     \legend{ReliaGate 20-25, Sistema Linux}
@@ -2382,28 +2382,36 @@ Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
 
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25
-\addplot 
-    coordinates {(7.80747,Metodo getFrame) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
-                    (0.033218,Tracking oggetti)};
-% Sistema Linux
-\addplot 
-    coordinates {(0.913448,Metodo getFrame) (0.295688,Sottrazione rumore) (0.228186,Rilevamento contorni)
-                    (0.054902,Tracking oggetti)};
-\legend{ReliaGate 20-25, Sistema Linux}
-\end{axis}
-\end{tikzpicture}
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25
+    \addplot 
+        coordinates {(7.80747,Metodo getFrame) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
+                        (0.033218,Tracking oggetti)};
+    % Sistema Linux
+    \addplot 
+        coordinates {(0.913448,Metodo getFrame) (0.295688,Sottrazione rumore) (0.228186,Rilevamento contorni)
+                        (0.054902,Tracking oggetti)};
+    \legend{ReliaGate 20-25, Sistema Linux}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione RSPCN con telecamera RealSense SR300}
+\end{figure}
 
 \begin{table}[h!]
     \centering
@@ -2422,33 +2430,41 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
 
 Anche in questo caso all'interno del tempo di esecuzione del loop principale \`e considerato il tempo speso ad attendere i frame dalla telecamera.
 
-Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense R200:
-
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25
-\addplot 
-    coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
-                    (4.48531e-4,Tracking oggetti)};
-% Sistema Linux
-\addplot 
-    coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
-                    (1.29373e-4,Tracking oggetti)};
-\legend{ReliaGate 20-25, Sistema Linux}
-\end{axis}
-\end{tikzpicture}
-
 %% Interruzione di pagina
 \newpage
+
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense R200:
+
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25
+    \addplot[green!20!black,fill=green!80!white] 
+        coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
+                        (4.48531e-4,Tracking oggetti)};
+    % Sistema Linux
+    \addplot[yellow!20!black,fill=yellow!80!white] 
+        coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
+                        (1.29373e-4,Tracking oggetti)};
+    \legend{ReliaGate 20-25, Sistema Linux}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione RSPCN con telecamera RealSense R200}
+\end{figure}
 
 \begin{table}[h!]
     \centering
@@ -2501,30 +2517,38 @@ Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passeng
 \subsubsection{Costo computazionale}
 L'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
 
-Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate. I tempi riportati sono in millisecondi.
+Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate.
 
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Rilevamento passeggeri, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25 RSPCN
-\addplot 
-    coordinates {(7.80747,Rilevamento passeggeri) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
-                    (0.033218,Tracking oggetti)};
-% ReliaGate 20-25 BSPCN
-\addplot 
-    coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
-                    (0.178409,Tracking oggetti)};
-\legend{RPC, BPC}
-\end{axis}
-\end{tikzpicture}
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Rilevamento passeggeri, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25
+    \addplot 
+        coordinates {(7.80747,Rilevamento passeggeri) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
+                        (0.033218,Tracking oggetti)};
+    % ReliaGate 20-25 BSPCN
+    \addplot 
+        coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
+                        (0.178409,Tracking oggetti)};
+    \legend{RPC, BPC}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione RPC e BPC}
+\end{figure}
 
 %% Interruzione di pagina
 \newpage
@@ -2636,28 +2660,36 @@ Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima 
 
 Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni principali del Passenger Counter con telecamere RealSense in Java. I dati sono riferiti all'uso della telecamera R200 sul ReliaGate 20-25.
 
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25 C++
-\addplot 
-    coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
-                    (4.48531e-4,Tracking oggetti)};
-% ReliaGate 20-25 Java
-\addplot 
-    coordinates {(4.008504,Metodo getFrame) (1.230020,Sottrazione rumore) (0.163716,Rilevamento contorni)
-                    (0.059985,Tracking oggetti)};
-\legend{Versione C++, Versione Java}
-\end{axis}
-\end{tikzpicture}
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25 C++
+    \addplot[green!20!black,fill=green!80!white] 
+        coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
+                        (4.48531e-4,Tracking oggetti)};
+    % ReliaGate 20-25 Java
+    \addplot[magenta!20!black,fill=magenta!80!white] 
+        coordinates {(4.008504,Metodo getFrame) (1.230020,Sottrazione rumore) (0.163716,Rilevamento contorni)
+                        (0.059985,Tracking oggetti)};
+    \legend{Versione C++, Versione Java}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione versioni Passenger Counter con telecamera R200}
+\end{figure}
 
 \begin{table}[h!]
     \centering
