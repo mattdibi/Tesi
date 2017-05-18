@@ -1614,28 +1614,36 @@ Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{HardwarePCN}: 
 
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25
-\addplot 
-    coordinates {(29.4414,Sottrazione background) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
-                    (0.178409,Tracking oggetti)};
-% Sistema Linux
-\addplot 
-    coordinates {(3.16497,Sottrazione background) (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) 
-                    (0.026478,Tracking oggetti)};
-\legend{ReliaGate 20-25, Sistema Linux}
-\end{axis}
-\end{tikzpicture}
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25
+    \addplot 
+        coordinates {(29.4414,Sottrazione background) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
+                        (0.178409,Tracking oggetti)};
+    % Sistema Linux
+    \addplot 
+        coordinates {(3.16497,Sottrazione background) (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) 
+                        (0.026478,Tracking oggetti)};
+    \legend{ReliaGate 20-25, Sistema Linux}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione PCN con telecamera 30 FPS}
+\end{figure}
 
 \begin{table}[h!]
     \centering
@@ -1656,28 +1664,36 @@ Si noti che il tempo di esecuzione del loop principale considera anche il tempo 
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando una webcam capace di fornire uno stream a 60 FPS ma con la stessa risoluzione della precedente:
 
-\begin{tikzpicture}
-\begin{axis}[
-  xbar,
-  y axis line style = { opacity = 0 },
-  axis x line       = none,
-  tickwidth         = 0pt,
-  enlarge y limits  = 0.2,
-  enlarge x limits  = 0.02,
-  symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
-  nodes near coords,
-]
-% ReliaGate 20-25
-\addplot 
+\begin{figure}[h!]
+    \centering
+    \fbox{
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar,
+    y axis line style = { opacity = 0 },
+    align = center,
+    enlarge y limits  = 0.2,
+    enlarge x limits  = 0.02,
+    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    nodes near coords,
+    grid = major,
+    grid style={dashed,gray!30},
+    xlabel = {Tempo di esecuzione [ms]},
+    ]
+    % ReliaGate 20-25
+    \addplot 
     coordinates {(33.3335,Sottrazione background) (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) 
                     (0.279599,Tracking oggetti)};
-% Sistema Linux
-\addplot 
+    % Sistema Linux
+    \addplot 
     coordinates {(3.10198,Sottrazione background) (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) 
                     (0.028581,Tracking oggetti)};
-\legend{ReliaGate 20-25, Sistema Linux}
-\end{axis}
-\end{tikzpicture}
+    \legend{ReliaGate 20-25, Sistema Linux}
+    \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Grafico tempi di esecuzione PCN con telecamera 60 FPS}
+\end{figure}
 
 %% Interruzione di pagina
 \newpage
@@ -1694,7 +1710,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Rilevamento e tracking degli oggetti & 0.279599 ms & 0.028581 ms \\ \hline
     Frame Rate & 20.5 FPS & 60 FPS \\ \hline
 	\end{tabular}
-    \caption{Risultati Passenger Counter a sottrazione del background con webcam 30 FPS}
+    \caption{Risultati Passenger Counter a sottrazione del background con webcam 60 FPS}
 \end{table}
 
 Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
