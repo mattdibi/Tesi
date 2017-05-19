@@ -115,7 +115,7 @@ Lo sviluppo si \`e diviso in tre fasi principali:
 \begin{itemize}
 \item Una indagine preliminare atta ad individuare la miglior piattaforma hardware/software sulla quale sviluppare l'applicazione.
 \item Progettazione e implementazione del contatore basato interamente su algoritmi di elaborazione delle immagini, individuando i passaggi pi\`u pesanti dal punto di vista computazionale. Nel resto del testo ci riferiremo a questa versione del software come: Passenger Counter a sottrazione dello sfondo, o BPC.
-\item Progettazione e implementazione del contatore sfruttando telecamere a infrarossi Intel RealSense. Nel resto del testo ci riferiremo a questa versione dell'applicazione come: Passenger Counter con telecamere RealSense, o RPC.
+\item Progettazione e implementazione del contatore sfruttando telecamere ad infrarossi Intel RealSense. Nel resto del testo ci riferiremo a questa versione dell'applicazione come: Passenger Counter con telecamere RealSense, o RPC.
 \end{itemize}
 
 Contemporaneamente allo sviluppo dell'applicazione si \`e realizzata la piattaforma software sulla quale integrare tutte le tecnologie utilizzate dall'applicativo, per mezzo del progetto Yocto, perch\'e potesse essere installato sull'hardware in dotazione.
@@ -2782,7 +2782,7 @@ Per quanto riguarda la versione con telecamere RealSense non ci sono invece prob
 
 In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioBPC} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| cerca di associare allo stesso blob l'oggetto pi\`u grande che rileva. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Il risultato \`e un comportamento impredicibile del programma.
 
-La versione con telecamere a infrarossi invece, ancora una volta, si conferma molto precisa.
+La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa.
 
 \subsubsection{Dipendenza dall'ambiente}
 La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
@@ -2800,7 +2800,7 @@ Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecno
 Bisogna altres\`\i\ considerare il fatto che il BPC necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
 \subsubsection{Conclusioni}
-Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere a infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense. 
+Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere ad infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense.
 
 %% Interruzione di pagina
 \newpage
@@ -3456,7 +3456,7 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
 \item \verb|s|: Abilita/Disabilita la stabilizzazione del framerate.
 \item \verb|q|: Termina il programma.
 \item \verb|h|: Visualizza il messaggio di aiuto.
-\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera a infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
 \end{itemize}
 
 %% Interruzione di pagina
@@ -3557,7 +3557,7 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \item \verb|q|: Termina il programma.
 \item \verb|r|: Resetta i contatori
 \item \verb|c|: Visualizza il conteggio attuale
-\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera a infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
 \item \verb|t|: Imposta la soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
 \item \verb|x|: Imposta il numero di pixel dell'asse orizzontale per il tracking.
 \item \verb|x|: Imposta il numero di pixel dell'asse verticale per il tracking.
