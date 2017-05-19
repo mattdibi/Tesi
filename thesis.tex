@@ -2660,7 +2660,7 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
 \begin{itemize}
 \item Telecamera: Intel RealSense SR300, nel caso del BPC \`e stata usata come semplice telecamera a colori. Usare la stessa telecamera per entrambe le versioni ha permesso un confronto pi\`u alla pari.
 \item Setup: la telecamera \`e stata montata sullo stipite di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
-\item Attraversamenti: per entrambe le versioni sono stati eseguiti 15 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
+\item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
 \end{itemize}
 
 \noindent Risultati attraversamenti singolo passeggero:
@@ -2755,7 +2755,7 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \end{minipage}
 \end{figure}
 
-Anche in questa situazione la versione basata su sottrazione del background non \`e precisa. Fare affidamento sull'area per rilevare il passaggio di pi\`u persone contemporaneamente \`e alla base del problema e comporta un'altissima imprecisione.
+Anche in questa situazione la versione basata su sottrazione del background non \`e precisa. Fare affidamento sull'area per rilevare il passaggio di pi\`u persone contemporaneamente \`e alla base del problema e comporta un'altissima imprecisione in quanto, soprattutto nel caso di pi\`u passeggeri, la forma dei blob varia molto nel tempo e quindi anche l'area ne \`e influenzata.
 
 Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
 
