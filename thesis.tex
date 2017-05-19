@@ -1037,7 +1037,7 @@ private:
 \begin{itemize}
 \item Costruttore: qui di seguito \`e riportato il codice del costruttore della classe PCN.
 
-\begin{lstlisting}[language=C++, caption=PCN(), style=customcpp]
+\begin{lstlisting}[language=C++, caption=Costruttore della classe PCN, style=customcpp]
 PCN::PCN(int device)
 {
     cap.open(device);
@@ -1076,6 +1076,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 \item \verb|start()|: ogni oggetto della classe PCN va lanciato utilizzando il metodo \verb|start()|, questo far\`a in modo che tutti i contatori vengano eseguiti in parallelo su thread diversi.
 \item \verb|stop()|: per chiudere il programma bisogna effettuare la chiamata al metodo \verb|stop()| per ogni istanza di contatore attiva.
 \end{itemize}
+
 %% Interruzione di pagina
 \newpage
 
@@ -1726,7 +1727,7 @@ I problemi principali rilevati in questa implementazione del Passenger Counter s
 \item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
 \item \textbf{Tracciamenti indesiderati}: Come visto nel paragrafo precedente, nonostante l'algoritmo riesca a rilevare la maggior parte delle ombre come tali, spesso le ombre vengono tracciate erroneamente. Ci\`o comporta errori nel conteggio.
 \item \textbf{Performance}: L'algoritmo di sottrazione del background, come riportato nel paragrafo precedente, \`e piuttosto oneroso dal punto di vista computazionale. Ci\`o ne limita le possibili applicazioni: non \`e possibile utilizzare telecamere con risoluzione elevata e bisogna limitare il numero di telecamere utilizzate contemporaneamente.
-\item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\`e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza.
+\item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\`e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza, senza contare le vibrazioni del mezzo.
 \end{enumerate}
 
 Per questo motivo si \`e passati ad una seconda implementazione sfruttando una tecnologia esente da queste problematiche: il Passenger Counter con telecamere RealSense.
@@ -1734,18 +1735,17 @@ Per questo motivo si \`e passati ad una seconda implementazione sfruttando una t
 %% Interruzione di pagina
 \newpage
 
-% TODO: Aggiornare questo preambolo in base a cosa andrai a scrivere nelle sezioni seguenti.
 \section{Passenger Counter con telecamere RealSense}
 In questa sezione tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
-Poich\`e questa versione \`e basata interamente sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
+Poich\`e questa versione \`e basata in gran parte sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
 
 \subsection{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
 \begin{enumerate}
 \item \textbf{Passenger}: \`e la stessa classe usata nella versione precedente del programma.
-\item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense}.
+\item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense} ed assolve gli stessi compiti della classe PCN visti nella versione precedente del Passenger Counter.
 \item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time delle telecamere e del contatore. Si noti inoltre che rileva automaticamente il numero di telecamere collegate e istanzia un contatore per ognuna di esse.
 \end{enumerate}
 
@@ -1858,13 +1858,82 @@ private:
 %% Interruzione di pagina
 \newpage
 
-I punti rilevanti dell'header sono i seguenti:
+\noindent Variabili:
+\begin{itemize}
+\item \verb|dev|: \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
+\item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere le due telecamere usate durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
+\item \verb|ImageWidth|, \verb|ImageHeight|, \verb|CameraFramerate|: sono le impostazioni di risoluzione e framerate dei flussi video in ingresso dalle telecamere.
+\item \verb|scale|: \`e la scala alla quale viene impostata la telecamera. 
+\item \verb|cnt_in|, \verb|cnt_out|: sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
+\item \verb|pid| e \verb|passengers| assolvono gli stessi compiti visti nella versione del Passenger Counter a sottrazione del background.
+\item Opzioni: questi booleani permettono di modificare le impostazioni del contatore in real-time.
+
+    \begin{itemize}
+    \item \verb|displayColor|, \verb|displayRawDepth|, \verb|displayDepth|, \verb|displayFrame|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
+    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
+    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
+    \item \verb|framerateStabilizationOn|: va ad agire sulla funziona per mezzo della quale andiamo a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante, che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
+    \end{itemize}
+\end{itemize}
+
+\noindent Metodi:
+\begin{itemize}
+\item Costruttore: qui di seguito \`e riportato il codice del costruttore della classe RSPCN.
+
+\begin{lstlisting}[language=C++, caption=Costruttore della classe RSPCN, style=customcpp]
+RSPCN::RSPCN(device *assignedDevice) {
+    dev = assignedDevice;
+
+    string devName = dev->get_name();
+
+    // Camera settings
+    if(devName.compare("Intel RealSense R200") == 0) {
+        cameraDevice = R200;
+
+        ImageWidth = IMAGE_WIDTH_R200;
+        ImageHeight = IMAGE_HEIGHT_R200;
+        CameraFramerate = FRAMERATE_R200;
+    }
+    else if(devName.compare("Intel RealSense SR300") == 0) {
+        cameraDevice = SR300;
+
+        ImageWidth = IMAGE_WIDTH_SR300;
+        ImageHeight = IMAGE_HEIGHT_SR300;
+        CameraFramerate = FRAMERATE_SR300;
+    }
+
+    // Configure stream
+    dev->enable_stream(rs::stream::color, ImageWidth, ImageHeight, rs::format::bgr8, CameraFramerate);
+    dev->enable_stream(rs::stream::depth, ImageWidth, ImageHeight, rs::format::z16, CameraFramerate);
+
+    // Get device depth scale
+    scale = dev->get_depth_scale();
+}
+\end{lstlisting}
+
+Come \`e possibile notare al costrutture viene passato un oggetto della classe \verb|device| che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
+
+Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\`e le telecamera operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
 
 \begin{itemize}
-\item La funzione \verb|count()| anche in questo caso rappresenta il cuore del Passenger Counter e verr\`a analizzata separatamente.
-\item La variabile \verb|dev| di tipo \verb|device| \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
-\item La variabile \verb|cameraDevice| si \`e resa necessaria per poter distinguere le due telecamere usate durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
-\item I metodi \verb|getColorMap()| e \verb|getFrame()| sono le funzioni che convertono i frame forniti dalle telecamere RealSense in qualcosa di utilizzabile dal nostro algoritmo. Nel seguito vedremo in dettaglio cosa fanno.
+\item Telecamera R200: 320x240 pixel @ 60 fps.
+\item Telecamera SR300: 640x480 pixel @ 30 fps.
+\end{itemize}
+
+Infine si ricava la scala alla quale opera la telecamera e viene salvata all'interno della variabile \verb|scale|.
+
+\item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
+\item \verb|count()|: anche in questo caso rappresenta il cuore del Passenger Counter e verr\`a analizzata separatamente. 
+\item \verb|getColorMap()| e \verb|getFrame()| sono le funzioni che convertono i frame forniti dalle telecamere RealSense in qualcosa di utilizzabile dal nostro algoritmo. Nel seguito vedremo in dettaglio cosa fanno.
+\end{itemize}
+
+\subsubsection{Utilizzo della classe RSPCN}
+La sequenza necessaria al funzionamento \`e la seguente:
+\begin{itemize}
+\item Dichiarazione della variabile della classe \verb|context|: questa classe definita nella libreria librealsense conserva tutti gli handle a tutte le telecamere connesse. \`E necessario per ricavare il numero di telecamere connesse e assegnare le device ai vari contatori. Si noti che all'interno del sistema di Passenger Counter deve esistere una sola istanza di tipo \verb|context|.
+\item Costruttore: per ogni telecamera va creato un oggetto della classe RSPCN assegnandogli, per mezzo dell'oggetto \verb|device| passato al costruttore, una telecamera diversa dagli altri contatori.
+\item \verb|start()|: ogni oggetto della classe RSPCN va lanciato utilizzando il metodo \verb|start()|, questo far\`a in modo che tutti i contatori vengano eseguiti in parallelo su thread diversi.
+\item \verb|stop()|: per chiudere il programma bisogna effettuare la chiamata al metodo \verb|stop()| per ogni istanza di contatore attiva.
 \end{itemize}
 
 %% Interruzione di pagina
