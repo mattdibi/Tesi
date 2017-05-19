@@ -1940,7 +1940,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 \newpage
 
 \subsection{Metodo getColorMap()}
-Questo metodo \`e stato molto utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno quindi \`e opportuno spiegarne il funzionamento.
+Questo metodo \`e stato utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
 Mat RSPCN::getColorMap(Mat depthImage) {
@@ -2060,7 +2060,7 @@ In figura \ref{fig:getColorMapStep3} il risultato dell'applicazione della funzio
 \end{minipage}
 \end{figure}
 
-Infine viene applicata la funzione \verb|applyColorMap()| la quale va semplicemente a ricolorare l'immagine in scala di grigi per avere una migliore percezione delle informazioni fornite dalle telecamere RealSense.
+Infine viene applicata la funzione \verb|applyColorMap()| la quale va semplicemente a ricolorare l'immagine in scala di grigi per avere una migliore percezione delle informazioni fornite dalle telecamere RealSense. In questo modo i pixel pi\`u vicini alla telecamera assumeranno il colore rosso, mentre quelli pi\`u lontani tenderanno al blu.
 
 Si noti infine che durante questa elaborazione sono stati conservati i dati del pixel pi\`u lontano e pi\`u vicino e convertiti in distanza. Ci\`o ha aiutato molto durante lo sviluppo del progetto per poter calibrare al meglio il contatore.
 
@@ -2212,12 +2212,36 @@ void RSPCN::count()
 
 \end{lstlisting}
 
-Come nel caso precedente, in questa fase abbiamo l'estrazione degli oggetti in primo piano.
+Come nella versione precedente del Passenger Counter, in questa fase abbiamo l'estrazione degli oggetti in primo piano.
 
+Variabili:
+\begin{itemize}
+\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Rappresenta l'input che si andr\`a a manipolare per rilevare gli oggetti in movimento.
+\item \verb|frame|: rappresenta l'output della funzione \verb|getFrame()| di cui si \`e parlato in precedenza.
+\item \verb|rawDepth|: questa \`e la matrice che conterr\`a i frame grezzi dello stream di profondit\`a in ingresso dalla telecamera ad infrarossi. \`E una copia della matrice \verb|depth| prima che sia passata alle funzioni di elaborazione delle immagini.
+\item \verb|depthColorMap|: rappresenta l'output della funzione \verb|getColorMap()|.
+\item \verb|morphTrans|: \`e la copia di \verb|frame| a seguito dell'applicazione degli algoritmi di riduzione del rumore.
+\end{itemize}
+
+\noindent Variabili di calibrazione del contatore:
+\begin{itemize}
+\item \verb|thresholdCentimeters|: soglia utilizzata nella funzione \verb|getFrame()| espressa in centimetri.
+\item \verb|blur_ksize|: valore che regola l'intensit\`a della funzione di blur.
+\item \verb|areaMin|: area minima per la quale l'oggetto viene tracciato dal programma.
+\item \verb|xNear|: coordinata orizzontale entro la quale due entit\`a vengono identificate come lo stesso passeggero.
+\item \verb|yNear|: coordinata verticale entro la quale due entit\`a vengono identificate come lo stesso passeggero.
+\item \verb|maxPassengerAge|: valore massimo di \verb|age| permesso. Quando un passeggero supera questo valore viene rimosso dalla memoria.
+\end{itemize}
+
+%% Interruzione di pagina
+\newpage
+
+Il codice esegue le seguenti operazioni:
 \begin{enumerate}
-\item Vengono catturati i frame dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense.
-\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente.
-\item Si effettua una veloce operazione di riduzione del rumore.
+\item Prima di raccogliere i frame in ingresso si attende che questi vengano ricevuti, per mezzo della funzione \verb|wait_for_frames()|. Esiste la versione non bloccante \verb|poll_for_frames()| il cui utilizzo per\`o comporta non poche problematiche.
+\item A seguito di questa sincronizzazione vengono catturati i frame di profondit\`a grezzi dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense e salvati nella variabile \verb|depth|.
+\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente e salvati nella variabile \verb|frame|.
+\item Quindi si effettua una veloce operazione di riduzione del rumore per mezzo della funzione \verb|blur|.
 \end{enumerate}
 
 \subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
@@ -2276,11 +2300,11 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 \noindent Quindi si passa ad aggiornare la posizione dei passeggeri.
 
 \begin{itemize}
-\item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel da un passeggero gi\`a nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
+\item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel, data dalle variabili \verb|xNear| e \verb|yNear|, da un passeggero gi\`a nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
 \item Se il passeggero non \`e vicono a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
 \end{itemize}
 
-\noindent Infine si va ad effettuare il conteggio degli attraversamenti.
+\noindent Infine si va ad effettuare il conteggio degli attraversamenti. Si pu\`o notare come questa parte del codice sia esattamente identica alla versione del Passenger Counter a sottrazione dello sfondo.
 
 %% Interruzione di pagina
 \newpage
@@ -2318,6 +2342,10 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
             // Updating age
             passengers[i].updateAge();
 
+            // If passenger is outside field of view update coords with last known position
+            if(passengers[i].getAge() > 1)
+                passengers[i].updateCoords(passengers[i].getCurrentPoint());
+
             // Removing older passengers
             if(passengers[i].getAge() > (maxPassengerAge * fps) )
                 passengers.erase(passengers.begin() + i);
@@ -2330,7 +2358,7 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 
 Una volta aggiornate le posizioni dei passeggeri viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
 
-\begin{itemize}
+\begin{enumerate}
 \item Se ne disegna la traccia dello storico delle posizioni.
 \item Si rilevano gli attraversamenti della soglia:
     \begin{itemize}
@@ -2338,8 +2366,9 @@ Una volta aggiornate le posizioni dei passeggeri viene letto l'intero database d
     \item Se l'ultima posizione si trovava a nord della soglia e la nuova posizione rilevata a sud, si aggiorna il contatore in uscita. 
     \end{itemize}
 \item Si effettua l'update del parametro \verb|age| dei passeggeri.
+\item Se il passeggero si trova fuori dal raggio d'azione della telecamera se ne aggiorna la posizione con l'ultima conosciuta.
 \item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\`e troppo a lungo fuori dal raggio visivo della telecamera.
-\end{itemize}
+\end{enumerate}
 
 Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\`e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera figura del passeggero.
 
