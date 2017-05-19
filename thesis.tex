@@ -2652,6 +2652,53 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
 \newpage
 
 \subsubsection{Precisione nel tracciamento}
+
+Setup esperimento:
+
+Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata la seguente configurazione:
+
+\begin{itemize}
+\item Telecamera: Intel RealSense SR300, nel caso del BPC \`e stata usata come semplice telecamera a colori. Usare la stessa telecamera per entrambe le versioni ha permesso un confronto pi\`u alla pari.
+\item Setup: la telecamera \`e stata montata sullo stipite di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
+\item Attraversamenti: per entrambe le versioni sono stati eseguiti 15 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
+\end{itemize}
+
+\noindent Risultati attraversamenti singolo passeggero:
+
+\begin{table}[h!]
+\parbox{.45\linewidth}{
+\centering
+    \begin{tabular}{| l | c |}
+    \hline
+    \multicolumn{2}{| c |}{Risultati con sottrazione background} \\
+    \hline
+    \hline
+    Passaggi registrati IN & 15 \\ \hline
+    Passaggi effettivi IN & 15 \\ \hline
+    Passaggi registrati OUT & 15 \\ \hline
+    Passaggi effettivi OUT & 15 \\ \hline
+    \bf Errore & \bf 0\% \\ \hline
+    \end{tabular}
+\caption{Risultati tracciamento BPC}
+}
+\hfill
+\parbox{.45\linewidth}{
+\centering
+    \begin{tabular}{| l | c |}
+    \hline
+    \multicolumn{2}{| c |}{Risultati con telecamere RealSense} \\
+    \hline
+    \hline
+    Passaggi registrati IN & 22 \\ \hline
+    Passaggi effettivi IN & 15 \\ \hline
+    Passaggi registrati OUT & 19 \\ \hline
+    Passaggi effettivi OUT & 15 \\ \hline
+    \bf Errore & \bf 36\% \\ \hline
+    \end{tabular}
+\caption{Risultati tracciamento RPC}
+}
+\end{table}
+
 Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamente.
 
 \begin{figure}[h!]
@@ -2689,6 +2736,53 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
   \label{fig:ombraRPC}
 \end{minipage}
 \end{figure}
+
+\noindent Risultati attraversamenti di pi\`u passeggeri:
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{Attraversamento2PasseggeriPCN.png}
+  \caption{Attraversamento multiplo BPC}
+  \label{fig:AttrBPC}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{Attraversamento2PasseggeriRSPCN.png}
+  \caption{Attraversamento multiplo RPC}
+  \label{fig:AttrRPC}
+\end{minipage}
+\end{figure}
+
+Anche in questa situazione la versione basata su sottrazione del background non \`e precisa. Fare affidamento sull'area per rilevare il passaggio di pi\`u persone contemporaneamente \`e alla base del problema e comporta un'altissima imprecisione.
+
+Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
+
+%% Interruzione di pagina
+\newpage
+
+\noindent Risultati incrocio di pi\`u passeggeri:
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{Incrocio2PasseggeriPCN.png}
+  \caption{Incrocio BPC}
+  \label{fig:IncrocioBPC}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{Incrocio2PasseggeriRSPCN.png}
+  \caption{Incrocio RPC}
+  \label{fig:IncrocioRPC}
+\end{minipage}
+\end{figure}
+
+In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioBPC} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| cerca di associare allo stesso blob l'oggetto pi\`u grande che rileva. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Il risultato \`e un comportamento impredicibile del programma.
+
+La versione con telecamere a infrarossi invece, ancora una volta, si conferma molto precisa.
 
 \subsubsection{Dipendenza dall'ambiente}
 La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.

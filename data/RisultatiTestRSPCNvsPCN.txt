@@ -1,0 +1,65 @@
+Formula per la percentuale di errore:
+    %err = abs(ValEffettivo - ValRegistrato)*100/ValEffettivo
+Test1
+    RPC
+    Passaggi registrati IN : 5
+    Passaggi effettivi  IN : 5
+    Passaggi registrati OUT: 5
+    Passaggi effettivi  OUT: 5
+    Errore              : 0 %
+
+    BPC
+    Passaggi registrati IN : 9
+    Passaggi effettivi  IN : 5
+    Passaggi registrati OUT: 9
+    Passaggi effettivi  OUT: 5
+    Errore              :  80%
+
+Test2
+    RPC
+    Passaggi registrati IN : 10
+    Passaggi effettivi  IN : 10
+    Passaggi registrati OUT: 10
+    Passaggi effettivi  OUT: 10
+    Errore              : 0 %
+
+    BPC
+    Passaggi registrati IN : 13
+    Passaggi effettivi  IN : 10
+    Passaggi registrati OUT: 10
+    Passaggi effettivi  OUT: 10
+    Errore              : 15%
+
+TestCoperta1 (Scattava)
+    BPC
+    Passaggi registrati IN : 4
+    Passaggi effettivi  IN : 3
+    Passaggi registrati OUT: 0
+    Passaggi effettivi  OUT: 3
+    Errore              : 30%
+
+TestCoperta2
+    BPC
+    Passaggi registrati IN : 9
+    Passaggi effettivi  IN : 5
+    Passaggi registrati OUT: 7
+    Passaggi effettivi  OUT: 5
+    Errore              : 60%
+
+
+UNIONE TEST 1 E TEST 2
+    RPC
+    Passaggi registrati IN : 15
+    Passaggi effettivi  IN : 15
+    Passaggi registrati OUT: 15
+    Passaggi effettivi  OUT: 15
+    Errore              : 0 %
+
+    BPC
+    Passaggi registrati IN : 22
+    Passaggi effettivi  IN : 15
+    Passaggi registrati OUT: 19
+    Passaggi effettivi  OUT: 15
+    Errore              IN : 46%
+    Errore              OUT: 26%
+    Errore totale: 36% 
