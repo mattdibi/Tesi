@@ -67,6 +67,10 @@
 % Traduzione didascalia listati: sostituisce Listing > Listato
 \renewcommand{\lstlistingname}{Listato}
 
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
 \usepackage{capt-of}
 \graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/} {img/CorpoTesi/5_Yocto/} {img/Manuale/}}
 
@@ -2653,7 +2657,7 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
 
 \subsubsection{Precisione nel tracciamento}
 
-Setup esperimento:
+\noindent \underline{Setup esperimento:}
 
 Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata la seguente configurazione:
 
@@ -2663,7 +2667,7 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
 \item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
 \end{itemize}
 
-\noindent Risultati attraversamenti singolo passeggero:
+\noindent \underline{Risultati attraversamenti singolo passeggero}
 
 \begin{table}[h!]
 \parbox{.45\linewidth}{
@@ -2737,50 +2741,78 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \end{minipage}
 \end{figure}
 
-\noindent Risultati attraversamenti di pi\`u passeggeri:
+\noindent \underline{Risultati attraversamenti di pi\`u passeggeri}
 
-\begin{figure}[h!]
-\begin{minipage}[b]{8.5cm}
-  \centering
-  \includegraphics[width=8cm]{Attraversamento2PasseggeriPCN.png}
-  \caption{Attraversamento multiplo BPC}
-  \label{fig:AttrBPC}
-\end{minipage}
-\ \hspace{2mm} \hspace{3mm} \
-\begin{minipage}[b]{8.5cm}
- \centering
-  \includegraphics[width=8cm]{Attraversamento2PasseggeriRSPCN.png}
-  \caption{Attraversamento multiplo RPC}
-  \label{fig:AttrRPC}
-\end{minipage}
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{PassaggioPCN1.png}
+  \caption{Attraversamento 2 Passeggeri PCN frame 1}\label{fig:AttrPCN1}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{PassaggioPCN2.png}
+  \caption{Attraversamento 2 Passeggeri PCN frame 2}\label{fig:AttrPCN2}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{PassaggioPCN3.png}
+  \caption{Attraversamento 2 Passeggeri PCN frame 3}\label{fig:AttrPCN3}
+\endminipage
 \end{figure}
 
 Anche in questa situazione la versione basata su sottrazione del background non \`e precisa. Fare affidamento sull'area per rilevare il passaggio di pi\`u persone contemporaneamente \`e alla base del problema e comporta un'altissima imprecisione in quanto, soprattutto nel caso di pi\`u passeggeri, la forma dei blob varia molto nel tempo e quindi anche l'area ne \`e influenzata.
 
-Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{PassaggioRSPCN1.png}
+  \caption{Attraversamento 2 Passeggeri RSPCN frame 1}\label{fig:AttrRSPCN1}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{PassaggioRSPCN2.png}
+  \caption{Attraversamento 2 Passeggeri RSPCN frame 2}\label{fig:AttrRSPCN2}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{PassaggioRSPCN3.png}
+  \caption{Attraversamento 2 Passeggeri RSPCN frame 3}\label{fig:AttrRSPCN3}
+\endminipage
+\end{figure}
 
 %% Interruzione di pagina
 \newpage
 
-\noindent Risultati incrocio di pi\`u passeggeri:
+Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
 
-\begin{figure}[h!]
-\begin{minipage}[b]{8.5cm}
-  \centering
-  \includegraphics[width=8cm]{Incrocio2PasseggeriPCN.png}
-  \caption{Incrocio BPC}
-  \label{fig:IncrocioBPC}
-\end{minipage}
-\ \hspace{2mm} \hspace{3mm} \
-\begin{minipage}[b]{8.5cm}
- \centering
-  \includegraphics[width=8cm]{Incrocio2PasseggeriRSPCN.png}
-  \caption{Incrocio RPC}
-  \label{fig:IncrocioRPC}
-\end{minipage}
+\noindent \underline{Risultati incrocio di pi\`u passeggeri}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{IncrocioPCN1.png}
+  \caption{Incrocio 2 Passeggeri PCN frame 1}\label{fig:IncrocioPCN1}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{IncrocioPCN2.png}
+  \caption{Incrocio 2 Passeggeri PCN frame 2}\label{fig:IncrocioPCN2}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{IncrocioPCN3.png}
+  \caption{Incrocio 2 Passeggeri PCN frame 3}\label{fig:IncrocioPCN3}
+\endminipage
 \end{figure}
 
-In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioBPC} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| cerca di associare allo stesso blob l'oggetto pi\`u grande che rileva. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Il risultato \`e un comportamento impredicibile del programma.
+In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioPCN1}, \ref{fig:IncrocioPCN2} e \ref{fig:IncrocioPCN3} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| cerca di associare allo stesso blob l'oggetto pi\`u grande che rileva. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Il risultato \`e un comportamento impredicibile del programma.
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{IncrocioRSPCN1.png}
+  \caption{Incrocio 2 Passeggeri RSPCN frame 1}\label{fig:IncrocioRSPCN1}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{IncrocioRSPCN2.png}
+  \caption{Incrocio 2 Passeggeri RSPCN frame 2}\label{fig:IncrocioRSPCN2}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{IncrocioRSPCN3.png}
+  \caption{Incrocio 2 Passeggeri RSPCN frame 3}\label{fig:IncrocioRSPCN3}
+\endminipage
+\end{figure}
 
 La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa.
 
@@ -2799,7 +2831,7 @@ Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecno
 
 Bisogna altres\`\i\ considerare il fatto che il BPC necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
-\subsubsection{Conclusioni}
+\subsection{Conclusioni}
 Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere ad infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense.
 
 %% Interruzione di pagina
