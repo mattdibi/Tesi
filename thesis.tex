@@ -67,10 +67,6 @@
 % Traduzione didascalia listati: sostituisce Listing > Listato
 \renewcommand{\lstlistingname}{Listato}
 
-\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
-\setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{4}
-
 \usepackage{capt-of}
 \graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/} {img/CorpoTesi/5_Yocto/} {img/Manuale/}}
 
@@ -599,7 +595,7 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
     \centering
 	\begin{tabular}{|c|c|}
 	\hline
-	Hardware & Avnet Zedboard \\ \hline
+	Piattaforma hardware & Avnet Zedboard \\ \hline
 	Acquisizione video & HDMI Webcam \\ \hline
     Ambiente di sviluppo & Xilinx SDSoC \\ \hline
     Piattaforma software & Bare-metal\\
@@ -689,21 +685,20 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
 
 %TODO: Approfondire?
 \subsection{Ambiente di sviluppo Intel - Yocto}
+Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|}
 	\hline
-	Hardware & Eurotech ReliaGate 20-25 \\ \hline
+	Piattaforma hardware & Eurotech ReliaGate 20-25 \\ \hline
 	Acquisizione video & Webcam - Telecamere Intel RealSense \\ \hline
     Ambiente di sviluppo & Toolchain generata con Yocto \\ \hline
-    Piattaforma software & Distribuzione Linux custom Poky \\
+    Piattaforma software & Distribuzione Poky Linux custom \\
     \hline
 	\end{tabular}
     \caption{Riassunto componenti ambiente di sviluppo Intel - Yocto}
 \end{table}
-
-Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
 \subsubsection{Hardware}
 L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le telecamere Intel RealSense.
@@ -713,14 +708,17 @@ L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le te
 \centering
     \centering
 	\begin{tabular}{|l|c|}
+    \hline
+    \multicolumn{2}{| c |}{ \bf ReliaGate 20-25-33} \\
+    \hline
 	\hline
-    ReliaGate 20-25-33 & \makecell{Processore Intel E3827  \\ Dual Core 1.75GHz x86-64} \\ \hline
+    Processore & \makecell{Intel E3827  \\ Dual Core 1.75GHz x86-64} \\ \hline
     Memoria & \makecell{2GB 1333MHz DDR3L ECC \\ 8GB eMMC} \\ \hline
     Connettivit\`a & \makecell{1x USB 3.0 \\ 2x USB 2.0 \\ 2x RS-232/RS-422/RS-485} \\ \hline
     Video & mini DisplayPort \\
     \hline
 	\end{tabular}
-    \caption{Specifiche tecniche ReliaGate 20-25-33}
+    \caption{Specifiche tecniche ReliaGate 20-25}
     \label{table:SpecificheWebcam}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.4\linewidth}
@@ -768,8 +766,11 @@ Per questa prima implementazione del contatore di passeggeri \`e stata utilizzat
 \centering
 \begin{tabular}{ | l | c | }
     \hline
-    Risoluzione & 640 x 480 \\ \hline
-    Framerate & 30fps \\ \hline
+    \multicolumn{2}{| c |}{ \bf Ligitech QuickCam Pro 5000} \\
+    \hline
+    \hline
+    Risoluzione & 640 x 480 pixel \\ \hline
+    Framerate & 30 fps \\ \hline
 	Connessione & USB 2.0 \\ \hline
     Tecnologia & driverless \\ \hline
     \end{tabular}
