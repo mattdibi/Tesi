@@ -2838,7 +2838,7 @@ Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lun
 \newpage
 
 \subsection{Versioni realizzate e porting}
-Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo principale per questi porting \`e stato quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech. Nel seguito analizzeremo le versioni del Passenger Counter con telecamere RealSense che sono state realizzate nel corso della tesi.
+Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo di questi porting \`e quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech. Nel seguito analizzeremo le versioni del Passenger Counter con telecamere RealSense che sono state realizzate nel corso della tesi.
 
 \subsubsection{Versione C++}
 Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
@@ -2867,7 +2867,7 @@ JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso effi
 
 Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets}.
 
-JavaCPP Presets \`e un sotto progetto di JavaCPP il quale rende disponibile le interfacce verso le librerie C++ pi\`u usate prodotte usando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
+JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le interfacce verso le librerie C++ pi\`u usate realizzato sfruttando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
 
 Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
@@ -2944,18 +2944,18 @@ Il risultato finale di quanto si \`e realizzato \`e riportato in figura \ref{fig
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{SoftwareStackDiag.png}
+\includegraphics[width=0.9\textwidth]{SoftwareStackDiag.png}
   \caption{Diagramma dello stack software della distribuzione realizzata}
   \label{fig:SWStack}
 \end{figure}
 
-La distribuzione \`e formata da quattro parti fondamentali:
+La distribuzione \`e formata da quattro componenti fondamentali:
 
 \begin{enumerate}
-\item Poky: la reference distribution del progetto Yocto. Fa da template per la costruzione della propria distro Linux customizzata. Nel progetto si \`e usata la versione 2.2 - Morty a causa delle restrizioni dovute alle librerie RealSense.
-\item OpenCV: come visto in precedenza, fondamentale per l'image processing.
-\item librealsense: necessaria per l'interfacciamento con le telecamere RealSense.
-\item OpenJDK 8: necessario per l'esecuzione delle versioni basate su Java del Passenger Counter.
+\item \textbf{Poky}: la reference distribution del progetto Yocto. Fa da template per la costruzione della propria distro Linux customizzata. Nel progetto si \`e usata la versione 2.2 (nome in codice Morty) a causa delle restrizioni dovute alle librerie RealSense.
+\item \textbf{OpenCV}: come visto in precedenza, fondamentale per l'image processing.
+\item \textbf{librealsense}: necessaria per l'interfacciamento con le telecamere RealSense.
+\item \textbf{OpenJDK 8}: necessario per l'esecuzione delle versioni basate su Java del Passenger Counter.
 \end{enumerate}
 
 %% Interruzione di pagina
@@ -3019,7 +3019,7 @@ La sorgente del file bblayers.conf.sample dipende dalla variabile \verb|$TEMPLAT
 Questa directory contiene i sorgenti della documentazione del progetto Yocto e template e tootl necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sotto cartella.
 
 \subsubsection{meta}
-Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder meta/recipes-sato, la quale contiene Sato demo/reference UI/UX and its associated applications and configuration data.
+Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder meta/recipes-sato, la quale contiene Sato demo/reference UI/UX ed i dati associati alle sue applicazioni e configurazioni.
 
 \subsubsection{meta-yocto}
 Questa directory contiene le configurazioni per la distribuzione reference di Poky.
@@ -3043,7 +3043,7 @@ L'esecuzione di questo script tramite il comando \verb|source| in una shell appl
 
 Una volta eseguito lo script, l'ambiente del progetto Yocto \`e impostato, la Build Directory viene creata, la working directory diventa la Build Directory e compare un elenco di possibili target per BitBake all'interno della shell.
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, caption=Output dell'environment setup script.]
 $ source oe-init-build-env
 
 ### Shell environment set up for builds. ###
@@ -3074,13 +3074,13 @@ $ source oe-init-build-env ~/mybuilds
 \subsection{Sviluppo della distribuzione}
 Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro. Ci\`o significava aggiungere gradualmente nuovi layer e nuove ricette al build system.
 
-Per lo sviluppo del progetto sono state realizzate principalmente tre versioni della distribuzione, verranno analizzate nel seguito in ordine cronologico.
+Per lo sviluppo del progetto sono state realizzate principalmente tre versioni della distribuzione, verranno analizzate nel seguito in ordine cronologico di realizzazione.
 
 \subsubsection{Prima versione}
 La prima versione \`e stata realizzata per supportare l'applicazione del Passenger Counter a sottrazione del background, quindi prevedeva solamente l'installazione di OpenCV sul ReliaGate 20-25. Per questa versione sono stati aggiunti solamente due layer alla configurazione standard di Poky:
 
 \begin{itemize}
-\item \textbf{meta-intel}: layer contenente metadati per il supporto di hardware intel. Questo layer \`e necessario per poter targettare correttamente il processore Intel sul quale \`e basato il ReliaGate 20-25.
+\item \textbf{meta-intel}: layer contenente metadati per il supporto di hardware intel. Questo layer \`e necessario per poter realizzare un'immagine dell'OS finalizzata all'esecuzione sul processore Intel, sul quale \`e basato il ReliaGate 20-25.
 \item \textbf{meta-openembedded}: \`e un layer contenente una collezione di layer dove sono riportate le ricette per i software pi\`u comuni. Questo layer era necessario in quanto contiene le ricette per l'installazione di OpenCV.
 \end{itemize}
 
@@ -3096,7 +3096,7 @@ Purtroppo questo layer risultava essere compatibile solamente con la versione 4.
 Il downgrade di OpenCV ha richiesto qualche accorgimento in fase di cross-compilazione del Passenger Counter in quanto la versione 3.2 di OpenCV aveva ridotto il numero di moduli, integrando pi\`u funzionalit\`a in uno stesso modulo.
 
 \subsubsection{Terza versione}
-Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment e un JDK. Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
+Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment ed un JDK (Java Developer Kit). Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
 
 \`E stato quindi necessario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
 
@@ -3165,7 +3165,7 @@ Vediamo ora nel dettaglio il significato di questi parametri:
 \item \verb|BB_NUMBER_THREADS|: Il massimo numero di task che BitBake pu\`o eseguire in parallelo contemporaneamente. Il build system di OpenEmbedded imposta automaticamente questo valore al numero di core disponibili sulla macchina host del build system. Per esempio un sistema con un processore dual-core che fa anche uso dell'hyper-threading implica che la variabile \verb|BB_NUMBER_THREADS| venga impostata a "4".
 \item \verb|PARALLEL_MAKE|: Opzioni extra passate al comando \verb|make| durante la task \verb|do_compile| task in modo tale da specificare la compilazione parallela sulla macchina del build system. Questa variabile solitamente \`e nella forma "-j x", dove x rappresenta il numero massimo di thread paralleli che il comando make pu\`o istanziare.
 \item \verb|IMAGE_INSTALL|: Specifica i pacchetti da installare in una immagine.
-\item \verb|CORE_IMAGE_EXTRA_INSTALL|: Specifica la lista di pacchetti che devono essere aggiunti all'immagine.
+\item \verb|CORE_IMAGE_EXTRA_INSTALL|: Specifica la lista di pacchetti che devono essere aggiunti all'immagine. Questa operazione \`e ristretta alle immagini di tipo OE Core.
 \end{itemize}
 
 %% Interruzione di pagina
@@ -3228,9 +3228,9 @@ PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'oracle-java', '${PN}-java-db
     ${PN}-samples-dbg ${PN}-samples ${PN}-apps python-opencv"
 \end{lstlisting}
 
-Praticamente grazie a queste modifiche, se durante il processo di build, bitbake si accorge che l'immagine possiede un JDK, effettua le operazioni necessarie a generare le API Java di OpenCV.
+Praticamente grazie a queste modifiche, se durante il processo di build, BitBake si accorge che l'immagine possiede un JDK, effettua le operazioni necessarie a generare le API Java di OpenCV.
 
-La patch si \`e resa necessaria in quanto questa operazione avveniva solamente nel caso in cui bitbake rilevasse il JDK di Oracle, ma per problemi di compatibilit\`a eravamo riusciti ad installare solamente il JDK OpenJDK-8. Quindi \`e stato necessario effettuare le modifiche di cui sopra le quali non fanno altro che rilevare la presenza del nuovo JDK e lo usano per implementare la API.
+La patch si \`e resa necessaria in quanto questa operazione avveniva solamente nel caso in cui BitBake rilevasse il JDK di Oracle, ma per problemi di compatibilit\`a eravamo riusciti ad installare solamente il JDK OpenJDK-8. Quindi \`e stato necessario effettuare le modifiche di cui sopra le quali non fanno altro che rilevare la presenza del nuovo JDK e lo usano per implementare la API.
 
 %% Interruzione di pagina
 \newpage
@@ -3239,10 +3239,10 @@ La patch si \`e resa necessaria in quanto questa operazione avveniva solamente n
 La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 
 \begin{itemize}
-\item Mancanza dei driver per l'hardware Eurotech: non \`e stato possibile aggiungere alla distribuzione i driver necessari all'interfacciamento con l'hardware proprietario Eurotech installato sul ReliaGate 20-25. Questo \`e dovuto alla scarsa conoscenza del tool Yocto e alla mancanza di tempo per la realizzazione di questo ultimo passaggio.
-\item Mancanza di tool: la distribuzione cos\`\i\ realizzata \`e molto barebone. Mancano moltissimi tool software adatti a farne una distribuzione completa.
-\item Incompatibilit\`a con le versioni pi\`u recenti del progetto Yocto: purtroppo il layer librealsense non viene aggiornato spesso e quindi siamo costretti ad utilizzare una versione di Poky che non \`e la pi\`u recente. Di conseguenza tutti pacchetti installati sono bloccati a versioni non aggiornate (es: OpenCV si trova alla versione 3.1 invece che alla 3.2).
-\item Mancanza del supporto ad OpenCL: inizialmente si prevedeva di accelerare parte della computazione sulla GPU. Purtroppo, per mancanza di supporto da parte di Intel, non \`e stato possibile installare OpenCL e quindi accelerare gli algoritmi di OpenCV sulla GPU integrata dell'Intel E3827.
+\item \textbf{Mancanza dei driver per l'hardware Eurotech}: non \`e stato possibile aggiungere alla distribuzione i driver necessari all'interfacciamento con l'hardware proprietario Eurotech installato sul ReliaGate 20-25. Questo \`e dovuto alla scarsa conoscenza del tool Yocto e alla mancanza di tempo per la realizzazione di questo ultimo passaggio.
+\item \textbf{Mancanza di tool}: la distribuzione cos\`\i\ realizzata \`e molto barebone. Mancano moltissimi tool software adatti a farne una distribuzione completa.
+\item \textbf{Incompatibilit\`a con le versioni pi\`u recenti del progetto Yocto}: purtroppo il layer librealsense non viene aggiornato spesso e quindi siamo costretti ad utilizzare una versione di Poky che non \`e la pi\`u recente. Di conseguenza tutti pacchetti installati sono bloccati a versioni non aggiornate (es: OpenCV si trova alla versione 3.1 invece che alla 3.2).
+\item \textbf{Mancanza del supporto ad OpenCL}: inizialmente si prevedeva di accelerare parte della computazione sulla GPU. Purtroppo, per mancanza di supporto da parte di Intel, non \`e stato possibile installare OpenCL e quindi accelerare gli algoritmi di OpenCV sulla GPU integrata dell'Intel E3827.
 \end{itemize}
 
 %TODO: Cambiare questa frase. Non sapevo cosa scrivere.
@@ -3288,7 +3288,7 @@ Qui sono riportati i passaggi per poter generare correttamente l'immagine dell'O
 
 \begin{lstlisting}[language=bash]
 $ git clone git://git.yoctoproject.org/poky -b morty
-$ cd $HOME/poky
+$ cd $INSTALL_DIR/poky
 $ git clone git://git.yoctoproject.org/meta-intel -b morty
 $ git clone git://git.openembedded.org/meta-openembedded -b morty
 $ git clone https://github.com/IntelRealSense/meta-intel-realsense.git -b morty
@@ -3310,11 +3310,32 @@ $ source oe-init-build-env
 \subsubsection{Step 3: Aggiungere i layer}
 
 \begin{lstlisting}[language=bash]
-$ cd $HOME/poky/build
-$ bitbake-layers add-layer "$HOME/poky/meta-intel"
-$ bitbake-layers add-layer "$HOME/poky/meta-openebemdded/meta-oe"
-$ bitbake-layers add-layer "$HOME/poky/meta-intel-realsense"
-$ bitbake-layers add-layer "$HOME/poky/meta-java"
+$ cd $INSTALL_DIR/poky/build
+$ bitbake-layers add-layer "$INSTALL_DIR/poky/meta-intel"
+$ bitbake-layers add-layer "$INSTALL_DIR/poky/meta-openebemdded/meta-oe"
+$ bitbake-layers add-layer "$INSTALL_DIR/poky/meta-intel-realsense"
+$ bitbake-layers add-layer "$INSTALL_DIR/poky/meta-java"
+\end{lstlisting}
+
+\noindent Il file bblayers.conf risultante deve corrispondere al seguente:
+
+\begin{lstlisting}[caption=File bblayers.conf risultante]
+# POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+BBLAYERS ?= " \
+  $INSTALL_DIR/poky/meta \
+  $INSTALL_DIR/poky/meta-poky \
+  $INSTALL_DIR/poky/meta-yocto-bsp \
+  $INSTALL_DIR/poky/meta-intel \
+  $INSTALL_DIR/poky/meta-openembedded/meta-oe \
+  $INSTALL_DIR/poky/meta-intel-realsense \
+  $INSTALL_DIR/poky/meta-java \
+  "
 \end{lstlisting}
 
 \subsubsection{Step 4: Modificare i file di configurazione}
@@ -3326,7 +3347,7 @@ Modificare i file di configurazione \textbf{local.conf} e \textbf{auto.conf} com
 Come descritto nel paragrafo \ref{ModRicettaOpenCV} \`e necessario modificare la ricetta di OpenCV disponibile nella cartella:
 
 \begin{verbatim}
-$HOME/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
+$INSTALL_DIR/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
 \end{verbatim}
 
 \subsubsection{Step 6: Lanciare la build}
@@ -3340,11 +3361,8 @@ $ bitbake core-image-sato
 \noindent I file dell'immagine del sistema operativo si trovano nella cartella:
 
 \begin{verbatim}
-$HOME/poky/build/tmp/deploy/images/intel-corei7-64/
+$INSTALL_DIR/poky/build/tmp/deploy/images/intel-corei7-64/
 \end{verbatim}
-
-%% Interruzione di pagina
-\newpage
 
 \noindent Lanciare il processo di build dell'installatore della toolchain di cross-compilazione:
 
@@ -3355,14 +3373,13 @@ $ bitbake core-image-sato -c populate_sdk
 \noindent L'installatore si trova nella cartella:
 
 \begin{verbatim}
-$HOME/poky/build/tmp/deploy/sdk/
+$INSTALL_DIR/poky/build/tmp/deploy/sdk/
 \end{verbatim}
 
 \noindent Scrivere l'immagine su supporto bootabile:
 
 \begin{lstlisting}[language=bash]
-$ sudo dd if=tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic 
-    of=TARGET_DEVICE status=progress
+$ sudo dd if=$INSTALL_DIR/poky/build/tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic of=TARGET_DEVICE status=progress
 \end{lstlisting}
 
 \subsection{Script di installazione}
@@ -3375,7 +3392,7 @@ $ chmod +x build_install
 $ ./build_install
 \end{lstlisting}
 
-\noindent Inoltre prima di lanciare il processo di build \`e necessario impostare la build directory. Questo step non \`e necessario se si effettua l'installazione manuale del build system.
+\noindent Inoltre prima di lanciare il processo di build \`e necessario impostare il nome della Build Directory come segue. Questo step non \`e necessario se si effettua l'installazione manuale del build system.
 
 \begin{lstlisting}[language=bash]
 $ cd poky/
@@ -3604,19 +3621,19 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \section{Riassunto}
 L'obiettivo di questa tesi era quello di sviluppare un sistema di Passenger Counter, un applicativo dedicato ad effettuare il conteggio delle persone in entrata/uscita da un mezzo pubblico o un ambiente, e la piattaforma software a supporto dello stesso, partendo dalla soluzione tecnologia adottata dalla Eurotech. Inoltre si \`e ritenuto necessario tenere in considerazione i punti deboli della soluzione adottata in azienda e cercare di risolverli opportunamente. 
 
-Il lavoro si \`e cos\`\i\ svolto:
+Il lavoro si \`e svolto come segue.
 
-Una prima parte di ricerca sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa \`e stato necessario prendere confidenza con la libreria OpenCV e l'ambiente di sviluppo Xilinx, per poter capire quale fosse lo strumento pi\`u adatto all'obiettivo che ci si prefiggeva. 
+Una prima parte di ricerca sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa \`e stato necessario prendere confidenza con la libreria OpenCV, l'ambiente di sviluppo Xilinx ed il progetto Yocto, per poter capire quale fosse lo strumento pi\`u adatto all'obiettivo che ci si prefiggeva. 
 
 Una volta deciso quale tecnologia/ambiente di sviluppo  adottare, \`e cominciato lo sviluppo dell'applicazione.
 
 Il primo passo \`e stato il Passenger Counter a sottrazione del background. Questo contatore, per rilevare il transito dei passeggeri attraverso la soglia virtuale, adotta algoritmi di sottrazione dello sfondo e rilevamento dei contorni. L'algoritmo di sottrazione dello sfondo "impara" qual'\`e lo sfondo dell'immagine e ne crea un modello. Quando viene rilevato un cambiamento nell'immagine, questo modello viene sottratto all'immagine e ci\`o che rimane sono gli oggetti in movimento nel raggio visivo della telecamera. A questi oggetti viene applicato un algoritmo di rilevamento dei contorno e quindi calcolato il centro dell'oggetto. Questo centro viene usato per tracciare il percorso effettuato dagli oggetti all'interno del raggio visivo della telecamera. Quando il centro dell'oggetto attraversa la soglia vengono aggiornati i contatori. Purtroppo la soluzione cos\`\i\ ottenuta \`e molto imprecisa e caratterizzata da un elevato costo computazionale.
 
-A corredo di questa soluzione \`e stata realizzata una distribuzione customizzata destinata all'hardware in dotazione. La Eurotech ha fornito il ReliaGate 20-25, un gateway IoT Multi-Service. Per mezzo del Progetto Yocto \`e stato possibile creare una distribuzione ad hoc per il gateway, che avesse installato al suo interno i tool necessari all'applicazione. L'immagine del sistema operativo permette di utilizzare una semplice webcam e il ReliaGate per implementare il contatore di passeggeri.
+A corredo di questa soluzione \`e stata realizzata una distribuzione customizzata destinata all'hardware in dotazione. La Eurotech ha fornito il ReliaGate 20-25, un gateway IoT Multi-Service dotato di CPU Intel con architettura x86-64. Per mezzo del Progetto Yocto \`e stato possibile creare una distribuzione \textit{ad hoc} per il gateway, che avesse installato al suo interno i tool necessari all'applicazione. L'immagine del sistema operativo permette di utilizzare una semplice webcam e il ReliaGate per implementare il contatore di passeggeri.
 
 Non soddisfatti del risultato ottenuto con la sottrazione del background si \`e visto nelle telecamere Intel RealSense il tassello mancante all'applicazione.
 
-Prima di poter procedere nello sviluppo dell'applicazione si \`e ritenuto necessario integrarle nell'immagine del sistema operativo. Solo una volta installate le librerie e i driver con successo si \`e potuti proseguire nello sviluppo. Questa fase si \`e rivelata non priva di problematiche viste le limitazioni nella compatibilit\`a delle telecamere.
+Prima di poter procedere nello sviluppo dell'applicazione si \`e ritenuto necessario integrarle nell'immagine del sistema operativo. Solo una volta installate le librerie e i driver con successo si \`e potuti proseguire nello sviluppo. Questa fase si \`e rivelata non priva di problematiche viste le limitazioni nella compatibilit\`a delle librerie di interfacciamento verso le telecamere.
 
 \`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento alle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\`e gran parte dell'elaborazione avviene all'interno delle telecamere per mezzo di un ASIC.
 
@@ -3624,7 +3641,7 @@ Una volta constatato che la soluzione con le telecamera RealSense soddisfafa i r
 
 Inizialmente si \`e effettuato un wrapping Java sfruttando il tool SWIG. Successivamente si \`e deciso di effettuare un porting completo dell'applicazione appoggiandosi al progetto open-source JavaCPP. Anche questo ha comportato notevoli problematiche in quanto \`e stato necessario appoggiarsi ad una API Java di OpenCV non ufficiale, la quale non era completamente compatibile con quanto realizzato fino a questo punto.
 
-A supporto di questa versione dell'applicativo si \`e aggiunto all'immagine del sistema operativo del ReliaGate 20-25 un Java Real-time Environment ed un JDK. Inoltre si \`e deciso di rendere disponibile la API Java ufficiale di OpenCV. Quest'ultimo passaggio \`e stato complicato dai problemi di compatiblit\`a delle telecamere RealSense e si \`e reso necessario modificare a mano i metadati necessari all'installazione della API Java di OpenCV.
+A supporto di questa versione dell'applicativo si \`e aggiunto all'immagine del sistema operativo del ReliaGate 20-25 un Java Real-time Environment ed un JDK. Inoltre si \`e deciso di rendere disponibile la API Java ufficiale di OpenCV. Quest'ultimo passaggio \`e stato complicato dai problemi di compatiblit\`a delle telecamere RealSense e si \`e reso necessario modificare a mano i metadati del progetto Yocto necessari all'installazione della API Java di OpenCV.
 
 A questo punto dello sviluppo si \`e ritenuto il progetto completato e ci si \`e ritenuti soddisfatti dei risultati ottenuti.
 
@@ -3634,7 +3651,7 @@ A questo punto dello sviluppo si \`e ritenuto il progetto completato e ci si \`e
 \section{Risultati Passenger Counter con telecamere RealSense}
 I risultati ottenuti da questa versione del contatore sono stati ritenuti molto buoni. \`E stato possibile infatti migliorare tutti i punti deboli della versione del contatore attualmente implementata da Eurotech.
 
-Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte tutte come segue:
+Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte come segue:
 
 \begin{enumerate}
 \item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel sembra intenzionata a fornire supporto a questa tecnologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
