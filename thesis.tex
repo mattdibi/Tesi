@@ -252,14 +252,13 @@ Qui di seguito \`e riportata l'organizzazione del testo:
 \begin{itemize}
 \item Capitolo 1: Introduzione al contesto dell'Internet of Things e all'applicazione di conteggio dei passeggeri.
 \item Capitolo 2: Analisi della versione corrente del Passenger Counter realizzato da Eurotech. Segue una trattazione dettagliata delle tecnologie e software utilizzati nella realizzazione del progetto.
-\item Capitolo 3: Descrizione degli step intrapresi per lo sviluppo. Si suddivide in tre sezioni principali:
-    \begin{itemize}
-    \item Analisi degli ambienti disponibili per l'image processing embedded e motiviazioni per le quali si \`e deciso quello che \`e stato utilizzato.
-    \item Implementazioni e confronti delle versioni realizzate per il contatore dei passeggeri.
-    \item Realizzazione e features della distribuzione Linux realizzata a supporto del progetto
-    \end{itemize}
-\item Capitolo 4: Manuale d'uso del progetto.
-\item Capitolo 5: Riassunto e conclusioni
+\item Capitolo 3: Analisi degli ambienti di sviluppo disponibili per l'image processing in ambito embedded e motivazioni che hanno portato alla scelta finale.
+\item Capitolo 4: Prima versione dell'applicativo, Passenger Counter a sottrazione del background.
+\item Capitolo 5: Seconda versione dell'applicativo, Passenger Counter con telecamere RealSense.
+\item Capitolo 6: Confronto versioni dell'applicativo realizzate.
+\item Capitolo 7: Realizzazione e features della distribuzione Linux realizzata a supporto del progetto
+\item Capitolo 8: Manuale d'uso del progetto.
+\item Capitolo 9: Riassunto e conclusioni
 \end{itemize}
 
 %% Capitolo 2: Contesto tecnologico di dettaglio
@@ -405,9 +404,6 @@ Specifiche tecniche:
     \label{table:R200Spec}
 \end{table}
 
-%% Interruzione di pagina
-\newpage
-
 \subsubsection{Intel RealSense SR300}
 
 \begin{figure}[h!]
@@ -436,6 +432,9 @@ Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando
   \label{fig:SchemaFunzSR300}
 \end{figure}
 
+%% Interruzione di pagina
+\newpage
+
 Specifiche tecniche:
 
 \begin{table}[h!]
@@ -453,9 +452,6 @@ Specifiche tecniche:
     \caption{Specifiche tecniche Intel RealSense SR300}
     \label{table:SR300Spec}
 \end{table}
-
-%% Interruzione di pagina
-\newpage
 
 \subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
 Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame e i dati di profondit\`a dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream video disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono: le immagini a colori, le immagini della telecamera a infrarossi e le immagini in cui \`e codificata l'informazione di profondit\`a. Nonostante usino tecnologie diverse entrambe le telecamere forniscono lo stesso formato in uscita.
@@ -582,14 +578,10 @@ Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario rea
 \subsection{Framework OSGi}\label{OSGi}
 In pausa finch\`e non sei sicuro di usarlo.
 
-% Capitolo 3: Corpo della tesi. Sviluppo del progetto: cosa ho fatto e come l'ho fatto.
-\chapter{Sviluppo del progetto}
-In questo capitolo verr\`a riportato come \`e stato affrontato lo sviluppo dell'applicazione e come sono stati affrontati i problemi riscontrati.
-
-\section{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
+\chapter{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
 Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
 
-\subsection{Ambiente di sviluppo Xilinx}
+\section{Ambiente di sviluppo Xilinx}
 
 \begin{table}[h!]
     \centering
@@ -609,7 +601,7 @@ Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrass
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Hardware}
+\subsection{Hardware}
 La piattaforma target sarebbe stata una Avnet Zedboard.
 
 Specifiche tecniche:
@@ -641,15 +633,8 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Piattaforma per lo sviluppo SDSoC}
+\subsection{Piattaforma per lo sviluppo SDSoC}
 La piattaforma per lo sviluppo SDSoC (Software-defined system-on-chip) permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
-
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[scale=1]{XilinxSDSoC.png}
-%   \caption{Workflow SDSoC}
-%   \label{fig:SDSoC}
-% \end{figure}
 
 \begin{wrapfigure}{r}{0.5\textwidth}
 \begin{center}
@@ -669,7 +654,7 @@ I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Compatibilit\`a con OpenCV e liberia AuvizCV}
+\subsection{Compatibilit\`a con OpenCV e liberia AuvizCV}
 
 \begin{figure}[h!]
   \centering
@@ -684,7 +669,7 @@ Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit
 \newpage
 
 %TODO: Approfondire?
-\subsection{Ambiente di sviluppo Intel - Yocto}
+\section{Ambiente di sviluppo Intel - Yocto}
 Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
 \begin{table}[h!]
@@ -739,7 +724,7 @@ I vantaggi di questa piattaforma sono dovuti in gran parte all'architettura del 
 %% Interruzione di pagina
 \newpage
 
-\subsection{Motivazioni per la scelta finale}
+\section{Motivazioni per la scelta finale}
 Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
 \begin{itemize}
 \item \textbf{Flessibilit\`a}: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
@@ -750,15 +735,12 @@ Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i se
 
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
 
-%% Interruzione di pagina
-\newpage
-
-\section{Passenger Counter con sottrazione del background}
-In questa sezione tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
+\chapter{Passenger Counter con sottrazione del background}
+In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
 Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
-\subsection{Componenti hardware}\label{HardwarePCN}
+\section{Componenti hardware}\label{HardwarePCN}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
 
 \begin{table}[ht]
@@ -787,17 +769,17 @@ Per questa prima implementazione del contatore di passeggeri \`e stata utilizzat
 
 Essendo driverless veniva riconosciuta senza problemi dal ReliaGate ed \`e stato possibile leggere i frame in ingresso tramite OpenCV senza l'installazione di componenti software aggiuntivi.
 
+%% Interruzione di pagina
+\newpage
+
 % TODO: Approfondire? La matematica dietro il metodo \`e spiegata sufficientemente bene nella pagina di wikipedia
 % link: 
-\subsection{Algoritmo per la sottrazione del background}
+\section{Algoritmo per la sottrazione del background}
 La sottrazione del background \`e una tecnica molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per essere ulteriormente manipolato. La background subtraction \`e una tecnica largamente utilizzata per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
 
 L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
 
 Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
-
-%% Interruzione di pagina
-\newpage
 
 Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazione dell'algoritmo di background subtraction, si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio.
 Qui di seguito \`e riportato un esempio di funzionamento.
@@ -812,8 +794,11 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 
 Questo algoritmo \`e reso disponibile dalla libreria OpenCV per mezzo della funzione BackgroundSubtractorMOG2. Nel seguito vedremo come \`e stato utilizzato all'interno del codice del Passenger Counter.
 
+%% Interruzione di pagina
+\newpage
+
 % TODO: Chiedere al prof quanto approfondire che qua \`e un casino leggersi il paper
-\subsection{Algoritmo per il rilevamento dei contorni}
+\section{Algoritmo per il rilevamento dei contorni}
 L'algoritmo \`e descritto in Suzuki, S. and Abe, K., Topological Structural Analysis of Digitized Binary Images by Border Following. CVGIP 30 1, pp 32-46 (1985).
 
 Questo algoritmo per la rilevazione dei contorni \`e utilizzato anche nella seconda versione del Passenger Counter.
@@ -830,7 +815,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
 %% Interruzione di pagina
 \newpage
 
-\subsection{Struttura del codice}
+\section{Struttura del codice}
 
 \begin{figure}[h!]
   \centering
@@ -849,7 +834,7 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni
 %% Interruzione di pagina
 \newpage
 
-\subsection{Classe Passenger}
+\section{Classe Passenger}
 Per il tracciamento dei passeggeri \`e stata creata una classe che contenesse le informazioni necessarie per il corretto tracking delle entit\`a.
 
 \begin{lstlisting}[language=C++, caption=passenger.h, style=customcpp]
@@ -947,7 +932,7 @@ Si noti che questa rappresentazione dei passeggeri all'interno del contatore \`e
 %% Interruzione di pagina
 \newpage
 
-\subsection{Classe PCN}
+\section{Classe PCN}
 
 Questa classe ha come obiettivi principali:
 \begin{itemize}
@@ -1085,7 +1070,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 %% Interruzione di pagina
 \newpage
 
-\subsection{Analisi del kernel del programma: funzione count()}\label{kernelPCN}
+\section{Analisi del kernel del programma: funzione count()}\label{kernelPCN}
 La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
@@ -1093,7 +1078,7 @@ La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo 
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
-\subsubsection{Estrazione degli oggetti in movimento}
+\subsection{Estrazione degli oggetti in movimento}
 
 \begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 1, style=customcpp]
 void PCN::count()
@@ -1203,7 +1188,7 @@ void PCN::count()
 \item L'immagine a destra riporta il contenuto della matrice \verb|denoisedMat|.
 \end{itemize}
 
-\subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
+\subsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
 \begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2, style=customcpp, firstnumber=47]
 while(!halt)
@@ -1275,7 +1260,7 @@ Risultato delle operazioni:
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Conteggio degli attraversamenti}
+\subsection{Conteggio degli attraversamenti}
 Definiamo all'inizio del codice un vettore di passenger che rappresenter\`a il nostro database di passeggeri. Quindi il tracciamento di questi avverr\`a tramite il seguente codice.
 
 \begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 3, style=customcpp, firstnumber=62]
@@ -1443,20 +1428,6 @@ Risultato tracciamento in fase sperimentale. La linea rossa rappresenta la sogli
 \end{minipage}
 \end{figure}
 
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[scale=0.5]{PCNMano1.png}
-%   \caption{Risultato tracciamento sperimentale PCN. Frame precedente all'attraversamento.}
-%   \label{fig:PCNMano1}
-% \end{figure}
-% 
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[scale=0.5]{PCNMano2.png}
-%   \caption{Risultato tracciamento sperimentale PCN. Primo attraversamento.}
-%   \label{fig:PCNMano2}
-% \end{figure}
-
 \begin{figure}[h!]
   \centering
   \includegraphics[width=9cm]{PCNMano3.png}
@@ -1469,7 +1440,7 @@ Dalla successione delle immagini si pu\`o notare come il tracciamento sia buono 
 %% Interruzione di pagina
 \newpage
 
-\subsection{main.cpp}
+\section{main.cpp}
 Qui di seguito \`e riportato il main dell'applicazione.
 
 \begin{lstlisting}[language=C++, caption=main.cpp, style=customcpp]
@@ -1569,10 +1540,10 @@ Il codice effettua le seguenti operazioni:
 %% Interruzione di pagina
 \newpage
 
-\subsection{Risultati ottenuti}
+\section{Risultati ottenuti}
 In questo paragrafo vengono riportati i risultati dei test effettuati con questa versione del contatore di passeggeri.
 
-\subsubsection{Dimostrazione funzionamento}
+\subsection{Dimostrazione funzionamento}
 Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuto in seguito alla sottrazione del background, a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore.
 
 \begin{figure}[h!]
@@ -1615,7 +1586,7 @@ In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzi
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Performance}
+\subsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{HardwarePCN}: 
@@ -1726,7 +1697,7 @@ Infine \`e opportuno notare che, la durata del loop principale nel caso della te
 %% Interruzione di pagina
 \newpage
 
-\subsection{Problemi}
+\section{Problemi}
 I problemi principali rilevati in questa implementazione del Passenger Counter sono i seguenti:
 \begin{enumerate}
 \item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
@@ -1737,15 +1708,12 @@ I problemi principali rilevati in questa implementazione del Passenger Counter s
 
 Per questo motivo si \`e passati ad una seconda implementazione sfruttando una tecnologia esente da queste problematiche: il Passenger Counter con telecamere RealSense.
 
-%% Interruzione di pagina
-\newpage
-
-\section{Passenger Counter con telecamere RealSense}
-In questa sezione tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+\chapter{Passenger Counter con telecamere RealSense}
+In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
 Poich\`e questa versione \`e basata in gran parte sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
 
-\subsection{Struttura del codice}\label{StrutturaRSPCN}
+\section{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
 \begin{enumerate}
@@ -1767,7 +1735,7 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 %% Interruzione di pagina
 \newpage
 
-\subsection{Classe RSPCN}\label{ClassePassenger}
+\section{Classe RSPCN}\label{ClassePassenger}
 Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Counter a sottrazione del background, con qualche aggiunta. Essa deve infatti:
 
 \begin{itemize}
@@ -1944,7 +1912,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 %% Interruzione di pagina
 \newpage
 
-\subsection{Metodo getColorMap()}
+\section{Metodo getColorMap()}
 Questo metodo \`e stato utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
@@ -2017,7 +1985,7 @@ Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere Rea
 
 Si noti che la leggera discrepanza tra le due immagini \`e dovuta al fatto che il sensore a infrarossi e quello per le immagini a colori si trovano in posizioni diverse. Inoltre il sensore a infrarossi ha un FOV pi\`u elevato.
 
-\subsubsection{Funzionamento getColorMap()}
+\subsection{Funzionamento getColorMap()}
 Il primo step \`e portare il valore dei pixel per i quali non \`e stato possibile ricavare il dato di distanza alla massima distanza rappresentabile. Quindi portiamo tutti i pixel nulli a 65535. Questo \`e implementato dalla funzione \verb|setTo()|.
 
 Quindi convertiamo l'immagine da 16 bit a 8 bit usando un fattore di scala. Si noti che questa conversione \`e con perdita.
@@ -2072,7 +2040,7 @@ Si noti infine che durante questa elaborazione sono stati conservati i dati del 
 %% Interruzione di pagina
 \newpage
 
-\subsection{Metodo getFrame()}
+\section{Metodo getFrame()}
 Questo metodo \`e alla base del funzionamento di questa versione del Passenger Counter. Esso va a recuperare i dati forniti dalle telecamere RealSense e li converte in un formato che pu\`o essere dato in pasto allo stesso algoritmo usato a valle della sottrazione del background nella precedente versione del contatore.
 
 Qui di seguito \`e riportato il codice della funzione:
@@ -2152,7 +2120,7 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
 %% Interruzione di pagina
 \newpage
 
-\subsection{Analisi del kernel del programma: funzione count()}
+\section{Analisi del kernel del programma: funzione count()}
 
 La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuore del programma. Il codice \`e suddivisibile ancora una volta in tre sezioni:
 
@@ -2164,7 +2132,7 @@ La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuor
 
 \`E stato possibile riutilizzare il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Vi sono per\`o alcune differenze nel codice che vedremo nel seguito.
 
-\subsubsection{Estrazione degli oggetti in primo piano}
+\subsection{Estrazione degli oggetti in primo piano}
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 1, style=customcpp]
 void RSPCN::count()
@@ -2249,7 +2217,7 @@ Il codice esegue le seguenti operazioni:
 \item Quindi si effettua una veloce operazione di riduzione del rumore per mezzo della funzione \verb|blur|.
 \end{enumerate}
 
-\subsubsection{Rilevamento e tracking degli oggetti di nostro interesse}
+\subsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2, style=customcpp, firstnumber=48]
         // --FINDING CONTOURS
@@ -2314,7 +2282,7 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Conteggio degli attraversamenti}
+\subsection{Conteggio degli attraversamenti}
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3, style=customcpp, firstnumber=94]
         // For every passenger in passengers DB
@@ -2393,10 +2361,10 @@ Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o crear
 %% Interruzione di pagina
 \newpage
 
-\subsection{Risultati ottenuti}
-In questo parametro sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare anche le prestazioni delle due telecamere.
+\section{Risultati ottenuti}
+In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare anche le prestazioni delle due telecamere.
 
-\subsubsection{Dimostrazione funzionamento telecamera R200}
+\subsection{Dimostrazione funzionamento telecamera R200}
 Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a(metodo \verb|getColorMap()|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (metodo \verb|getFrame()|).
 
 \begin{figure}[h!]
@@ -2439,7 +2407,7 @@ In figura \ref{fig:R2003} il pallino verde in alto a destra nell'immagine indica
 %% Interruzione di pagina
 \newpage
 
-\subsubsection{Dimostrazione funzionamento telecamera SR300}
+\subsection{Dimostrazione funzionamento telecamera SR300}
 Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Il formato dei frame \`e lo stesso del caso precedente.
 
 \begin{figure}[h!]
@@ -2477,10 +2445,7 @@ Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del
   \label{fig:SR3004}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
-
-\subsubsection{Performance}
+\subsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
@@ -2591,7 +2556,7 @@ Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop
 %% Interruzione di pagina
 \newpage
 
-\subsection{Problemi}
+\section{Problemi}
 Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi, in questo caso sono pi\`u legati alle tecnologie impiegate.
 
 Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se presente la luce solare, la quale ha molte componenti infrarosse. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere notevolmente il funzionamento della telecamera.
@@ -2602,10 +2567,7 @@ Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori all
 
 In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti per l'applicazione considerata in questa tesi, comunque il funzionamento \`e molto migliore rispetto al caso del Passenger Counter a sottrazione del background e i punti di forza di questa tecnologia sono di gran lunga maggiori dei punti deboli.
 
-%% Interruzione di pagina
-\newpage
-
-\section{Confronto implementazioni del Passenger Counter}
+\chapter{Confronto implementazioni del Passenger Counter}
 Nel corso della tesi sono state implementate diverse versioni del contatore, in diversi linguaggi. In questa sezione andremo ad analizzare quali sono queste implementazioni, come sono state realizzate  e quali sono le loro prestazioni.
 
 Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
@@ -2614,13 +2576,16 @@ Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 \item RPC: Passenger Counter con telecamere RealSense.
 \end{itemize}
 
-\subsection{Prestazioni}
+\section{Prestazioni}
 Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie ed algoritmi utilizzati del punto di vista delle prestazioni del programma.
 
-\subsubsection{Costo computazionale}
+\subsection{Costo computazionale}
 L'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
 
-Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate.
+In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate.
+
+%% Interruzione di pagina
+\newpage
 
 \begin{figure}[h!]
     \centering
@@ -2651,14 +2616,12 @@ Qui di seguito \`e riportato un confronto sui tempi di esecuzione delle funzioni
     \end{tikzpicture}
     }
     \caption{Grafico tempi di esecuzione RPC e BPC}
+    \label{fig:GraficoTempiPCNRSPCN}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
+\subsection{Precisione nel tracciamento}
 
-\subsubsection{Precisione nel tracciamento}
-
-\noindent \underline{Setup esperimento:}
+\subsubsection{Setup esperimento}
 
 Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata la seguente configurazione:
 
@@ -2668,7 +2631,7 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
 \item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
 \end{itemize}
 
-\noindent \underline{Risultati attraversamenti singolo passeggero}
+\subsubsection{Risultati attraversamenti singolo passeggero}
 
 \begin{table}[h!]
 \parbox{.45\linewidth}{
@@ -2706,6 +2669,9 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
 
 Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamente.
 
+%% Interruzione di pagina
+\newpage
+
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
@@ -2742,7 +2708,10 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \end{minipage}
 \end{figure}
 
-\noindent \underline{Risultati attraversamenti di pi\`u passeggeri}
+%% Interruzione di pagina
+\newpage
+
+\subsubsection{Risultati attraversamenti di pi\`u passeggeri}
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -2776,12 +2745,12 @@ Anche in questa situazione la versione basata su sottrazione del background non 
 \endminipage
 \end{figure}
 
+Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
+
 %% Interruzione di pagina
 \newpage
 
-Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
-
-\noindent \underline{Risultati incrocio di pi\`u passeggeri}
+\subsubsection{Risultati incrocio di pi\`u passeggeri}
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -2815,19 +2784,19 @@ In questo caso il comportamento del Passenger Counter a sottrazione del backgrou
 \endminipage
 \end{figure}
 
-La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa.
+\noindent La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa.
 
-\subsubsection{Dipendenza dall'ambiente}
+\subsection{Dipendenza dall'ambiente}
 La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
 Infine, in condizioni di bassa illuminazione, il BPC si trova ad avere a che fare con un rumore molto elevato e quindi un degrado delle prestazioni. D'altro canto, essendo le telecamere RealSense dotate di proiettori di luce infrarossa, il RPC non risente di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il suo funzionamento.
 
-\subsubsection{Raggio di azione}
+\subsection{Raggio di azione}
 L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, ci\`o pu\`o compromettere il corretto funzionamento del programma.
 
 Abbiamo visto infatti in figura \ref{fig:R2002} a pagina \pageref{fig:R2002} come l'eccessiva vicinanza dell'oggetto da tracciare non permetta alla telecamera di rilevare correttamente i dati di profondit\`a. Questo comporta un'area priva di dati al centro dell'oggetto da tracciare e, nel caso quest'area diventi troppo grande, un fallimento nel rilevamento dell'oggetto nell'immagine e/o un oggetto tracciato in modo non corretto.
 
-\subsubsection{Costi}
+\subsection{Costi}
 Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. L'RPC invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
 
 Bisogna altres\`\i\ considerare il fatto che il BPC necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
@@ -2838,13 +2807,13 @@ Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lun
 %% Interruzione di pagina
 \newpage
 
-\subsection{Versioni realizzate e porting}
+\section{Versioni realizzate e porting}
 Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo di questi porting \`e quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech. Nel seguito analizzeremo le versioni del Passenger Counter con telecamere RealSense che sono state realizzate nel corso della tesi.
 
-\subsubsection{Versione C++}
+\subsection{Versione C++}
 Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
-\subsubsection{Wrapping in Java}
+\subsection{Wrapping in Java}
 Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: http://www.swig.org/}.
 
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
@@ -2861,7 +2830,7 @@ SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo
 
 Questa versione conservava le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
-\subsubsection{Versione Java}
+\subsection{Versione Java}
 Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp}.
 
 JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Sfrutta la Java Nativi Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
@@ -2931,21 +2900,18 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     \caption{Confronto performance versioni Passenger Counter con telecamera R200.}
 \end{table}
 
-\subsubsection{Versione OSGi}
+\subsection{Versione OSGi}
 \textbf{In pausa finch\`e non siamo sicuri di implementarla.}
 
-%% Interruzione di pagina
-\newpage
+\chapter{Piattaforma Yocto: realizzazione e features}
+In questo capitolo tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
 
-\section{Piattaforma Yocto: realizzazione e features}
-In questa sezione tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
-
-\subsection{Caratteristiche della distribuzione}
+\section{Caratteristiche della distribuzione}
 Il risultato finale di quanto si \`e realizzato \`e riportato in figura \ref{fig:SWStack}.
 
 \begin{figure}[h!]
   \centering
-\includegraphics[width=0.9\textwidth]{SoftwareStackDiag.png}
+\includegraphics[width=0.8\textwidth]{SoftwareStackDiag.png}
   \caption{Diagramma dello stack software della distribuzione realizzata}
   \label{fig:SWStack}
 \end{figure}
@@ -2962,7 +2928,7 @@ La distribuzione \`e formata da quattro componenti fondamentali:
 %% Interruzione di pagina
 \newpage
 
-\subsection{Build System di Yocto}
+\section{Build System di Yocto}
 Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yocto \`e basato su "ricette". Queste ricette contengono dei metadati con le istruzioni su come installare il software nella distribuzione da realizzare. Ogni ricetta esegue le seguenti operazioni in ordine:
 
 \begin{enumerate}
@@ -3072,12 +3038,12 @@ $ source oe-init-build-env ~/mybuilds
 %% Interruzione di pagina
 \newpage
 
-\subsection{Sviluppo della distribuzione}
+\section{Sviluppo della distribuzione}
 Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro. Ci\`o significava aggiungere gradualmente nuovi layer e nuove ricette al build system.
 
 Per lo sviluppo del progetto sono state realizzate principalmente tre versioni della distribuzione, verranno analizzate nel seguito in ordine cronologico di realizzazione.
 
-\subsubsection{Prima versione}
+\subsection{Prima versione}
 La prima versione \`e stata realizzata per supportare l'applicazione del Passenger Counter a sottrazione del background, quindi prevedeva solamente l'installazione di OpenCV sul ReliaGate 20-25. Per questa versione sono stati aggiunti solamente due layer alla configurazione standard di Poky:
 
 \begin{itemize}
@@ -3089,14 +3055,14 @@ Poich\`e non vi erano problemi di compatibilit\`a fra i layer \`e stato possibil
 
 Inoltre, per visualizzare le finestre di OpenCV contenenti gli stream video dalle telecamere, era necessario disporre del Window System X11. Per questo motivo si \`e deciso di installare la Sato reference User Interface, resa disponibile dal layer \textbf{openembedded-core}, fornito assieme a Poky. Questa interfaccia utente \`e basata su GTK+ e rende disponibile X11.
 
-\subsubsection{Seconda versione}
+\subsection{Seconda versione}
 Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense. Per poter installare correttamente le librerie librealsense e i driver delle telecamere \`e stato necessario aggiungere un nuovo layer: \textbf{meta-intel-realsense}.
 
 Purtroppo questo layer risultava essere compatibile solamente con la versione 4.8 del kernel Linux, contenuta nella versione Morty di Poky. \`E stato quindi necessario effettuare un downgrade della versione di Poky con conseguente downgrade della versione di OpenCV. In questa versione della distribuzione erano quindi presenti OpenCV 3.1 e la libreria librealsense 1.12.1.
 
 Il downgrade di OpenCV ha richiesto qualche accorgimento in fase di cross-compilazione del Passenger Counter in quanto la versione 3.2 di OpenCV aveva ridotto il numero di moduli, integrando pi\`u funzionalit\`a in uno stesso modulo.
 
-\subsubsection{Terza versione}
+\subsection{Terza versione}
 Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment ed un JDK (Java Developer Kit). Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
 
 \`E stato quindi necessario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
@@ -3108,7 +3074,7 @@ Lo stack software completo di questa versione della distribuzione \`e riportato 
 %% Interruzione di pagina
 \newpage
 
-\subsection{File di configurazione: local.conf}\label{ModLocalConf}
+\section{File di configurazione: local.conf}\label{ModLocalConf}
 Qui di seguito riportiamo il file di configurazione della versione finale della distribuzione.
 
 \begin{lstlisting}[caption=local.conf]
@@ -3183,7 +3149,7 @@ CORE_IMAGE_EXTRA_INSTALL += "librealsense-graphical-examples"
 
 La keyword \verb|require| va a prendere la ricetta specificata nel seguito, necessaria all'installazione della libreria.
 
-\subsection{Modifica alla ricetta di OpenCV}\label{ModRicettaOpenCV}
+\section{Modifica alla ricetta di OpenCV}\label{ModRicettaOpenCV}
 Per aggiungere le API Java di OpenCV \`e stato necessario modificare la ricetta di OpenCV come segue:
 
 \begin{lstlisting}[language=diff]
@@ -3236,7 +3202,7 @@ La patch si \`e resa necessaria in quanto questa operazione avveniva solamente n
 %% Interruzione di pagina
 \newpage
 
-\subsection{Problemi}
+\section{Problemi}
 La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 
 \begin{itemize}
