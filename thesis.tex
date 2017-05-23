@@ -374,7 +374,7 @@ Come dispositivi di acquisizione delle immagini sono state utilizzate le telecam
 \end{minipage}
 \end{figure}
 
-Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}
+Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
 
 \begin{figure}[h!]
   \centering
@@ -422,7 +422,7 @@ Specifiche tecniche:
 \end{minipage}
 \end{figure}
 
-La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. Il proiettore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti ed ottenere altre informazioni sulla superficie. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera.
+La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. Il proiettore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti ed ottenere altre informazioni sulla superficie\footnote{Per approfondire il funzionamento della Luce Strutturata si faccia riferimento all'appendice \ref{LuceStrutturata} a pagina \pageref{LuceStrutturata}.}. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera.
 Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando un circuito ASIC.
 
 \begin{figure}[h!]
@@ -3777,6 +3777,33 @@ d = x_R - x_T
 \end{equation}
 
 ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
+
+\chapter{Luce strutturata}\label{LuceStrutturata}
+
+La luce strutturata \`e un processo attraverso il quale, proiettando dei pattern di luce (tipicamente griglie o barre orizzontali) su una scena, si ricavano informazioni circa la profondit\`a e la superficie degli oggetti all'interno della scena grazie alle deformazioni dei pattern ottenute quando questi colpiscono gli oggetti.
+
+\section{Principio di funzionamento}
+
+Proiettare una stretta banda di luce su una superficie tridimensionale produce una linea di illuminazione che appare distorta da una prospettiva diversa da quella del proiettore, e pu\`o essere usata per estrarre informazioni geometriche circa la superficie.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{StructuredLight.png}
+  \caption{Schematizzazione funzionamento luce strutturata.}
+  \label{}
+\end{figure}
+
+Per effettuare la scansione di un intera superficie velocemente vengono proiettati dei pattern che consistono di molte bande di luce, disposte ad una distanza arbitraria, poich\`e cos\`\i\ facendo si raccolgono molti campioni contemporaneamente. Visti da punti di vista diversi, i pattern vengono distorti geometricamente a causa della forma degli oggetti.
+
+\section{Analisi dei pattern}
+
+Vi sono molte informazioni relative alla profondit\`a contenute all'interno dei pattern di luce osservati. Il discostamento di ogni singola banda pu\`o essere direttamente convertito in coordinate 3D. A questo scopo, le bande vegnono identificate individualmente tramite diversi metodi.
+
+Un'altra informazione importante sulla profondit\`a \`e data dalla variazione di spessore delle bande proiettate sulla superficie degli oggetti. Lo spessore delle bande \`e una funzione della ripidezza della superficie, la derivata prima della elevazione.
+
+La frequenza e la fase delle bande portano informazioni simili che possono essere analizzate per mezzo di una trasformata di Fourier.
+
+In molte implementazioni pratiche di questa tecnica viene effettuate una serie di misure che combinano la pattern recognition, identificazione delle bande e traformate di Fourier per ottenere una ricostruzione non ambigua delle forme in 3D.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
