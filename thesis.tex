@@ -3717,9 +3717,9 @@ ovvero la differenza tra le coordinate x di due punti corrispondenti. La dispari
 \section{Simple block matching}
 Capito il principio di funzionamento \`e necessario dedicarsi al problemi del matching dei punti di interesse. Come abbiamo visto \`e necessario ritrovare lo stesso punto nelle due immagini ricevute dalla telecamera, per farlo si usa la tecnica nota come Simple Block Matching.
 
-Essentially, we¿ll be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
+Essentially, we'll be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
 
-For example, we¿ll take the region of pixels within the black box in the left image:
+For example, we'll take the region of pixels within the black box in the left image:
 
 \begin{figure}[h!]
   \centering
@@ -3737,9 +3737,9 @@ And find the closest matching block in the right image:
   \label{fig:}
 \end{figure}
 
-When searching the right image, we¿ll start at the same coordinates as our template (indicated by the white box) and search to the left and right up to some maximum distance. The closest matching block is the green box in the second image. The disparity is just the horizontal distance between the centers of the green and white boxes.
+When searching the right image, we'll start at the same coordinates as our template (indicated by the white box) and search to the left and right up to some maximum distance. The closest matching block is the green box in the second image. The disparity is just the horizontal distance between the centers of the green and white boxes.
 
-What is our similarity metric for finding the ¿closest matching block¿? It¿s simpler than you might think, it¿s a simple operation called ¿sum of absolute differences¿ or ¿SAD¿.
+What is our similarity metric for finding the "closest matching block"? It's simpler than you might think, it's a simple operation called "sum of absolute differences" or "SAD".
 
 \begin{equation}
 \sum \left | L(r,c) - R(r,c - d)  \right |
@@ -3758,7 +3758,7 @@ To compute the sum of absolute differences between the template and a block, we 
   \label{fig:}
 \end{figure}
 
-To find the ¿most similar¿ block to the template, we compute the SAD values between the template and each block in the search region, then choose the block with the lowest SAD value.
+To find the "most similar" block to the template, we compute the SAD values between the template and each block in the search region, then choose the block with the lowest SAD value.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
