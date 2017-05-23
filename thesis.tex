@@ -3670,10 +3670,77 @@ Anche in questo caso sono possibili dei miglioramenti:
 
 \chapter{Computer Stereo Vision}
 
-La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come Visione Binoculare.
+La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{Stereopsi}.
 
-\section{Principio di funzionamento triangolazione}
-Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale. Dalle immagini ricavate da queste due telecamere si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
+\section{Principio di funzionamento}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{Overview.png}
+  \caption{Overview dei passaggi della computer stereo vision}
+  \label{fig:overviewStereoVision}
+\end{figure}
+
+In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali per ricavare le informazioni 3D.
+
+\begin{enumerate}
+\item \textbf{Rettificazione}: le due immagini ottenute dalle telecamere vanno proiettate su un piano comune per permettere la comparazione tra le due. Questo passaggio \`e noto come image rectification. Ed \`e necessaria a semplificare il passaggio di stereo correpondance.
+\item \textbf{Stereo correspondance}: questa operazione permette la generazione della disparity map. La disparity map si riferisce alla differenza tra i pixel ricavata da due immagini stereo dovuta al diverso posizionamento delle telecamere.
+\item \textbf{Triangolazione}: \`e il processo che determina un punto nello spazio 3D data la sua proiezione su due o pi\`u immagini. In questo caso \`e il passaggio necessario a ricostruire le informazioni di distanza a partire dalla disparity map.
+\end{enumerate}
+
+\section{Stereo correspondance: simple block matching}
+Si abbiano due immagini ricavate da altrettante telecamere disposte sullo stesso piano ad una distanza nota tra di loro. Essenzialmente viene presa una piccola regione di pixel nell'immagine proveniente dalla telecamera sinistra (ad esempio) e si cerca la regione pi\`u simile a quella considerata nell'immagine proveniente dalla telecamera destra.
+
+Per esempio, si consideri la regione di pixel contenuta nel riquadro nero nell'immagine proveniente dalla telecamera sinistra.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{left_wtemplate_crop.png}
+  \caption{Dettaglio immagine ricavata dalla telecamera di sinistra}
+  \label{fig:}
+\end{figure}
+
+Cerchiamo il riquadro pi\`u simile nell'immagine di destra.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{right_wsearch_crop.png}
+  \caption{Dettaglio immagine ricavata dalla telecamera di destra}
+  \label{fig:rightSearchCrop}
+\end{figure}
+
+Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell'immagine template (indicate in figura \ref{fig:rightSearchCrop} con il riquadro bianco) e si cerca a destra e a sinistra di queste cooridinate fino ad una massima distanza decisa precedentemente. La regione pi\`u simile \`e evidenziata dal riquadro verde in figura \ref{fig:rightSearchCrop}. La disparit\`a \`e data dalla distanza orizzontale tra i centri del riguardo verde e il riquadro bianco. La metrica di similitudine tra le regioni nei riquadri \`e data dall'operazione nota come SAD (Sum of absolute differences).
+
+\begin{equation}
+\sum \left | L(r,c) - R(r,c - d)  \right |
+\end{equation}
+
+Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. "d" si riferisce alla dispari\`a dell'immagine di destra.
+
+Prima di calcolare la disparity map convertiamo le due immagini in scala di gridi cosicch\`e si abbano solo valori compresi tra 0 - 255 per ogni pixel.
+
+Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, sottraiamo ogni pixel nel riquadro template dal pixel corrispondente nella regione e prendiamo il valore assoluto di questa differenza. Quindi sommiamo tutte le differenze e questo ci da un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che le immagini sono molto simili.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{sadillustration.png}
+  \caption{Illustrazione SAD}
+  \label{fig:}
+\end{figure}
+
+Per trovare la regione pi\`u simile al riquadro template, si calcola il SAD tra il template ed ogni blocco nella regione di ricerca, quindi si sceglie il riquadro con il valore di SAD pi\`u basso.
+
+Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, la quale \`e ottenuta applicando la SAD a tutti i pixel dell'immagine nei quali si \`e ricavata il valore di disparit\`a pi\`u basso.
+
+\section{Rettificazione}
+
+Si noti come nel simple block matching si \`e cercata la corrispondenza tra blocchi solamente in orizzontale e non in verticale. Ci\`o \`e reso possibile dall'operazione di rettificazione delle immagini. Questa operazione, la quale coinvolge il rilevamento di un insieme di keypoint (usando algoritmi come SIFT o SURF) delle due immagini, e quindi l'applicazione di trasformazioni sulle immagini in modo tale che i keypoint siano allineati verticalmente. Ci\`o permette di eliminare eventuali rotazioni o deformazioni dovute alle lenti nelle immagini e si pu\`o ignorare la componente verticale nella ricerca dei riquadri simili durante l'operazione di simple block matching.
+
+\section{Triangolazione}
+Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini ricavate da queste due telecamere si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
+
+%% Interruzione di pagina
+\newpage
 
 \begin{figure}[h!]
   \centering
@@ -3681,9 +3748,6 @@ Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una di
   \caption{Schema funzionamento computer stereo vision.}
   \label{fig:SchemaStereoVision}
 \end{figure}
-
-%% Interruzione di pagina
-\newpage
 
 In figura \ref{fig:SchemaStereoVision} abbiamo che:
 
@@ -3713,52 +3777,6 @@ d = x_R - x_T
 \end{equation}
 
 ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
-
-\section{Simple block matching}
-Capito il principio di funzionamento \`e necessario dedicarsi al problemi del matching dei punti di interesse. Come abbiamo visto \`e necessario ritrovare lo stesso punto nelle due immagini ricevute dalla telecamera, per farlo si usa la tecnica nota come Simple Block Matching.
-
-Essentially, we'll be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
-
-For example, we'll take the region of pixels within the black box in the left image:
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{left_wtemplate_crop.png}
-  \caption{Dettaglio immagine ricavata dalla telecamera di sinistra}
-  \label{fig:}
-\end{figure}
-
-And find the closest matching block in the right image:
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{right_wsearch_crop.png}
-  \caption{Dettaglio immagine ricavata dalla telecamera di destra}
-  \label{fig:}
-\end{figure}
-
-When searching the right image, we'll start at the same coordinates as our template (indicated by the white box) and search to the left and right up to some maximum distance. The closest matching block is the green box in the second image. The disparity is just the horizontal distance between the centers of the green and white boxes.
-
-What is our similarity metric for finding the "closest matching block"? It's simpler than you might think, it's a simple operation called "sum of absolute differences" or "SAD".
-
-\begin{equation}
-\sum \left | L(r,c) - R(r,c - d)  \right |
-\end{equation}
-
-Where L and R refer to the left and right columns while r and c refer to the current row and column of either images being examined. "d" refers to the disparity of the right image.
-
-Before computing the disparity map, we convert the two images to grayscale so that we only have one value (0 - 255) for each pixel.
-
-To compute the sum of absolute differences between the template and a block, we subtract each pixel in the template from the corresponding pixel in the block and take the absolute value of the differences. Then we sum up all of these differences and this gives a single value that roughly measures the similarity between the two image patches. A lower value  means the patches are more similar.
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{sadillustration.png}
-  \caption{Illustrazione SAD}
-  \label{fig:}
-\end{figure}
-
-To find the "most similar" block to the template, we compute the SAD values between the template and each block in the search region, then choose the block with the lowest SAD value.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
