@@ -3717,7 +3717,7 @@ Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell
 
 Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. "d" si riferisce alla dispari\`a dell'immagine di destra.
 
-Prima di calcolare la disparity map convertiamo le due immagini in scala di gridi cosicch\`e si abbano solo valori compresi tra 0 - 255 per ogni pixel.
+Prima di calcolare la disparity map convertiamo le due immagini in scala di grigi cosicch\`e si abbano solo valori compresi tra 0 e 255 per ogni pixel.
 
 Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, sottraiamo ogni pixel nel riquadro template dal pixel corrispondente nella regione e prendiamo il valore assoluto di questa differenza. Quindi sommiamo tutte le differenze e questo ci da un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che le immagini sono molto simili.
 
