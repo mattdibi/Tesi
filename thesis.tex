@@ -68,7 +68,7 @@
 \renewcommand{\lstlistingname}{Listato}
 
 \usepackage{capt-of}
-\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/} {img/CorpoTesi/5_Yocto/} {img/Manuale/}}
+\graphicspath{ {img/Introduzione/} {img/ContestoTecnologico/1_PCNEurotech/} {img/ContestoTecnologico/2_TecnTesi/} {img/CorpoTesi/1_AmbientiLavoro/} {img/CorpoTesi/2_PCNBackSub/} {img/CorpoTesi/3_RSPCN/} {img/CorpoTesi/4_Confronto/} {img/CorpoTesi/5_Yocto/} {img/Manuale/} {img/Appendici/}}
 
 %% --- Informazioni sulla tesi ---
 %% Per tutti i tipi di tesi
@@ -3668,8 +3668,97 @@ Anche in questo caso sono possibili dei miglioramenti:
 
 \part{Appendici}
 
-%% \chapter{Altro capitolo}
-%% Sed purus libero, vestibulum ut nibh vitae, mollis ultricies augue. Pellentesque velit libero, tempor sed pulvinar non, fermentum eu leo. Duis posuere eleifend nulla eget sagittis. Nam laoreet accumsan rutrum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur eget libero quis leo porttitor vehicula eget nec odio. Proin euismod interdum ligula non ultricies. Maecenas sit amet accumsan sapien.
+\chapter{Computer Stereo Vision}
+
+La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come Visione Binoculare.
+
+\section{Principio di funzionamento triangolazione}
+Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale. Dalle immagini ricavate da queste due telecamere si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{SchemaStereoVision.png}
+  \caption{Schema funzionamento computer stereo vision.}
+  \label{fig:SchemaStereoVision}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
+
+In figura \ref{fig:SchemaStereoVision} abbiamo che:
+
+\begin{itemize}
+\item P: \`e il punto di cui vogliamo ricavare la distanza dalle telecamere (Z).
+\item B: \`e la distanza fra gli obiettivi delle due telecamere.
+\item p e p': sono le proiezioni del punto P sui piani delle due telecamere.
+\item f: \`e la distanza focale delle due telecamere.
+\end{itemize}
+
+Quindi sfruttando il fatto che i triangoli PO\ped{R}O\ped{T} e Ppp' sono triangoli simili possiamo ricavare:
+
+\begin{equation}
+\frac{B}{Z} = \frac{(B + x_T) - x_R}{Z - f}
+\end{equation}
+
+e quindi:
+
+\begin{equation}
+Z = \frac{B \times f}{x_R - x_T} = \frac{B \times f}{d}
+\end{equation}
+
+Dove si definisce \textit{Disparit\`a} la differenza: 
+
+\begin{equation}
+d = x_R - x_T
+\end{equation}
+
+ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
+
+\section{Simple block matching}
+Capito il principio di funzionamento \`e necessario dedicarsi al problemi del matching dei punti di interesse. Come abbiamo visto \`e necessario ritrovare lo stesso punto nelle due immagini ricevute dalla telecamera, per farlo si usa la tecnica nota come Simple Block Matching.
+
+Essentially, we¿ll be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
+
+For example, we¿ll take the region of pixels within the black box in the left image:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{left_wtemplate_crop.png}
+  \caption{Dettaglio immagine ricavata dalla telecamera di sinistra}
+  \label{fig:}
+\end{figure}
+
+And find the closest matching block in the right image:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{right_wsearch_crop.png}
+  \caption{Dettaglio immagine ricavata dalla telecamera di destra}
+  \label{fig:}
+\end{figure}
+
+When searching the right image, we¿ll start at the same coordinates as our template (indicated by the white box) and search to the left and right up to some maximum distance. The closest matching block is the green box in the second image. The disparity is just the horizontal distance between the centers of the green and white boxes.
+
+What is our similarity metric for finding the ¿closest matching block¿? It¿s simpler than you might think, it¿s a simple operation called ¿sum of absolute differences¿ or ¿SAD¿.
+
+\begin{equation}
+\sum \left | L(r,c) - R(r,c - d)  \right |
+\end{equation}
+
+Where L and R refer to the left and right columns while r and c refer to the current row and column of either images being examined. "d" refers to the disparity of the right image.
+
+Before computing the disparity map, we convert the two images to grayscale so that we only have one value (0 - 255) for each pixel.
+
+To compute the sum of absolute differences between the template and a block, we subtract each pixel in the template from the corresponding pixel in the block and take the absolute value of the differences. Then we sum up all of these differences and this gives a single value that roughly measures the similarity between the two image patches. A lower value  means the patches are more similar.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{sadillustration.png}
+  \caption{Illustrazione SAD}
+  \label{fig:}
+\end{figure}
+
+To find the ¿most similar¿ block to the template, we compute the SAD values between the template and each block in the search region, then choose the block with the lowest SAD value.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
