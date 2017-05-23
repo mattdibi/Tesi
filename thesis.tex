@@ -291,7 +291,7 @@ Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utili
 
 Il cuore del sistema \`e il DynaPCN 10-20, visibile in figura \ref{fig:DynaPCN1020}, il quale si incarica dell'elaborazione video e conteggio degli attraversamenti. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
 
-Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la scena, le telecamere ad infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica, accelerate in hardware, permette di generare una immagine in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
+Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la scena, le telecamere ad infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica, accelerate in hardware, permette di generare una immagine in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
 
 %% Interruzione di pagina
 \newpage
@@ -374,7 +374,7 @@ Come dispositivi di acquisizione delle immagini sono state utilizzate le telecam
 \end{minipage}
 \end{figure}
 
-Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
+Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}
 
 \begin{figure}[h!]
   \centering
@@ -3668,7 +3668,7 @@ Anche in questo caso sono possibili dei miglioramenti:
 
 \part{Appendici}
 
-\chapter{Computer Stereo Vision}
+\chapter{Computer Stereo Vision}\label{ComputerStereoVision}
 
 La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{Stereopsi}.
 
@@ -3745,7 +3745,7 @@ Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una di
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.6]{SchemaStereoVision.png}
-  \caption{Schema funzionamento computer stereo vision.}
+  \caption{Schema triangolazione.}
   \label{fig:SchemaStereoVision}
 \end{figure}
 
