@@ -772,8 +772,6 @@ Essendo driverless veniva riconosciuta senza problemi dal ReliaGate ed \`e stato
 %% Interruzione di pagina
 \newpage
 
-% TODO: Approfondire? La matematica dietro il metodo \`e spiegata sufficientemente bene nella pagina di wikipedia
-% link: 
 \section{Algoritmo per la sottrazione del background}
 La sottrazione del background \`e una tecnica molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per essere ulteriormente manipolato. La background subtraction \`e una tecnica largamente utilizzata per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
 
@@ -828,13 +826,12 @@ In figura \ref{fig:EsempioBackSub} si pu\`u notare come le persone vengano corre
 %% Interruzione di pagina
 \newpage
 
-% TODO: Chiedere al prof quanto approfondire che qua \`e un casino leggersi il paper
 \section{Algoritmo per il rilevamento dei contorni}
 
-L'algoritmo \`e descritto in Suzuki, S. and Abe, K., \textit{Topological Structural Analysis of Digitized Binary Images by Border Following}, CVGIP 30 1, pp 32-46 del 1985.
+L'algoritmo utilizzato per il Passenger Counter \`e descritto in Suzuki, S. and Abe, K., \textit{Topological Structural Analysis of Digitized Binary Images by Border Following}, CVGIP 30 1, pp 32-46 del 1985.
 
 \subsection{Principio di funzionamento}
-Alla base dell'algoritmo implementato c'\`e l'algoritmo noto come \textit{Freeman Chain Code of Eight Directions} (FCCE). L'algoritmo consiste nel codificare i poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o "blob" sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
+Alla base dell'algoritmo implementato c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE). Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o "blob" sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
 
 \begin{figure}[h!]
   \centering
@@ -852,7 +849,9 @@ Alla base dell'algoritmo implementato c'\`e l'algoritmo noto come \textit{Freema
 
 Si consideri in ingresso una immagine monocroma, la quale, ad esempio, rappresenta una scena a cui \`e stato sottratto lo sfondo. Il foreground sar\`a rappresentato per mezzo di pixel bianchi mentre lo sfondo con pixel neri.
 
-Si scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine. 
+L'algoritmo si compone delle seguenti operazioni.
+
+Anzitutto si scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine.
 
 Quindi si passa ad analizzare gli 8 pixel adiacenti al punto di partenza, la direzione del primo pixel appartenente al bordo del poligono \`e salvata nella sequenza. Si considera un pixel appartenente al bordo dell'immagine se condivide almeno un lato o un vertice con almeno un pixel appartenente allo sfondo (cio\`e un pixel nero). Si ripete il procedimento fino a trovare la fine della sequenza, rappresentata dalla coordinata del punto di partenza della sequenza, la quale, a questo punto, descrive completamente il blob.
 
