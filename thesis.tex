@@ -779,9 +779,40 @@ La sottrazione del background \`e una tecnica molto utilizzata dell'image proces
 
 L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
 
-Questo algoritmo \`e anche noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm. Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
+\subsection{Principio di funzionamento}
 
-Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazione dell'algoritmo di background subtraction, si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.75\textwidth]{SchemaBackSub.png}
+  \caption{Sottrazione del background.}
+  \label{fig:SchemaBackSub}
+\end{figure}
+
+Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione del background \`e l'estrazione delle regioni in movimento (o Foreground, primo piano) comparando il frame corrente con un modello dello sfondo (Background). Il prodotto di questa computazione \`e la Foreground Mask, una immagine binaria contenente i pixel che appartengono agli oggetti in movimento nella scena.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.65\textwidth]{Background_Subtraction_Tutorial_Scheme.png}
+  \caption{Estrazione della Foreground Mask.}
+  \label{fig:EstrazioneFGMask}
+\end{figure}
+
+\noindent L'algoritmo si compone di due fasi:
+
+\begin{enumerate}
+\item L'inizializzazione del background: dove viene creato il primo modello del background (BG Model).
+\item L'aggiornamento del modello: dove le informazioni sul modello del background vengono aggiornate per tenere conto degli eventuali cambiamenti nella scena osservata.
+\end{enumerate}
+
+\subsection{Algoritmo OpenCV: MOG2}
+La funzione utilizzata nello sviluppo di questa versione del Passenger Counter, resa disponibile da OpenCV, implementa l'algoritmo noto come Gaussian Mixture-based Background/Foreground Segmentation Algorithm nella sua versione migliorata MOG2.
+
+Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
+
+Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazione dell'algoritmo di background subtraction, si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio. 
+
+Questo algoritmo \`e reso disponibile per mezzo della struttura \verb|BackgroundSubtractorMOG2| dalla libreria OpenCV. Nei prossimi paragrafi vedremo come \`e stato utilizzato all'interno del codice del Passenger Counter.
+
 Qui di seguito \`e riportato un esempio di funzionamento.
 
 \begin{figure}[h!]
@@ -792,25 +823,56 @@ Qui di seguito \`e riportato un esempio di funzionamento.
   \label{fig:EsempioBackSub}
 \end{figure}
 
-Questo algoritmo \`e reso disponibile dalla libreria OpenCV per mezzo della funzione BackgroundSubtractorMOG2. Nel seguito vedremo come \`e stato utilizzato all'interno del codice del Passenger Counter.
+In figura \ref{fig:EsempioBackSub} si pu\`u notare come le persone vengano correttamente associate alla Foreground Mask poich\`e evidenziate dal colore bianco e come le ombre associate agli oggetti in movimento siano evidenziate dal colore grigio.
 
 %% Interruzione di pagina
 \newpage
 
 % TODO: Chiedere al prof quanto approfondire che qua \`e un casino leggersi il paper
 \section{Algoritmo per il rilevamento dei contorni}
-L'algoritmo \`e descritto in Suzuki, S. and Abe, K., Topological Structural Analysis of Digitized Binary Images by Border Following. CVGIP 30 1, pp 32-46 (1985).
 
-Questo algoritmo per la rilevazione dei contorni \`e utilizzato anche nella seconda versione del Passenger Counter.
+L'algoritmo \`e descritto in Suzuki, S. and Abe, K., \textit{Topological Structural Analysis of Digitized Binary Images by Border Following}, CVGIP 30 1, pp 32-46 del 1985.
+
+\subsection{Principio di funzionamento}
+Alla base dell'algoritmo implementato c'\`e l'algoritmo noto come \textit{Freeman Chain Code of Eight Directions} (FCCE). L'algoritmo consiste nel codificare i poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o "blob" sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{freeman.png}
+  \caption{Funzionalmento Freeman Chain Code.}
+  \label{fig:Freeman}
+\end{figure}
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{center}
+  \includegraphics[width=0.38\textwidth]{boundary.png}
+\end{center}
+\caption{Analisi pixel appartenenti al bordo del poligono.}
+\end{wrapfigure}
+
+Si consideri in ingresso una immagine monocroma, la quale, ad esempio, rappresenta una scena a cui \`e stato sottratto lo sfondo. Il foreground sar\`a rappresentato per mezzo di pixel bianchi mentre lo sfondo con pixel neri.
+
+Si scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine. 
+
+Quindi si passa ad analizzare gli 8 pixel adiacenti al punto di partenza, la direzione del primo pixel appartenente al bordo del poligono \`e salvata nella sequenza. Si considera un pixel appartenente al bordo dell'immagine se condivide almeno un lato o un vertice con almeno un pixel appartenente allo sfondo (cio\`e un pixel nero). Si ripete il procedimento fino a trovare la fine della sequenza, rappresentata dalla coordinata del punto di partenza della sequenza, la quale, a questo punto, descrive completamente il blob.
+
+A questo punto si ricomincia la scansione dell'immagine per individuare altri poligoni fino a che anche l'ultimo pixel dell'immagine \`e stato analizzato.
+
+Alla fine di questa operazione otterremo tante sequenze di interi, le quali rappresentano i blob, quanti sono i poligoni presenti nel foreground.
+
+\subsection{Funzione OpenCV: findContours}
+Questo algoritmo per la rilevazione dei contorni \`e reso disponibile dalla funzione \verb|findContours()| di OpenCV ed \`e stato utilizzato anche nella seconda versione del Passenger Counter.
 
 Qui di seguito \`e riportato un esempio di funzionamento.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{findContours.png}
-  \caption{Esempio funzionamento findContours: l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni ricavati per mezzo dell'algoritmo sull'immagine a colori.}
+  \caption{Esempio funzionamento findContours}
   \label{fig:EsempioFindContours}
 \end{figure}
+
+In figura \ref{fig:EsempioFindContours} l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni in giallo, ricavati per mezzo della funzione \verb|findContours()| sull'immagine a colori.
 
 %% Interruzione di pagina
 \newpage
