@@ -139,30 +139,31 @@ Contemporaneamente allo sviluppo dell'applicazione si \`e realizzata la piattafo
 
 %% Capitolo 1: Introduzione
 \chapter{Introduzione}
-Nel seguito tratteremo il contesto all'interno del quale si configura l'applicazione sviluppata nel corso della tesi. Quindi verr\`a descritta la finalit\`a dell'applicazione Passenger Counter e gli obiettivi di questa tesi.
+In questo capitolo tratteremo il contesto all'interno del quale si configura l'applicazione sviluppata nel corso della tesi. Quindi verr\`a descritta la finalit\`a dell'applicazione Passenger Counter e gli obiettivi di questa tesi.
 
 %% Sezione Contesto IoT
 %% NOTA: L'intera sezione che segue \`e stata presa dalla Wikipedia inglese alla voce: Internet of Things.
 %% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
 \section{Il contesto IoT}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{IoTInfrastructure.png}
+  \caption{Infrastruttura dell'internet of things}
+  \label{fig:IoTInfrastructure}
+\end{figure}
+
 L'Internet of Things (IoT) \`e l'interconnesione di device, veicoli, edifici e oggetti dotati di elettronica, software, sensori, attuatori e connettivit\`a che permettono a questi oggetti di raccogliere e scambiare dati. L'IoT permette agli oggetti di essere rilevati e controllati in remoto attraverso l'infrastruttura di rete esistente, creando opportunit\`a per una integrazione pi\`u diretta del mondo fisico all'interno di sistemi informatizzati, con l'obbiettivo di aumentare l'efficienza, la precisione e il beneficio economico riducendo al contempo la necessit\`a dell'intervento umano. Tipicamente ci si aspetta che l'IoT offra connettivit\`a avanzata tra device, sistemi e servizi che vadano oltre la comunicazione Machine-to-machine (M2M) e coprano una variet\`a di protocolli, domini ed applicazioni. L'obiettivo \`e quello di introdurre processi di automazione in tutti i settori.
 
 %% Storia dell'IoT
 \subsection{Storia dell'Internet of Things}
-Il neologismo inglese Internet of Things \`e stato introdotto per la prima volta da Kevin Ashton, cofondatore e direttore esecutivo di Auto-ID Center (consorzio di ricerca con sede al MIT), durante una presentazione nel 1999, ma il concetto di una rete di device "intelligenti" fu discusso per la prima volta nel 1982, con un distributore di bibite opportunamente modificato per interfacciarsi ad internet dalla Carniegie Mellon University. Esso era capace di riportare il suo inventario e qualora le bibite di cui era appena stato rifornito fossero ancora calde. Tra il 1993 e il 1996 molte aziende cominciarono a proporre soluzioni per l'Internet delle Cose ma \`e solamente dopo il 1999 che il settore cominci\`o ad assumere rilevanza. Le prime applicazioni per questo tipo di concetti erano finalizzate all'inventariamento degli oggetti all'interno di fabbriche. Ci\`o poteva essere realizzato utilizzando tag RFID (Radio-frequency Identification) che permettessero ai sistemi informatici di identificare e tracciare gli oggetti presenti all'interno di ambienti vasti. Questo tipo di applicazione dell'IoT \`e ormai pratica standard nota come RFID Asset Tracking.
+Il neologismo inglese Internet of Things \`e stato introdotto per la prima volta da Kevin Ashton, cofondatore e direttore esecutivo di Auto-ID Center (consorzio di ricerca con sede al MIT), durante una presentazione nel 1999, ma il concetto di una rete di device ``intelligenti'' fu discusso per la prima volta nel 1982, con un distributore di bibite opportunamente modificato per interfacciarsi ad internet dalla Carniegie Mellon University. Esso era capace di riportare il suo inventario e qualora le bibite di cui era appena stato rifornito fossero ancora calde. Tra il 1993 e il 1996 molte aziende cominciarono a proporre soluzioni per l'Internet delle Cose ma \`e solamente dopo il 1999 che il settore cominci\`o ad assumere rilevanza. Le prime applicazioni per questo tipo di concetti erano finalizzate all'inventariamento degli oggetti all'interno di fabbriche. Ci\`o veniva realizzato utilizzando tag RFID (Radio-frequency Identification) che permettessero ai sistemi informatici di identificare e tracciare gli oggetti presenti all'interno di ambienti vasti. Questo tipo di applicazione dell'IoT \`e ormai pratica standard nota come RFID Asset Tracking.
 Ad oggi il concetto di IoT si \`e molto evoluto grazie al progresso tecnologico. La capacit\`a di integrare negli oggetti elettronica, sensori e connettivit\`a wireless ne ha ampliato le capacit\`a e le possibili applicazioni. Nel settore IoT ora convergono molteplici tecnologie quali real-time analytics, machine learning, commodity sensors e sistemi embedded.
 
 \subsection{Sviluppi futuri}
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\linewidth]{IoTTrend.png}
-  \caption{Trend dell'internet of things}
-  \label{fig:trendIoT}
-\end{figure}
-
 %% Parte di questa sezione l'ho rubacchiata da wikipedia cercando: Industria 4.0
 %% TODO: Cambiare un po' le parole in modo che non si capisca che ho copiato =D
-Secondo le proiezioni di Gartner Inc., una corporation per la ricerca e advisory tecnologica, entro il 2020 ci saranno oltre 50 miliardi di device connesse all'Internet of Things. Si sta parlando di una Industria 4.0 dove l'automazione industriale integra l'IoT per migliorare le condizioni di lavoro e la produttivit\`a. La chiave di volta dell'Industria 4.0 sono i sistemi ciberfisici (CPS), ovvero sistemi fisici che sono strettamente connessi con i sistemi informatici e possono interagire e collaborare con altri sistemi CPS i quali costituiscono lo step evolutivo successivo delle device IoT. 
+Secondo le proiezioni di Gartner Inc., una corporation per la ricerca e advisory tecnologica, entro il 2020 ci saranno oltre 20 miliardi di device connesse all'Internet of Things. Si sta parlando di una Industria 4.0 dove l'automazione industriale integra l'IoT per migliorare le condizioni di lavoro e la produttivit\`a. La chiave di volta dell'Industria 4.0 sono i sistemi ciberfisici (CPS), ovvero sistemi fisici che sono strettamente connessi con i sistemi informatici e possono interagire e collaborare con altri sistemi CPS i quali costituiscono lo step evolutivo successivo delle device IoT. 
 Un altro settore nel quale si proiettano ulteriori sviluppi \`e la Big Data Analysis. L'ubiquit\`a dei dispositivi intelligenti connessi all'Internet delle Cose permette analisi di dati vastissimi ai quali precedentemente era impensabile avere accesso. Le informazioni che si possono ricavare da questi dati sono molteplici e di sicuro interesse per molti ambiti di applicazione.
 
 %% Interruzione di pagina
@@ -178,10 +179,10 @@ Passiamo ora ad analizzare i campi di applicazione pi\`u diffusi per l'Internet 
 Le applicazioni di monitoraggio ambientale tipicamente utilizzano sensori collegati all'Internet delle Cose per fornire assistenza nella protezione dell'ambiente. Il monitoraggio pu\`o interessare la qualit\`a dell'aria o dell'acqua, condizioni atmosferiche o del suolo, e pu\`o includere aree come il monitoraggio degli spostamenti della fauna selvatica e del suo habitat. Ci\`o pu\`o avere applicazioni anche nell'ambito della rilevazione di disastri naturali: sistemi di allerta per terremoti e tsunami possono essere implementati nell'ambito IoT. Device IoT in questo campo di applicazione sono tipicamente dislocate su un'ampia area geografica e possono anche essere mobili.
 
 \subsection{Gestione delle infrastrutture}
-Il monitoraggio e il controllo di infrastrutture urbane come ponti, rotaie, wind-farms \`e un campo di applicazione chiave dell'IoT. L'infrastruttura IoT pu\`o essere usata per monitorare eventi o cambiamenti nelle condizioni strutturali che possono compromettere la sicurezza o aumentare i rischi. Pu\`o altres\`\i\ essere usato per la programmazione di interventi di manutenzione in maniera pi\`u efficiente coordinando le operazioni tra diversi fornitori di servizi. Si pensa che l'utilizzo di device IoT possa migliorare la gestione degli incidenti e la coordinazione in caso emergenze, la qualit\`a del servizio e ridurre i costi in tutte le aree legate alla gestione delle infrastrutture.
+Il monitoraggio e il controllo di infrastrutture urbane come ponti, rotaie, wind-farms \`e un campo di applicazione chiave dell'IoT. L'infrastruttura IoT pu\`o essere usata per monitorare eventi o cambiamenti nelle condizioni strutturali che possono compromettere la sicurezza o aumentare i rischi di incidenti. Pu\`o altres\`\i\ essere usato per la programmazione di interventi di manutenzione in maniera pi\`u efficiente coordinando le operazioni tra diversi fornitori di servizi. Si pensa che l'utilizzo di device IoT possa migliorare la gestione degli incidenti e la coordinazione in caso emergenze, la qualit\`a del servizio e ridurre i costi in tutte le aree legate alla gestione delle infrastrutture.
 
 \subsection{Settore manifatturiero}
-L'ambiente manifatturiero \`e sicuramente una delle applicazioni di punta dell'IoT fin dalla sua nascita. Le applicazioni dell'IoT spaziano dalla gestione degli equipaggiamenti al tracking degli asset nell'ambiente produttivo. Questa sinergia permette alle aziende di avere una maggior flessibilit\`a e di ottimizzare in tempo reale i sistemi di produzione nonch\`e la rete di approvvigionamento grazie all'interconnessione tra macchinari, sensori e sistemi.
+L'ambiente manifatturiero \`e sicuramente una delle applicazioni di punta dell'IoT fin dalla sua nascita. Le applicazioni dell'IoT spaziano dalla gestione degli equipaggiamenti al tracking degli asset nell'ambiente produttivo. Questa sinergia permette alle aziende di avere una maggior flessibilit\`a e di ottimizzare in tempo reale i sistemi di produzione nonch\'e la rete di approvvigionamento grazie all'interconnessione tra macchinari, sensori e sistemi.
 L'integrazione di sistemi IoT all'interno di catene di produzione permette la predictive maintenance (tecniche decicate al rilevamento dello stato di salute di macchinari ed equipaggiamenti in modo tale da poter prevedere quando effettuare la manutenzione), valutazione statistica della degradazione dello stato dei macchinari, e prevenzione di guasti.
 Come visto in precedenza l'evoluzione dell'Industria 4.0 \`e interamente basata sull'integrazione tra sistemi di produzione e l'Internet of Things.
 
@@ -189,7 +190,7 @@ Come visto in precedenza l'evoluzione dell'Industria 4.0 \`e interamente basata 
 L'integrazione di reti di sensori e attuatori, connessi ad internet, si pensa possa ottimizzare il consumo energetico in ambito industriale e casalingo. L'integrazione di device IoT all'interno di contatori per l'energia, cos\`\i\ come dispositivi domestici e industriali, capaci di comunicare con le compagnie per la rete elettrica possono permettere una gestione migliore della generazione ed utilizzo dell'energia. Questo tipo di device inoltre permetterebbe agli utenti di controllare in remoto i loro dispositivi, o controllarli centralmente grazie a interfacce cloud, in modo tale da implementare funzioni avanzate come la programmazione delle accensioni/spegnimenti o dell'utilizzo dei dispositivi. Questo tipo di applicazioni \`e molto diffuso nel campo della domotica, i termostati IoT sono un ottimo esempio di questa applicazione.
 
 \subsection{Settore medicale ed assistenza sanitaria}
-Device connesse all'Internet delle Cose possono abilitare il monitoraggio remoto dello stato di salute e sistemi di notifica delle emergenze. Queste device per il rilevamento dello stato di salute possono variare dal rilevamento della pressione arteriosa fino al conteggio dei battiti del cuore. Alcuni ospedali hanno cominciato ad utilizzare "letti smart" in grado di rilevare quanto il letto \`e occupato e quando il paziente sta cercando di alzarsi. Ormai sono molto diffusi dispositivi per il tracciamento delle attivit\`a dell'utente che incoraggiano uno stile di vita salutare, in questo ambito rientrano le wearable device come i fitness trackers.
+Device connesse all'Internet delle Cose possono abilitare il monitoraggio remoto dello stato di salute e sistemi di notifica delle emergenze. Queste device per il rilevamento dello stato di salute possono variare dal rilevamento della pressione arteriosa fino al conteggio dei battiti del cuore. Alcuni ospedali hanno cominciato ad utilizzare ``letti smart'' in grado di rilevare quanto il letto \`e occupato e quando il paziente sta cercando di alzarsi. Ormai sono molto diffusi dispositivi per il tracciamento delle attivit\`a dell'utente che incoraggiano uno stile di vita salutare, in questo ambito rientrano le wearable device come i fitness trackers.
 
 \subsection{Settore dei trasporti}
 L'IoT pu\`o dare assistenza nella integrazione delle comunicazioni, controlli e elaborazione delle informazioni attraverso vari sistemi di trasporto. Le applicazioni dell'IoT si estendono a tutti gli aspetti dei sistemi di trasporto: i veicoli, l'infrastruttura, il pilota e i passeggeri. L'interazione dinamica tra questi componenti permette una comunicazione inter e intra veicolare, controllo del traffico intelligente, smart parking, gestione della logistica e delle flotte, controllo dei veicoli e sicurezza stradale.
@@ -200,7 +201,7 @@ L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambit
 
 %% Sezione PCN
 \section{Passenger Counter}
-Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e conteggiare i passeggeri presenti all'interno di un sistema di trasporto o ambiente pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al gestore del servizio, sfruttando la connessione all'Internet delle Cose, in modo tale che sia possibile:
+Il Passenger Counter, o contatore di passeggeri, \`e un dispositivo IoT la cui funzione \`e quella di rilevare e contare i passeggeri presenti all'interno di un sistema di trasporto o ambiente pubblico. Esso deve altres\`\i\ fornire i dati in tempo reale al gestore del servizio, sfruttando la connessione all'Internet delle Cose, in modo tale che sia possibile:
 \begin{itemize}
 \item Rilevare frodi.
 \item Aumentare l'efficienza della flotta di mezzi migliorando la gestione e la programmazione dei percorsi.
@@ -216,7 +217,7 @@ Il dispositivo deve essere in grado di effettuare il conteggio in modo non invas
   \label{fig:SchemPCN}
 \end{figure}
 
-Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo, di comunicare tra loro trasferendo le informazioni rilevanti alle business application ed alle infrastrutture IT. Il PCN o Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
+Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo, di comunicare tra loro trasferendo le informazioni rilevanti alle business application ed alle infrastrutture IT. Il Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
 
 %% Interruzione di pagina
 \newpage
@@ -230,9 +231,9 @@ Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda
 
 Il sistema di conteggio di passeggeri consta di tre parti fondamentali come schematizzato in figura \ref{fig:SchemPCNEurotech}:
 \begin{enumerate}
-\item Dispositivo di acquisizione video.
-\item Dispositivo di elaborazione e trasmissione dei dati in real-time.
-\item Infrastruttura di rete cloud per il raccoglimento dei dati.
+\item Dispositivo di acquisizione video ed elaborazione principale.
+\item Dispositivo per la trasmissione dei dati in real-time.
+\item Infrastruttura di rete cloud IoT per il raccoglimento dei dati.
 \end{enumerate}
 \`E quindi possibile accedere ai dati raccolti da pi\`u dispositivi per mezzo della piattaforma M2M proprietaria di Eurotech.
 
@@ -244,7 +245,7 @@ L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Pas
 \begin{enumerate}
 \item Identificare gli ambienti di sviluppo pi\`u idonei alla realizzazione del progetto.
 \item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione ed abbattere i costi, adattandolo alle tecnologie usate dall'azienda per i suoi prodotti. 
-\item Realizzare una infrastruttura software che fornisse tutti gli strumenti e le librerie necessarie all'implementazione del Passenger Counter realizzato e che potesse essere installato sulla piattaforma hardware fornita da Eurotech.
+\item Realizzare una infrastruttura software che fornisse tutti gli strumenti e le librerie software necessarie all'implementazione del Passenger Counter realizzato e che potesse essere installata sulla piattaforma hardware fornita da Eurotech.
 \end{enumerate}
 
 % TODO: Attenzione! Aggiornare questa sezione ad ogni cambiamento della struttura del testo. (Se ce ne sono).
