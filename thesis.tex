@@ -2655,8 +2655,8 @@ Nel corso della tesi sono state implementate diverse versioni del contatore, in 
 
 Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 \begin{itemize}
-\item BPC: Passenger Counter a sottrazione del background.
-\item RPC: Passenger Counter con telecamere RealSense.
+\item PCN: Passenger Counter a sottrazione del background.
+\item RSPCN: Passenger Counter con telecamere RealSense.
 \end{itemize}
 
 \section{Prestazioni}
@@ -2665,7 +2665,7 @@ Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passeng
 \subsection{Costo computazionale}
 L'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
 
-In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e hanno la stessa risoluzione e lo stesso framerate.
+In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e posseggono la stessa risoluzione e lo stesso framerate.
 
 %% Interruzione di pagina
 \newpage
@@ -2694,11 +2694,11 @@ In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRS
     \addplot 
         coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
                         (0.178409,Tracking oggetti)};
-    \legend{RPC, BPC}
+    \legend{RSPCN, PCN}
     \end{axis}
     \end{tikzpicture}
     }
-    \caption{Grafico tempi di esecuzione RPC e BPC}
+    \caption{Grafico tempi di esecuzione RSPCN e PCN}
     \label{fig:GraficoTempiPCNRSPCN}
 \end{figure}
 
@@ -2706,12 +2706,12 @@ In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRS
 
 \subsubsection{Setup esperimento}
 
-Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata la seguente configurazione:
+Per confrontare i due sistemi di Passenger Counter si \`e utilizzata la seguente configurazione:
 
 \begin{itemize}
-\item Telecamera: Intel RealSense SR300, nel caso del BPC \`e stata usata come semplice telecamera a colori. Usare la stessa telecamera per entrambe le versioni ha permesso un confronto pi\`u alla pari.
-\item Setup: la telecamera \`e stata montata sullo stipite di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
-\item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti di dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
+\item Telecamera: Intel RealSense SR300. Nel caso del PCN \`e stata usata come semplice telecamera a colori, ci\`o \`e reso possibile dal fatto che, se non viene utilizzata la libreria librealsense, per OpenCV la telecamera SR300 \`e una webcam qualsiasi. Usare la stessa telecamera per entrambe le versioni ha permesso un confronto pi\`u alla pari.
+\item Ambiente: la telecamera \`e stata montata sullo stipite di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
+\item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti i dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
 \end{itemize}
 
 \subsubsection{Risultati attraversamenti singolo passeggero}
@@ -2724,13 +2724,13 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
     \multicolumn{2}{| c |}{Risultati con sottrazione background} \\
     \hline
     \hline
-    Passaggi registrati IN & 15 \\ \hline
+    Passaggi registrati IN & 22 \\ \hline
     Passaggi effettivi IN & 15 \\ \hline
-    Passaggi registrati OUT & 15 \\ \hline
+    Passaggi registrati OUT & 19 \\ \hline
     Passaggi effettivi OUT & 15 \\ \hline
-    \bf Errore & \bf 0\% \\ \hline
+    \bf Errore & \bf 36\% \\ \hline
     \end{tabular}
-\caption{Risultati tracciamento BPC}
+\caption{Risultati tracciamento PCN}
 }
 \hfill
 \parbox{.45\linewidth}{
@@ -2740,13 +2740,13 @@ Per confrontare al meglio i due sistemi di Passenger Counter si \`e utilizzata l
     \multicolumn{2}{| c |}{Risultati con telecamere RealSense} \\
     \hline
     \hline
-    Passaggi registrati IN & 22 \\ \hline
+    Passaggi registrati IN & 15 \\ \hline
     Passaggi effettivi IN & 15 \\ \hline
-    Passaggi registrati OUT & 19 \\ \hline
+    Passaggi registrati OUT & 15 \\ \hline
     Passaggi effettivi OUT & 15 \\ \hline
-    \bf Errore & \bf 36\% \\ \hline
+    \bf Errore & \bf 0\% \\ \hline
     \end{tabular}
-\caption{Risultati tracciamento RPC}
+\caption{Risultati tracciamento RSPCN}
 }
 \end{table}
 
@@ -2758,38 +2758,40 @@ Le prestazioni del Passenger Counter a sottrazione del background sono di gran l
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=8cm]{TrackBPC.png}
-  \caption{Dettaglio tracking BPC}
-  \label{fig:trackBPC}
+  \includegraphics[width=8cm]{TrackPCN.png}
+  \caption{Dettaglio tracking PCN}
+  \label{fig:trackPCN}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
-  \includegraphics[width=8cm]{TrackRPC.png}
-  \caption{Dettaglio tracking RPC}
-  \label{fig:trackRPC}
+  \includegraphics[width=8cm]{TrackRSPCN.png}
+  \caption{Dettaglio tracking RSPCN}
+  \label{fig:trackRSPCN}
 \end{minipage}
 \end{figure}
 
-Il fatto che nel RPC venga tracciata solo la testa dei passeggeri permette un tracking molto pi\`u preciso. Infatti nel caso del BPC la forma del soggetto tracciato varia continuamente e, poich\`e il tracciamento \`e riferito al centro dell'area, ci\`o comporta un sacco di errori. In figura \ref{fig:trackBPC} possiamo notare come la traccia lasciata dal passeggero sia piena di discontinuit\`a e linee spezzate, d'altra parte in figura \ref{fig:trackRPC} la linea di tracciamento risulta molto pi\`u continua.
+Il fatto che nel RSPCN venga tracciata solo la testa dei passeggeri permette un tracking molto pi\`u preciso. Infatti nel caso del PCN la forma del soggetto tracciato varia continuamente e, poich\`e il tracciamento \`e riferito al centro dell'area, ci\`o comporta spostamenti repentini. In figura \ref{fig:trackPCN} possiamo notare come la traccia lasciata dal passeggero sia ricca di discontinuit\`a e linee spezzate, d'altra parte in figura \ref{fig:trackRSPCN} la linea di tracciamento risulta molto pi\`u continua.
 
 Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso della sottrazione del background questo \`e un problema molto grave. Qui di seguito \`e riportato un confronto tra le due versioni.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
-  \includegraphics[width=8cm]{OmbraBPC.png}
-  \caption{Dettaglio tracking ombra BPC}
-  \label{fig:ombraBPC}
+  \includegraphics[width=8cm]{OmbraPCN.png}
+  \caption{Dettaglio tracking ombra PCN}
+  \label{fig:ombraPCN}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
-  \includegraphics[width=8cm]{OmbraRPC.png}
-  \caption{Dettaglio tracking ombra RPC}
-  \label{fig:ombraRPC}
+  \includegraphics[width=8cm]{OmbraRSPCN.png}
+  \caption{Dettaglio tracking ombra RSPCN}
+  \label{fig:ombraRSPCN}
 \end{minipage}
 \end{figure}
+
+Appare evidente che l'RSPCN \`e completamente esente da falsi positivi nel tracciamento dovuti alle ombre, mentre nel caso del PCN sono presenti ben due falsi positivi dovuti ad esse. Questo accade nonostante l'algoritmo per la sottrazione del background sia stato pensato per rilevarle ed eliminarle.
 
 %% Interruzione di pagina
 \newpage
@@ -2813,6 +2815,8 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 
 Anche in questa situazione la versione basata su sottrazione del background non \`e precisa. Fare affidamento sull'area per rilevare il passaggio di pi\`u persone contemporaneamente \`e alla base del problema e comporta un'altissima imprecisione in quanto, soprattutto nel caso di pi\`u passeggeri, la forma dei blob varia molto nel tempo e quindi anche l'area ne \`e influenzata.
 
+Come visibile in figura \ref{fig:AttrPCN3}, il contatore rileva due attraversamenti di due passeggeri invece che uno solo. Questo \`e dovuto al fatto che, essendo la forma del blob cambiata proprio durante l'attraversamento, il centro del blob \`e transitato due volte sulla soglia.
+
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth]{PassaggioRSPCN1.png}
@@ -2828,7 +2832,7 @@ Anche in questa situazione la versione basata su sottrazione del background non 
 \endminipage
 \end{figure}
 
-Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamente \`e altamente affidabile.
+Per quanto riguarda la versione con telecamere RealSense non ci sono invece problemi di precisione da rilevare. Il comportamento \`e altamente affidabile poich\'e basato sul rilevamento delle teste dei passeggeri le quali non cambiano forma in modo cos\`\i\ drammatico.
 
 %% Interruzione di pagina
 \newpage
@@ -2850,7 +2854,7 @@ Per quanto riguarda la versione con telecamere RealSense non ci sono invece prob
 \endminipage
 \end{figure}
 
-In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioPCN1}, \ref{fig:IncrocioPCN2} e \ref{fig:IncrocioPCN3} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| cerca di associare allo stesso blob l'oggetto pi\`u grande che rileva. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Il risultato \`e un comportamento impredicibile del programma.
+In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioPCN1}, \ref{fig:IncrocioPCN2} e \ref{fig:IncrocioPCN3} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| ingloba nello stesso blob due passeggeri che transitano sotto la telecamera se troppo vicini tra loro. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Ci\`o implica che verr\`a tracciata una nuova entit\`a composta dai due passeggeri che resta ferma al centro del frame finch\`e le due persone non sono sufficientemente lontane da tornare ad essere rilevate come due blob separati. Il risultato \`e un comportamento impredicibile del programma.
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -2867,12 +2871,12 @@ In questo caso il comportamento del Passenger Counter a sottrazione del backgrou
 \endminipage
 \end{figure}
 
-\noindent La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa.
+\noindent La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa e rileva correttamente gli attraversamenti anche in questa situazione.
 
 \subsection{Dipendenza dall'ambiente}
-La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Analogamente necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto ci\`o non \`e possibile mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
+La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Per lo stesso motivo necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto entrambe queste situazioni si verificano spesso e ci\`o degraderebbe le prestazioni del PCN, mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
-Infine, in condizioni di bassa illuminazione, il BPC si trova ad avere a che fare con un rumore molto elevato e quindi un degrado delle prestazioni. D'altro canto, essendo le telecamere RealSense dotate di proiettori di luce infrarossa, il RPC non risente di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il suo funzionamento.
+Infine, in condizioni di bassa illuminazione, il PCN si trova ad avere a che fare con un rumore molto elevato e quindi un degrado delle prestazioni. D'altro canto, essendo le telecamere RealSense dotate di proiettori di luce infrarossa, il RSPCN non risente di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il suo funzionamento.
 
 \subsection{Raggio di azione}
 L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, ci\`o pu\`o compromettere il corretto funzionamento del programma.
@@ -2880,9 +2884,9 @@ L'implementazione con sottrazione del background non ha problemi legati al range
 Abbiamo visto infatti in figura \ref{fig:R2002} a pagina \pageref{fig:R2002} come l'eccessiva vicinanza dell'oggetto da tracciare non permetta alla telecamera di rilevare correttamente i dati di profondit\`a. Questo comporta un'area priva di dati al centro dell'oggetto da tracciare e, nel caso quest'area diventi troppo grande, un fallimento nel rilevamento dell'oggetto nell'immagine e/o un oggetto tracciato in modo non corretto.
 
 \subsection{Costi}
-Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. L'RPC invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
+Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. L'RSPCN invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
 
-Bisogna altres\`\i\ considerare il fatto che il BPC necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
+Bisogna altres\`\i\ considerare il fatto che il PCN necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
 \subsection{Conclusioni}
 Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere ad infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense.
@@ -2911,16 +2915,18 @@ L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da
 
 SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo, questo deve essere fatto dal programmatore manualmente.
 
-Questa versione conservava le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
+La versione realizzata con questo tool conserva le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsection{Versione Java}
-Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\`e, bench\`e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp}.
+Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\'e, bench\'e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp}.
 
 JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Sfrutta la Java Nativi Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
 
 Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets}.
 
-JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le interfacce verso le librerie C++ pi\`u usate realizzato sfruttando JavaCPP. Esso rende quindi disponibili i file \verb|.jar| per l'interfacciamento alle librerie librealsense. 
+JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le configurazioni e le classi di interfacciamento verso le librerie C++ pi\`u usate realizzate sfruttando JavaCPP. I file di configurazione nel pacchetto org.bytedeco.javacpp sono usati dal Parser per creare dai file header C/C++ le interfacce Java che puntano al pacchetto di JavaCPP, il quale a sua volta \`e usato dal Generator e il compilatore nativo C++ per produrre le librerie JNI richieste.
+
+Nella repository del progetto sono inoltre disponibili i file \verb|.jar| precompilati per l'interfacciamento alle librerie librealsense, i quali sono stati usati per facilitare il porting dell'applicazione in Java.
 
 Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
@@ -2983,8 +2989,10 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     \caption{Confronto performance versioni Passenger Counter con telecamera R200.}
 \end{table}
 
-\subsection{Versione OSGi}
-\textbf{In pausa finch\`e non siamo sicuri di implementarla.}
+Per ricavare questi dati si \`e fatto uso del metodo \verb|currentTimeMillis()| reso disponibile dalla classe \verb|System| di Java. Questo metodo ritorna il tempo corrente in millisecondi e permette una granularit\`a sufficiente a fare una stima dei tempi di esecuzione delle funzioni implementate in Java. Similmente al caso C++ si \`e mediato i tempi di esecuzione sul numero di cicli del loop principale.
+
+% \subsection{Versione OSGi}
+% \textbf{In pausa finch\`e non siamo sicuri di implementarla.}
 
 \chapter{Piattaforma Yocto: realizzazione e features}\label{CapitoloYocto}
 In questo capitolo tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
