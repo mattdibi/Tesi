@@ -265,7 +265,7 @@ Qui di seguito \`e riportata l'organizzazione del testo:
 
 %% Capitolo 2: Contesto tecnologico di dettaglio
 \chapter{Contesto tecnologico di dettaglio}\label{CapitoloContestoTecnologico}
-Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utilizzare nello svolgimento della tesi.
+Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utilizzate nello svolgimento della tesi.
 
 \section{Tecnologie PCN Eurotech}
 
@@ -286,7 +286,7 @@ Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utili
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{DispositivoAcquisizioneImmagini.png}
+  \includegraphics[width=0.8\textwidth]{DispositivoAcquisizioneImmagini.png}
   \caption{Sistema di conteggio dei passeggeri Eurotech, DynaPCN 10-20}
   \label{fig:DynaPCN1020}
 \end{figure}
@@ -308,7 +308,7 @@ Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la 
 \end{figure}
 
 %% TODO: Chiedere al prof se il conteggio viene effettuato sul ReliaGate o sul DynaPCN
-L'unit\`a di elaborazione centrale riceve in ingresso una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
+L'unit\`a di elaborazione riceve in ingresso dalla FPGA una immagine in scala di grigi in cui \`e codificata l'informazione di profondit\`a tramite il colore dei pixel. I punti pi\`u vicini al rilevatore tendono al bianco, i punti pi\`u lontani tendono al nero.
 Il cuore dell'algoritmo opera come segue:
 \begin{enumerate}
 \item Vengono rilevati i massimi locali all'interno dell'immagine in scala di grigi, i quali rappresentano le teste delle persone.
@@ -331,7 +331,7 @@ I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al g
   \label{fig:StackSoftwarePCNEurotech}
 \end{figure}
 
-La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica da web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
 Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\'e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessarie alla nuova versione del Passenger Counter.
 
 %% Interruzione di pagina
@@ -343,7 +343,7 @@ Questo sistema di conteggio dei passeggeri non \`e esente da problematiche, le q
 \begin{enumerate}
 \item Le ottiche del dispositivo di acquisizione delle immagini sono costose e difficili da reperire.
 \item L'utilizzo di una FPGA per la ricostruzione delle informazioni di profondit\`a fa aumentare i costi di produzione.
-\item Per come \`e stata implementata la soluzione \`e necessario installare un gateway per ogni DynaPCN 10-20 presente nell'amibente. Anche questo contribuisce ad aumentare i costi di produzione di un sistema PCN e ne diminuisce l'appetibilit\`a sul mercato.
+\item Per come \`e stata implementata la soluzione \`e necessario installare un gateway per ogni DynaPCN 10-20 presente nell'ambiente. Anche questo contribuisce ad aumentare i costi di produzione del sistema e ne diminuisce l'appetibilit\`a sul mercato.
 \end{enumerate}
 
 Vedremo che nella versione del Passenger Counter realizzata nel corso di questa tesi sono stati risolti in buona parte tutte queste problematiche, con vari gradi di successo.
@@ -352,11 +352,11 @@ Vedremo che nella versione del Passenger Counter realizzata nel corso di questa 
 \newpage
 
 \section{Tecnologie utilizzate durante lo sviluppo della tesi}\label{TecnologieTesi}
-In questa sezione andremo ad esaminare le tecnologie che sono state utilizzate per realizzare la nuova versione del Passenger Counter.
+In questa sezione andremo ad esaminare le tecnologie che sono state utilizzate per realizzare la nuova versione del Passenger Counter. Si tenga presente che le telecamere RealSense sono state usate solamente nella seconda implementazione del Passenger Counter.
 
 %%TODO: Aggiungere nella bibliografia i riferimenti ai Datasheet delle telecamere
 \subsection{Telecamere Intel RealSense}
-Come dispositivi di acquisizione delle immagini sono state utilizzate le telecamere Intel RealSense. Esse sono telecamere ad infrarossi di nuova generazione che permettono la ricostruzione delle informazioni di profondit\`a della scena filmata sfruttando diverse tecniche di elaborazione delle immagini.
+Come dispositivi di acquisizione delle immagini sono state utilizzate le telecamere Intel RealSense. Esse sono telecamere ad infrarossi di nuova generazione che permettono la ricostruzione delle informazioni di profondit\`a della scena filmata sfruttando diverse tecniche di elaborazione delle immagini. Eurotech ha fornito due modelli di queste telecamere per lo sviluppo del progetto.
 
 \subsubsection{Intel RealSense R200}
 
@@ -376,11 +376,11 @@ Come dispositivi di acquisizione delle immagini sono state utilizzate le telecam
 \end{minipage}
 \end{figure}
 
-Il funzionamento di queste telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
+Il funzionamento di questo tipo di telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due illuminatori ad infrarossi che illuminano la scena. Due telecamere stereoscopiche acquisiscono due immagini leggermente diverse dovute al diverso posizionamento. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing ricostruiscono l'informazione di profondit\`a\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{DepthDataFlowR200.png}
+  \includegraphics[width=0.9\textwidth]{DepthDataFlowR200.png}
   \caption{Schema funzionamento Intel RealSense R200}
   \label{fig:SchemaFunzR200}
 \end{figure}
@@ -395,11 +395,11 @@ Specifiche tecniche:
 	\begin{tabular}{|c|c|c|}
 	\hline
 	& Depth Stream & Color Stream \\ \hline
-	Risoluzione massima & 640 x 480 & 1920 x 1080 \\ \hline
-    Frame rate massimo & 90fps & 60fps \\ \hline
-    FOV (WxH) & 56 x 43 & 70 x 43 \\ \hline
-    Indoor Range & 0.7 - 3.5m & - \\ \hline
-    OutdoorRange & 10m & - \\
+	Risoluzione massima & 640 x 480 pixel & 1920 x 1080 pixel\\ \hline
+    Frame rate massimo & 90 fps & 60 fps \\ \hline
+    FOV (WxH) & 56$^\circ$ x 43$^\circ$ & 70$^\circ$ x 43$^\circ$ \\ \hline
+    Indoor Range & 0.7 - 3.5 m & - \\ \hline
+    Outdoor Range & 10 m & - \\
     \hline
 	\end{tabular}
     \caption{Specifiche tecniche Intel RealSense R200}
@@ -444,11 +444,11 @@ Specifiche tecniche:
 	\begin{tabular}{|c|c|c|}
 	\hline
 	& Depth Stream & Color Stream \\ \hline
-	Risoluzione massima & 640 x 480 & 1920 x 1080 \\ \hline
-    Frame rate massimo & 60fps & 60fps \\ \hline
-    FOV (WxH) & 71 x 55  & 68 x 41 \\ \hline
-    Indoor Range & 0.2 - 1.5m & - \\ \hline
-    OutdoorRange & - & - \\
+	Risoluzione massima & 640 x 480 pixel & 1920 x 1080 pixel\\ \hline
+    Frame rate massimo & 60 fps & 60 fps \\ \hline
+    FOV (WxH) & 71$^\circ$ x 55$^\circ$  & 68$^\circ$ x 41$^\circ$ \\ \hline
+    Indoor Range & 0.2 - 1.5 m & - \\ \hline
+    Outdoor Range & - & - \\
     \hline
 	\end{tabular}
     \caption{Specifiche tecniche Intel RealSense SR300}
@@ -463,10 +463,10 @@ Vi \`e una eccezione a questa codifica in quanto, un valore nullo \`e attribuito
 
 Vi sono per\`o delle minime differenze tra le due telecamere per quanto riguarda la risoluzione della distanza calcolata:
 \begin{itemize}
-\item Per la Intel RealSense SR300: il formato dello stream di profondit\`a \`e di 16 bit privi di segno interpolati su un range di 8m nonostante il range della telecamere arrivi ad un massimo di 1,5m. Ci\`o implica che la risoluzione della profondit\`a sia 0,125mm. 
-\item Per la Intel RealSense R200: il formato \`e di 16 bit privi di segno interpolati su un range di circa 65m. Ci\`o implica una risoluzione di profondit\`a di 1mm.
+\item Per la Intel RealSense SR300: il formato dello stream di profondit\`a \`e di 16 bit privi di segno interpolati su un range di 8 metri nonostante il range della telecamere arrivi ad un massimo di 1,5 m. Ci\`o implica che la risoluzione della profondit\`a \`e 0,125 mm. 
+\item Per la Intel RealSense R200: il formato \`e di 16 bit privi di segno interpolati su un range di circa 65 m. Ci\`o implica una risoluzione di profondit\`a di 1 mm.
 \end{itemize}
-Questo fatto non ha per\`o comportato problemi dal punto di vista della funzionalit\`a dell'applicazione in quanto la risoluzione e precisione delle telecamere non \`e critica per il corretto funzionamento del contatore.
+Questo fatto non ha per\`o comportato problemi dal punto di vista della funzionalit\`a dell'applicazione in quanto la risoluzione e precisione delle telecamere non \`e critica per il corretto funzionamento del contatore ed il fattore di scala viene ricavato run-time.
 
 %% Interruzione di pagina
 \newpage
@@ -479,8 +479,8 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 
 \subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
-\item \textbf{Modulo core}: funzionalit\`a di base. Lo scopo del modulo \`e  definire interfacce e funzionalità che permettano di semplificare la manipolazione di immagini e flussi video. Il modulo contiene le funzionalità di  base delle libreria e ne definisce le strutture fondamentali nonch\'e gestisce la memoria. 
-\item \textbf{Modulo highui}: High-level GUI e Media I/O. l modulo HighGUI \`e stato progettato per fornire funzioni che permettano di provare le funzionalit\`a della libreria ed osservare i risultati velocemente. Fornisce semplici interfacce per creare e manipolare finestre che possano visualizzare immagini e aggiungere slider alle finestre, gestire semplici eventi come click del mouse e comandi da tastiera.
+\item \textbf{Modulo core}: funzionalit\`a di base. Lo scopo del modulo \`e  definire interfacce e funzionalit\`a che permettano di semplificare la manipolazione di immagini e flussi video. Il modulo contiene le funzioni alla base delle libreria e ne definisce le strutture fondamentali nonch\'e gestisce la memoria. 
+\item \textbf{Modulo highui}: High-level GUI e Media I/O. Il modulo HighGUI \`e stato progettato per fornire funzioni che permettano di provare le funzionalit\`a della libreria ed osservare i risultati velocemente. Fornisce semplici interfacce per creare e manipolare finestre che possano visualizzare immagini e aggiungere slider alle finestre, gestire semplici eventi come click del mouse e comandi da tastiera.
 \item \textbf{Modulo imgproc}: image processing. Il modulo di Image Processing contiene funzioni e classi per la manipolazione di immagini. Ci\`o comprende:
     \begin{itemize}
     \item Image Filtering: funzioni per la convoluzione di immagini con un kernel, dilatazione di immagini, filtro Sobel, GaussianBlur ecc...
@@ -488,7 +488,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
     \item Funzioni per il disegno: permettono di disegnare semplici forme sulle immagini che vengono manipolate.
     \item Funzioni per l'analisi delle immagini: istogrammi, analisi strutturale e descrittori di forme, motion analysis e tracking di oggetti.
     \end{itemize}
-\item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\'e analisi di video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
+\item \textbf{Modulo videoio}: lettura e scrittura di file, nonch\'e analisi di flussi video. Le funzioni principali implementate sono: analisi del movimento, sottrazione del background, rilevamento e tracciamento di oggetti.
 \item \textbf{Modulo objdetect}: rilevazione di oggetti. Implementa funzioni e classi per il rilevamento e tracciamento di oggetti all'interno di immagini e flussi video. OpenCV ottiene tutto ci\`o facendo leva sui Haar Feature-based Cascade Classifier e Histogram of Oriented Gradients object detector.
 \item \textbf{Modulo ml}: machine learning. La Machine Learning Library (MLL) \`e un insieme di classi e funzioni per la classificazione statistica, regressione e clustering dei dati. La maggior parte degli algoritmi di classificazione e regressione sono implementati come classi C++. Algoritmi implementati dal modulo:
     \begin{itemize}
@@ -504,41 +504,40 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
     \end{itemize}
 \end{itemize}
 
-La struttura fondamentale della libreria \`e l'oggetto Mat, il quale \`e usato come contenitore delle immagini. Esso \`e una classe C++ formata da due componenti principali
+\noindent La struttura fondamentale della libreria OpenCV \`e l'oggetto Mat, il quale \`e usato come contenitore delle immagini. Esso \`e una classe C++ formata da due componenti principali:
 \begin{itemize}
-\item L'header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
-\item La matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc...)
+\item Un header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
+\item Una matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc...).
 \end{itemize}
-Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile questa conversione \`e garantita dal modulo imgcodecs, la quale funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo Mat.
+Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile. Questa conversione \`e garantita dal modulo imgcodecs, la quale funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo Mat.
 
 \subsubsection{Storia}
 Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa Intel finalizzata all'avanzamento delle applicazioni CPU-intensive che includeva ray tracing real-time e display 3D. Inizialmente le finalit\`a del progetto erano descritte come:
 \begin{itemize}
-\item Permettere l'avanzamento della computer vision fornendo non solo una libreria di codice open-source ma anche pre ottimizzato per costruire l'infrastruttura base di applicazioni di computer vision.
+\item Permettere l'avanzamento della computer vision fornendo non solo una libreria di codice open-source ma anche pre-ottimizzato per costruire l'infrastruttura base di applicazioni di computer vision.
 \item Condividere conoscenza sulla computer vision fornendo una infrastruttura comune sulla quale tutti gli sviluppatori potessero costruire.
 \item Far avanzare le applicazioni commerciali basate sulla computer vision rendendo il codice portabile, ottimizzato per le performance.
 \end{itemize}
-Ad oggi il supporto al progetto \`e dato dall'organizzazione no-profit OpenCV.org, la quale mantiene uno sviluppatore e un sito per la documentazione. La libreria \`e ormai lo standard de facto per le applicazioni di computer vision e image processing, vista la sua diffusione e la community molto attiva.
+Ad oggi il supporto al progetto \`e dato dall'organizzazione no-profit OpenCV.org, la quale mantiene uno sviluppatore ed un sito per la documentazione. La libreria \`e ormai lo standard de facto per le applicazioni di computer vision e image processing, vista la sua diffusione e la community molto attiva.
 
 Per lo sviluppo dell'applicazione di Passenger Counter la scelta di utilizzare questa libreria \`e stata quasi obbligata visto l'ottimo supporto e diffusione della libreria. Inoltre la vasta portabilit\`a e l'attenzione alle performance la rendono particolarmente adatto al caso embedded real-time.
 
 %% Interruzione di pagina
 \newpage
 
-%% TODO: Rivedi cosa hai scritto e amplia ancora se riesci
 \subsection{Ambiente di sviluppo per l'OS: Yocto Project}\label{Yocto}
 Per integrare nella piattaforma hardware gli strumenti software necessari al funzionamento dell'applicativo \`e stato indispensabile realizzare una distribuzione Linux customizzata adatta alle nostre esigenze. Per farlo \`e stato utilizzato il progetto Yocto, standard industriale de facto per realizzare distribuzioni Linux embedded.
 
-Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi embedded, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Yocto Project \`e quindi un ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux embedded.
+Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi embedded, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Yocto Project \`e quindi un progetto ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux embedded.
 
 Le architettura supportate dal progetto sono le pi\`u diffuse nell'ambito embedded: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
 
-OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\`e sia possibile installarli sulla target distribution.
+OpenEmbedded \`e framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di ``ricette'' ed esegue task in base a dette ricette. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare cross-compilazione dei pacchetti affinch\'e sia possibile installarli sulla target distribution.
 
 \subsubsection{Componenti del progetto Yocto}
 \begin{itemize}
 \item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
-\item BitBake: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di "ricette" ed esegue task in base a dette ricette. \`e uno dei componenti fondamentali di Yocto Project.
+\item BitBake: \`e un build automation software, ovvero uno strumento software che legge dei metadati ed esegue task in base a tali metadati. \`E uno dei componenti fondamentali di Yocto Project.
 \item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata.
 \item Layers: il build system del progetto Yocto \`e composto da layer. I layer sono una collezione logica di ricette che rappresentano stack di applicazioni o Board Support Packaged (BSP). I BSP contengono i pacchetti e i driver fondamentali necessari per costruire una distribuzione Linux per una specifica board o architettura. Solitamente questi BSP sono mantenuti dai produttori dell'hardware e sono l'interfaccia tra l'OS e l'hardware che lo esegue.
 \end{itemize}
@@ -560,7 +559,7 @@ Dopo aver configurato e lanciato il processo di build il build system provvede a
 \item Procede alla cross-compilazione dei sorgenti.
 \item Genera i file .deb/.rpm/.ipk dipendentemente dalla configurazione.
 \end{enumerate}
-Una volta che sono stati generati tutti i pacchetti richiesti procede alla generazione dell'immagine della distribuzione, genera quindi il filesystem, installa i pacchetti e genera l'immagine che pu\`o essere eseguita sulla macchina target. In seguito \`e possibile generare la toolchain per la cross-compilazione di sorgenti per l'immagine della macchina target, questo processo generer\`a un piccolo installer il quale installer\`a la toolchain nella macchina dedicata allo sviluppo delle applicazioni per la piattaforma target.
+Una volta che sono stati generati tutti i pacchetti richiesti dalla configurazione, procede alla creazione dell'immagine della distribuzione: genera quindi il filesystem, installa i pacchetti e d\`a origine all'immagine che pu\`o essere eseguita sulla macchina target. In seguito \`e possibile generare la toolchain per la cross-compilazione di sorgenti per l'immagine creata. Questo processo dar\`a origine ad un piccolo installer il quale installer\`a la toolchain nella macchina host, dedicata allo sviluppo delle applicazioni per la piattaforma target.
 
 %% Interruzione di pagina
 \newpage
@@ -574,11 +573,14 @@ Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario rea
   \label{fig:ToolchainYocto}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
+Il processo di build e le configurazioni necessarie a generare la distribuzione usata nel corso della tesi saranno discussi in dettaglio nel capitolo \ref{CapitoloYocto} a pagina \pageref{CapitoloYocto}.
 
-\subsection{Framework OSGi}\label{OSGi}
-In pausa finch\`e non sei sicuro di usarlo.
+% OSGi tmp location
+% %% Interruzione di pagina
+% \newpage
+% 
+% \subsection{Framework OSGi}\label{OSGi}
+% In pausa finch\`e non sei sicuro di usarlo.
 
 \chapter{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}\label{CapitoloAnalisiAmbienti}
 Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
