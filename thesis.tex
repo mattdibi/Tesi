@@ -3020,7 +3020,7 @@ La distribuzione \`e formata da quattro componenti fondamentali:
 \newpage
 
 \section{Build System di Yocto}
-Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yocto \`e basato su "ricette". Queste ricette contengono dei metadati con le istruzioni su come installare il software nella distribuzione da realizzare. Ogni ricetta esegue le seguenti operazioni in ordine:
+Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yocto \`e basato su ``ricette''. Queste ricette contengono dei metadati con le istruzioni su come installare il software nella distribuzione da realizzare. Ogni ricetta esegue le seguenti operazioni in ordine:
 
 \begin{enumerate}
 \item Scarica i sorgenti del software.
@@ -3053,7 +3053,7 @@ Lanciare l'environment setup script (esempio: \verb|oe-init-build-end| o \verb|o
 \subsubsection{build}
 Questa cartella rappresenta la Build Directory.
 
-Questa cartella contiene i file di configurazione dell'utente e l'output generato dal build system OpenEmbedded nella sua configurazione standard. La build directory viene creata inizialmente quando viene lanciato l'environment setup script di OpenEmbedded.
+Questa cartella contiene i file di configurazione dell'utente e l'output generato dal build system OpenEmbedded nella sua configurazione standard. La Build Directory viene creata inizialmente quando viene lanciato l'environment setup script di OpenEmbedded.
 
 Le preferenze circa il software da installare nella distribuzione e il processo di build vanno specificate in due file di configurazione della Build Directory:
 
@@ -3074,7 +3074,7 @@ La sorgente del file bblayers.conf.sample dipende dalla variabile \verb|$TEMPLAT
 \end{itemize}
 
 \subsubsection{documentation}
-Questa directory contiene i sorgenti della documentazione del progetto Yocto e template e tootl necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sotto cartella.
+Questa directory contiene i sorgenti della documentazione del progetto Yocto e template e tool necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sotto cartella.
 
 \subsubsection{meta}
 Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder meta/recipes-sato, la quale contiene Sato demo/reference UI/UX ed i dati associati alle sue applicazioni e configurazioni.
@@ -3086,7 +3086,7 @@ Questa directory contiene le configurazioni per la distribuzione reference di Po
 Qui sono contenuti i metadati del reference hardware Board Supperto Packages del progetto Yocto.
 
 \subsubsection{meta-selftest}
-Questa directory aggiunge ricette e file addizionali usati da OpenEmbedded per verificare il corretto comportamento del build system. Perch\`e questi test vengano eseguiti \`e necessario aggiungere questo layer al file bblayers.conf.
+Questa directory aggiunge ricette e file addizionali usati da OpenEmbedded per verificare il corretto comportamento del build system. Perch\'e questi test vengano eseguiti \`e necessario aggiungere questo layer al file bblayers.conf.
 
 \subsubsection{meta-skeleton}
 Questa directory contiene ricette template per lo sviluppo di BSP e kernel custom.
@@ -3130,7 +3130,7 @@ $ source oe-init-build-env ~/mybuilds
 \newpage
 
 \section{Sviluppo della distribuzione}
-Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunte parti alla distro. Ci\`o significava aggiungere gradualmente nuovi layer e nuove ricette al build system.
+Lo sviluppo della distribuzione \`e stato parallelo allo sviluppo dell'applicazione. Mano a mano che si aggiungevano componenti aumentavano i requisiti dell'applicativo e di conseguenza venivano aggiunti nuovi tool software alla distribuzione. Ci\`o significava aggiungere gradualmente nuovi layer e nuove ricette al build system.
 
 Per lo sviluppo del progetto sono state realizzate principalmente tre versioni della distribuzione, verranno analizzate nel seguito in ordine cronologico di realizzazione.
 
@@ -3166,7 +3166,7 @@ Lo stack software completo di questa versione della distribuzione \`e riportato 
 \newpage
 
 \section{File di configurazione: local.conf}\label{ModLocalConf}
-Qui di seguito riportiamo il file di configurazione della versione finale della distribuzione.
+Qui di seguito \`e riportato il file di configurazione della versione finale della distribuzione.
 
 \begin{lstlisting}[caption=local.conf]
 MACHINE ??= "intel-corei7-64"
@@ -3216,9 +3216,9 @@ Vediamo ora nel dettaglio il significato di questi parametri:
 \item \verb|MACHINE|: Specifica la target device per la quale l'immagine viene costruita. La variabile corrisponde ad un file di configurazione della macchina con lo stesso nome, attraverso il quale le configurazioni specifiche per quella macchina vengono impostate. Di conseguenza, quando \verb|MACHINE| \`e impostato a \verb|quemux86| esister\`a un file qemux86.conf corrispondente nella directory meta/conf/machine. Nel nostro caso stiamo costruendo una distribuzione per una architettura Intel 64-bit e il file di configurazione della macchina si trova nel layer \textbf{meta-intel}.
 \item \verb|DISTRO|: Il nome della distribuzione. Questa variabile corrisponde ad un file di configurazione di distribuzione la cui radice del nome \`e la stessa dell'argomento della variabile e la cui esensione \`e .conf. Per esempio, il file di configurazione della distribuzione Poky \`e poky.conf e risiede in meta-poky/conf/distro.
 \item \verb|PACKAGE_CLASSES|: specifica il package manager che viene usato dal build system di OpenEmbedded quando vengono creati i pacchetti del software in fase di build.
-\item \verb|SDKMACHINE|: La macchina per la quale \`e costruita la toolchain di cross-sviluppo. In altre parole, il SDK \`e costruito in modo tale che possa essere eseguito su un target specifico con il valore \verb|SDKMACHINE|. Il valore punta ad un file .conf corrispondente sotto la cartella conf/machine-sdk/. Possono essere usati "\verb|i686|" e "\verb|x86_64|" come possibili valori per questa variabile.
-\item \verb|EXTRA_IMAGE_FEATURES|: Una lista di feature addizionali da includere nell'immagine. Ad esempio "debug-tweaks" rende l'immagine adatta al debugging, permettendo il login come root senza l'uso di password e abilitando il logging post-installazione.
-\item \verb|PATCHRESOLVE|: Determina che azione intraprendere quanto la patch fallisce. In questo caso \`e stato lasciato al valore di default.
+\item \verb|SDKMACHINE|: La macchina per la quale \`e costruita la toolchain di cross-sviluppo. In altre parole, il SDK \`e costruito in modo tale che possa essere eseguito su un target specifico con il valore \verb|SDKMACHINE|. Il valore punta ad un file .conf corrispondente sotto la cartella conf/machine-sdk/. Possono essere usati ``\verb|i686|'' e ``\verb|x86_64|'' come possibili valori per questa variabile.
+\item \verb|EXTRA_IMAGE_FEATURES|: Una lista di feature addizionali da includere nell'immagine. Ad esempio ``\verb|debug-tweaks|'' rende l'immagine adatta al debugging, permettendo il login come root senza l'uso di password e abilitando il logging post-installazione.
+\item \verb|PATCHRESOLVE|: Determina che azione intraprendere quando l'operazione di applicazione di patch fallisce. In questo caso \`e stato lasciato al valore di default.
 \item \verb|BB_DISKMON_DIRS|: Monitora lo spazio su disco e gli inode disponibili durante la build permettendo di controllare il processo di build per mezzo di questi parametri.
 \item \verb|BB_NUMBER_THREADS|: Il massimo numero di task che BitBake pu\`o eseguire in parallelo contemporaneamente. Il build system di OpenEmbedded imposta automaticamente questo valore al numero di core disponibili sulla macchina host del build system. Per esempio un sistema con un processore dual-core che fa anche uso dell'hyper-threading implica che la variabile \verb|BB_NUMBER_THREADS| venga impostata a "4".
 \item \verb|PARALLEL_MAKE|: Opzioni extra passate al comando \verb|make| durante la task \verb|do_compile| task in modo tale da specificare la compilazione parallela sulla macchina del build system. Questa variabile solitamente \`e nella forma "-j x", dove x rappresenta il numero massimo di thread paralleli che il comando make pu\`o istanziare.
@@ -3229,7 +3229,7 @@ Vediamo ora nel dettaglio il significato di questi parametri:
 %% Interruzione di pagina
 \newpage
 
-Si noti la mancanza della libreria RealSense tra i pacchetti installati nella distribuzione. Questo \`e dovuto al fatto che la sua installazione avviene usando un secondo file di configurazione "auto.conf", come specificato nelle istruzioni di installazione della libreria.
+Si noti la mancanza della libreria RealSense tra i pacchetti installati nella distribuzione. Questo \`e dovuto al fatto che la sua installazione avviene usando un secondo file di configurazione ``auto.conf'', come specificato nelle istruzioni di installazione della libreria.
 
 \begin{lstlisting}[caption=auto.conf]
 require include/intel-librealsense.inc
@@ -3238,7 +3238,7 @@ require include/intel-librealsense.inc
 CORE_IMAGE_EXTRA_INSTALL += "librealsense-graphical-examples"
 \end{lstlisting}
 
-La keyword \verb|require| va a prendere la ricetta specificata nel seguito, necessaria all'installazione della libreria.
+La keyword \verb|require| va a prendere la ricetta specificata, necessaria all'installazione della libreria.
 
 \section{Modifica alla ricetta di OpenCV}\label{ModRicettaOpenCV}
 Per aggiungere le API Java di OpenCV \`e stato necessario modificare la ricetta di OpenCV come segue:
@@ -3288,7 +3288,7 @@ PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'oracle-java', '${PN}-java-db
 
 Praticamente grazie a queste modifiche, se durante il processo di build, BitBake si accorge che l'immagine possiede un JDK, effettua le operazioni necessarie a generare le API Java di OpenCV.
 
-La patch si \`e resa necessaria in quanto questa operazione avveniva solamente nel caso in cui BitBake rilevasse il JDK di Oracle, ma per problemi di compatibilit\`a eravamo riusciti ad installare solamente il JDK OpenJDK-8. Quindi \`e stato necessario effettuare le modifiche di cui sopra le quali non fanno altro che rilevare la presenza del nuovo JDK e lo usano per implementare la API.
+La patch si \`e resa necessaria in quanto questa operazione avveniva solamente nel caso in cui BitBake rilevasse il JDK di Oracle, ma per problemi di compatibilit\`a \`e stato possibile installare solamente il JDK OpenJDK-8. Quindi \`e stato necessario effettuare le modifiche di cui sopra le quali non fanno altro che rilevare la presenza del nuovo JDK e lo usano per implementare la API.
 
 %% Interruzione di pagina
 \newpage
@@ -3298,15 +3298,13 @@ La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 
 \begin{itemize}
 \item \textbf{Mancanza dei driver per l'hardware Eurotech}: non \`e stato possibile aggiungere alla distribuzione i driver necessari all'interfacciamento con l'hardware proprietario Eurotech installato sul ReliaGate 20-25. Questo \`e dovuto alla scarsa conoscenza del tool Yocto e alla mancanza di tempo per la realizzazione di questo ultimo passaggio.
-\item \textbf{Mancanza di tool}: la distribuzione cos\`\i\ realizzata \`e molto barebone. Mancano moltissimi tool software adatti a farne una distribuzione completa.
-\item \textbf{Incompatibilit\`a con le versioni pi\`u recenti del progetto Yocto}: purtroppo il layer librealsense non viene aggiornato spesso e quindi siamo costretti ad utilizzare una versione di Poky che non \`e la pi\`u recente. Di conseguenza tutti pacchetti installati sono bloccati a versioni non aggiornate (es: OpenCV si trova alla versione 3.1 invece che alla 3.2).
+\item \textbf{Mancanza di tool}: la distribuzione cos\`\i\ realizzata \`e barebone: mancano moltissimi tool software adatti a farne una distribuzione completa.
+\item \textbf{Incompatibilit\`a con le versioni pi\`u recenti del progetto Yocto}: purtroppo il layer librealsense non viene aggiornato spesso e quindi si \`e stati costretti ad utilizzare una versione di Poky che non \`e la pi\`u recente. Di conseguenza tutti pacchetti installati sono bloccati a versioni non aggiornate (es: OpenCV si trova alla versione 3.1 invece che alla 3.2).
 \item \textbf{Mancanza del supporto ad OpenCL}: inizialmente si prevedeva di accelerare parte della computazione sulla GPU. Purtroppo, per mancanza di supporto da parte di Intel, non \`e stato possibile installare OpenCL e quindi accelerare gli algoritmi di OpenCV sulla GPU integrata dell'Intel E3827.
 \end{itemize}
 
-%TODO: Cambiare questa frase. Non sapevo cosa scrivere.
 Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e stata ritenuta un ottimo proof of concept da parte di Eurotech.
 
-%% Capitolo 4: Manuale d'uso
 \chapter{Manuale d'uso del progetto}\label{CapitoloManuale}
 In questo capitolo verr\`a riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
 
