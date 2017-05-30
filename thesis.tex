@@ -1542,8 +1542,7 @@ int main(int argc, char * argv[])
         cout << "Device number: " << i << endl;
     }
 
-    if(argc >= 2)
-    {
+    if(argc >= 2) {
         if(!strcmp(argv[1], "-s")) {
             for(int i = 0; i < deviceNumber; i++) {
                 counters[i]->setSaveVideo(true);
@@ -1557,14 +1556,12 @@ int main(int argc, char * argv[])
         counters[i]->start();
     }
 
-    do
-    {
+    do {
         cout << "Please enter a valid command:\n>";
         choice = getchar();
         cout << "You entered: " << choice << endl;
 
         for(int i = 0; i < deviceNumber; i++) {
-            
             cout << "Device : " << i << endl;
             switch(choice)
             {
@@ -1614,12 +1611,14 @@ int main(int argc, char * argv[])
 }
 \end{lstlisting}
 
-Il codice effettua le seguenti operazioni:
+\noindent Il codice effettua le seguenti operazioni:
 \begin{enumerate}
 \item Crea un vettore di contatori pari al numero di telecamere ad esso collegate. Per ogni telecamera, quindi, viene istanziato un oggetto della classe PCN.
 \item Vengono fatti partire in parallelo i contatori per mezzo del metodo \verb|start()|.
 \item Viene fatto partire un loop all'interno del quale si aspettano i comandi da eseguire su tutti i contatori immessi dall'utente.
 \end{enumerate}
+
+Nel capitolo \ref{CapitoloManuale} a pagina \pageref{CapitoloManuale} sono riportati in dettaglio i comandi real-time implementati da questo codice.
 
 %% Interruzione di pagina
 \newpage
@@ -1628,7 +1627,7 @@ Il codice effettua le seguenti operazioni:
 In questo paragrafo vengono riportati i risultati dei test effettuati con questa versione del contatore di passeggeri.
 
 \subsection{Dimostrazione funzionamento}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuto in seguito alla sottrazione del background, a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore.
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuta in seguito alla sottrazione del background (cio\`e la foreground mask), a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore (cio\`e \verb|denoisedMat|).
 
 \begin{figure}[h!]
   \centering
@@ -1654,7 +1653,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
 %% Interruzione di pagina
 \newpage
 
-In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del rumore ed eliminazione dell'ombra ottenuti. Nonostante ci\`o l'ombra proiettata lateralmente sul muro viene rilevata erroneamente come oggetto in movimento. Essa viene quindi rilevata dal programma e tracciata come se si trattasse di un passeggero.
+In figura \ref{fig:PCNTest3} \`e importante notare l'effetto di riduzione del rumore ed eliminazione dell'ombra ottenuti. Nonostante ci\`o l'ombra proiettata lateralmente sul muro, evidenziata tramite il cerchio rosso, viene rilevata erroneamente come oggetto in movimento. Essa viene quindi rilevata dal programma e tracciata come se si trattasse di un passeggero.
 
 Inoltre, al centro del fotogramma, \`e possibile notare un ulteriore falso tracciamento dovuto ad un picco di rumore registrato dalla telecamera.
 
@@ -1703,7 +1702,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \end{axis}
     \end{tikzpicture}
     }
-    \caption{Grafico tempi di esecuzione PCN con telecamera 30 FPS}
+    \caption{Grafico tempi di esecuzione PCN con telecamera 30 fps}
 \end{figure}
 
 \begin{table}[h!]
@@ -1716,9 +1715,9 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Sottrazione del rumore & 2.80683 ms & 0.546563 ms \\ \hline
     Algoritmo rilevamento contorni & 1.09507 ms & 0.211879 ms \\ \hline
     Rilevamento e tracking degli oggetti & 0.178409 ms & 0.026478 ms \\ \hline
-    Frame Rate & 20.1 FPS & 30 FPS \\ \hline
+    Frame Rate & 20.1 fps & 30 fps \\ \hline
 	\end{tabular}
-    \caption{Risultati Passenger Counter a sottrazione del background con telecamera 30 FPS}
+    \caption{Risultati Passenger Counter a sottrazione del background con telecamera 30 fps}
 \end{table}
 
 Si noti che il tempo di esecuzione del loop principale considera anche il tempo speso ad attendere i frame dalla telecamera.
@@ -1756,7 +1755,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \end{axis}
     \end{tikzpicture}
     }
-    \caption{Grafico tempi di esecuzione PCN con telecamera 60 FPS}
+    \caption{Grafico tempi di esecuzione PCN con telecamera 60 fps}
 \end{figure}
 
 \begin{table}[h!]
@@ -1769,14 +1768,14 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Sottrazione del rumore & 2.7739 ms & 0.538276 ms \\ \hline
     Algoritmo rilevamento contorni & 1.75694 ms & 0.233947 ms \\ \hline
     Rilevamento e tracking degli oggetti & 0.279599 ms & 0.028581 ms \\ \hline
-    Frame Rate & 20.5 FPS & 60 FPS \\ \hline
+    Frame Rate & 20.5 fps & 60 fps \\ \hline
 	\end{tabular}
     \caption{Risultati Passenger Counter a sottrazione del background con telecamera 60 FPS}
 \end{table}
 
-Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo da compromettere la stabilit\`a del framerate. Nominalmente il flusso video dovrebbe essere stabile sui 30 FPS ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo che la stabilit\`a del framerate risulta compromessa. Nominalmente il flusso video dovrebbe essere stabile sui 30 fps ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
 
-Infine \`e opportuno notare che, la durata del loop principale nel caso della telecamera a 30 FPS, \`e simile sui due sistemi poich\`e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 FPS poich\`e fornisce frame pi\`u velocemente.
+Infine \`e opportuno notare che la durata del loop principale nel caso della telecamera a 30 fps, \`e simile sui due sistemi poich\`e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 fps poich\`e fornisce i frame pi\`u velocemente.
 
 %% Interruzione di pagina
 \newpage
