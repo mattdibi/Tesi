@@ -138,7 +138,7 @@ Contemporaneamente allo sviluppo dell'applicazione si \`e realizzata la piattafo
 %% \part{Parte}
 
 %% Capitolo 1: Introduzione
-\chapter{Introduzione}
+\chapter{Introduzione}\label{CapitoloIntroduzione}
 In questo capitolo tratteremo il contesto all'interno del quale si configura l'applicazione sviluppata nel corso della tesi. Quindi verr\`a descritta la finalit\`a dell'applicazione Passenger Counter e gli obiettivi di questa tesi.
 
 %% Sezione Contesto IoT
@@ -252,19 +252,19 @@ L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Pas
 \section{Struttura della tesi}
 Qui di seguito \`e riportata l'organizzazione del testo:
 \begin{itemize}
-\item Capitolo 1: Introduzione al contesto dell'Internet of Things e all'applicazione di conteggio dei passeggeri.
-\item Capitolo 2: Analisi della versione corrente del Passenger Counter realizzato da Eurotech. Segue una trattazione dettagliata delle tecnologie e software utilizzati nella realizzazione del progetto.
-\item Capitolo 3: Analisi degli ambienti di sviluppo disponibili per l'image processing in ambito embedded e motivazioni che hanno portato alla scelta finale.
-\item Capitolo 4: Prima versione dell'applicativo, Passenger Counter a sottrazione del background.
-\item Capitolo 5: Seconda versione dell'applicativo, Passenger Counter con telecamere RealSense.
-\item Capitolo 6: Confronto versioni dell'applicativo realizzate.
-\item Capitolo 7: Realizzazione e features della distribuzione Linux realizzata a supporto del progetto
-\item Capitolo 8: Manuale d'uso del progetto.
-\item Capitolo 9: Riassunto e conclusioni
+\item Capitolo \ref{CapitoloIntroduzione}: Introduzione al contesto dell'Internet of Things e all'applicazione di conteggio dei passeggeri.
+\item Capitolo \ref{CapitoloContestoTecnologico}: Analisi della versione corrente del Passenger Counter realizzato da Eurotech. Segue una trattazione dettagliata delle tecnologie e software utilizzati nella realizzazione del progetto.
+\item Capitolo \ref{CapitoloAnalisiAmbienti}: Analisi degli ambienti di sviluppo disponibili per l'image processing in ambito embedded e motivazioni che hanno portato alla scelta finale.
+\item Capitolo \ref{CapitoloPCN}: Prima versione dell'applicativo, Passenger Counter a sottrazione del background.
+\item Capitolo \ref{CapitoloRSPCN}: Seconda versione dell'applicativo, Passenger Counter con telecamere RealSense.
+\item Capitolo \ref{CapitoloConfronto}: Confronto versioni dell'applicativo realizzate.
+\item Capitolo \ref{CapitoloYocto}: Realizzazione e features della distribuzione Linux realizzata a supporto del progetto
+\item Capitolo \ref{CapitoloManuale}: Manuale d'uso del progetto.
+\item Capitolo \ref{CapitoloConclusioni}: Riassunto e conclusioni
 \end{itemize}
 
 %% Capitolo 2: Contesto tecnologico di dettaglio
-\chapter{Contesto tecnologico di dettaglio}
+\chapter{Contesto tecnologico di dettaglio}\label{CapitoloContestoTecnologico}
 Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utilizzare nello svolgimento della tesi.
 
 \section{Tecnologie PCN Eurotech}
@@ -580,7 +580,7 @@ Per lo sviluppo dell'applicazione del Passenger Counter \`e stato necessario rea
 \subsection{Framework OSGi}\label{OSGi}
 In pausa finch\`e non sei sicuro di usarlo.
 
-\chapter{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}
+\chapter{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}\label{CapitoloAnalisiAmbienti}
 Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
 
 \section{Ambiente di sviluppo Xilinx}
@@ -737,7 +737,7 @@ Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i se
 
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
 
-\chapter{Passenger Counter con sottrazione del background}
+\chapter{Passenger Counter con sottrazione del background}\label{CapitoloPCN}
 In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
 Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
@@ -1771,7 +1771,7 @@ I problemi principali rilevati in questa implementazione del Passenger Counter s
 
 Per questo motivo si \`e passati ad una seconda implementazione sfruttando una tecnologia esente da queste problematiche: il Passenger Counter con telecamere RealSense.
 
-\chapter{Passenger Counter con telecamere RealSense}
+\chapter{Passenger Counter con telecamere RealSense}\label{CapitoloRSPCN}
 In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
 Poich\`e questa versione \`e basata in gran parte sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
@@ -2630,7 +2630,7 @@ Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori all
 
 In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti per l'applicazione considerata in questa tesi, comunque il funzionamento \`e molto migliore rispetto al caso del Passenger Counter a sottrazione del background e i punti di forza di questa tecnologia sono di gran lunga maggiori dei punti deboli.
 
-\chapter{Confronto implementazioni del Passenger Counter}
+\chapter{Confronto implementazioni del Passenger Counter}\label{CapitoloConfronto}
 Nel corso della tesi sono state implementate diverse versioni del contatore, in diversi linguaggi. In questa sezione andremo ad analizzare quali sono queste implementazioni, come sono state realizzate  e quali sono le loro prestazioni.
 
 Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
@@ -2966,7 +2966,7 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
 \subsection{Versione OSGi}
 \textbf{In pausa finch\`e non siamo sicuri di implementarla.}
 
-\chapter{Piattaforma Yocto: realizzazione e features}
+\chapter{Piattaforma Yocto: realizzazione e features}\label{CapitoloYocto}
 In questo capitolo tratteremo la distribuzione Linux, realizzata per mezzo del progetto Yocto, a supporto degli applicativi trattati nelle sezioni precedenti. Vedremo quali sono le sue caratteristiche, come \`e stata realizzata e i problemi riscontrati nella sua realizzazione.
 
 \section{Caratteristiche della distribuzione}
@@ -3279,7 +3279,7 @@ La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e stata ritenuta un ottimo proof of concept da parte di Eurotech.
 
 %% Capitolo 4: Manuale d'uso
-\chapter{Manuale d'uso del progetto}
+\chapter{Manuale d'uso del progetto}\label{CapitoloManuale}
 In questo capitolo verr\`a riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
 
 \section{Repository Github}
@@ -3646,7 +3646,7 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \end{itemize}
 
 % Capitolo 5: Conclusioni
-\chapter{Conclusioni}
+\chapter{Conclusioni}\label{CapitoloConclusioni}
 
 \section{Riassunto}
 L'obiettivo di questa tesi era quello di sviluppare un sistema di Passenger Counter, un applicativo dedicato ad effettuare il conteggio delle persone in entrata/uscita da un mezzo pubblico o un ambiente, e la piattaforma software a supporto dello stesso, partendo dalla soluzione tecnologia adottata dalla Eurotech. Inoltre si \`e ritenuto necessario tenere in considerazione i punti deboli della soluzione adottata in azienda e cercare di risolverli opportunamente. 
