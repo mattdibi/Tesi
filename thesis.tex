@@ -1794,8 +1794,6 @@ Per questo motivo si \`e passati ad una seconda implementazione sfruttando una t
 \chapter{Passenger Counter con telecamere RealSense}\label{CapitoloRSPCN}
 In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
-Poich\`e questa versione \`e basata in gran parte sulla versione del contatore di passeggeri a sottrazione del background, per evitare ripetizioni, ci concentreremo sulle differenze tra le due versioni.
-
 \section{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
@@ -1859,9 +1857,8 @@ public:
   // Methods
   void start();
   void count();
-  void stop(){halt = true;};
-
   void resetCounters(){cnt_in = 0; cnt_out = 0; return;};
+  void stop(){halt = true;};
 
   Mat getColorMap(Mat depthImage);
   Mat getFrame(Mat depthImage, int thresholdCentimeters);
@@ -1928,7 +1925,7 @@ private:
     \item \verb|displayColor|, \verb|displayRawDepth|, \verb|displayDepth|, \verb|displayFrame|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
     \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
     \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
-    \item \verb|framerateStabilizationOn|: va ad agire sulla funziona per mezzo della quale andiamo a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante, che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
+    \item \verb|framerateStabilizationOn|: va ad agire sulla funzione per mezzo della quale andiamo a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante, che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
     \end{itemize}
 \end{itemize}
 
@@ -1967,7 +1964,7 @@ RSPCN::RSPCN(device *assignedDevice) {
 }
 \end{lstlisting}
 
-Come \`e possibile notare al costrutture viene passato un oggetto della classe \verb|device| che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
+Come \`e possibile notare al costruttore viene passato un oggetto della classe \verb|device| che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
 
 Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\`e le telecamera operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
 
@@ -1996,7 +1993,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 \newpage
 
 \section{Metodo getColorMap()}
-Questo metodo \`e stato utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale all'interno dell'algoritmo ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
+Questo metodo \`e stato utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale nel programma ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
 Mat RSPCN::getColorMap(Mat depthImage) {
@@ -2048,20 +2045,20 @@ Mat RSPCN::getColorMap(Mat depthImage) {
 }
 \end{lstlisting}
 
-Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato di un plot per mezzo di OpenCV di questo formato di immagini.
+Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato della visualizzazione per mezzo di OpenCV di questo formato di immagini.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
   \centering
   \includegraphics[width=8cm]{rawDepthImageC.png}
-  \caption{Output Intel RealSense SR300 colori.}
+  \caption{Output stream a colori Intel RealSense SR300.}
   \label{fig:colorSR300}
 \end{minipage}
 \ \hspace{2mm} \hspace{3mm} \
 \begin{minipage}[b]{8.5cm}
  \centering
   \includegraphics[width=8cm]{rawDepthImageD.png}
-  \caption{Output Intel RealSense SR300 grezzo.}
+  \caption{Output stream di profondit\`a Intel RealSense SR300 grezzo.}
   \label{fig:rawDepthImage}
 \end{minipage}
 \end{figure}
@@ -2165,7 +2162,7 @@ Passiamo quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel
 %% Interruzione di pagina
 \newpage
 
-La soglia va quindi ad applicare la seguente operazione:
+La soglia va quindi ad effettuare la seguente operazione:
 
 \begin{equation}
 dstPixel(x,y) = \begin{cases} 65535, & \mbox{se } srcPixel(x,y) > threshPixel \\ 0, & \mbox{altrimenti } \end{cases}
@@ -2200,8 +2197,7 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
   \label{fig:getFrameStep3}
 \end{figure}
 
-%% Interruzione di pagina
-\newpage
+L'obiettivo di queste operazioni \`e andare a ricavare una foreground mask contenente solo la testa dei passeggeri che transitano sotto la telecamera. Rilevando solamente la testa delle persone, infatti, otteniamo un tracciamento molto pi\`u preciso ed affidabile rispetto all'implementazione del Passenger Counter precedente.
 
 \section{Analisi del kernel del programma: funzione count()}
 
@@ -2270,9 +2266,9 @@ void RSPCN::count()
 
 Come nella versione precedente del Passenger Counter, in questa fase abbiamo l'estrazione degli oggetti in primo piano.
 
-Variabili:
+\noindent Variabili:
 \begin{itemize}
-\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Rappresenta l'input che si andr\`a a manipolare per rilevare gli oggetti in movimento.
+\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Verr\`a usata solamente per visualizzare le informazioni sul funzionamento del contatore.
 \item \verb|frame|: rappresenta l'output della funzione \verb|getFrame()| di cui si \`e parlato in precedenza.
 \item \verb|rawDepth|: questa \`e la matrice che conterr\`a i frame grezzi dello stream di profondit\`a in ingresso dalla telecamera ad infrarossi. \`E una copia della matrice \verb|depth| prima che sia passata alle funzioni di elaborazione delle immagini.
 \item \verb|depthColorMap|: rappresenta l'output della funzione \verb|getColorMap()|.
@@ -2292,9 +2288,9 @@ Variabili:
 %% Interruzione di pagina
 \newpage
 
-Il codice esegue le seguenti operazioni:
+\noindent Il codice esegue le seguenti operazioni:
 \begin{enumerate}
-\item Prima di raccogliere i frame in ingresso si attende che questi vengano ricevuti, per mezzo della funzione \verb|wait_for_frames()|. Esiste la versione non bloccante \verb|poll_for_frames()| il cui utilizzo per\`o comporta non poche problematiche.
+\item Prima di raccogliere i frame in ingresso si attende che questi vengano ricevuti per mezzo della funzione \verb|wait_for_frames()|. Esiste la versione non bloccante \verb|poll_for_frames()| il cui utilizzo per\`o comporta problemi di stabilit\`a del framerate.
 \item A seguito di questa sincronizzazione vengono catturati i frame di profondit\`a grezzi dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense e salvati nella variabile \verb|depth|.
 \item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente e salvati nella variabile \verb|frame|.
 \item Quindi si effettua una veloce operazione di riduzione del rumore per mezzo della funzione \verb|blur|.
@@ -2351,16 +2347,16 @@ Il codice esegue le seguenti operazioni:
         }
 \end{lstlisting}
 
-A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato calcoliamo l'area. Se l'area supera un valore minimo ricavato sperimentalmente viene considerato un passeggero.
+A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato calcoliamo l'area. Se l'area supera un valore minimo deciso arbitrariamente in fase sperimentale viene considerato un passeggero.
 
 \noindent Quindi si passa ad aggiornare la posizione dei passeggeri.
 
 \begin{itemize}
-\item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel, data dalle variabili \verb|xNear| e \verb|yNear|, da un passeggero gi\`a nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
-\item Se il passeggero non \`e vicono a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
+\item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel, data dalle variabili \verb|xNear| e \verb|yNear|, da un passeggero gi\`a presente nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
+\item Se il passeggero non \`e vicino a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
 \end{itemize}
 
-\noindent Infine si va ad effettuare il conteggio degli attraversamenti. Si pu\`o notare come questa parte del codice sia esattamente identica alla versione del Passenger Counter a sottrazione dello sfondo.
+\noindent Infine si va ad effettuare il conteggio degli attraversamenti.
 
 %% Interruzione di pagina
 \newpage
@@ -2412,23 +2408,23 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 %% Interruzione di pagina
 \newpage
 
-Una volta aggiornate le posizioni dei passeggeri viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
+Una volta aggiornate le posizioni viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
 
 \begin{enumerate}
 \item Se ne disegna la traccia dello storico delle posizioni.
 \item Si rilevano gli attraversamenti della soglia:
     \begin{itemize}
-    \item Se l'ultima posizione si trovava a sud della soglia e la nuova posizione rilevata a nord, si aggiorna il contatore in ingresso. 
-    \item Se l'ultima posizione si trovava a nord della soglia e la nuova posizione rilevata a sud, si aggiorna il contatore in uscita. 
+    \item Se l'ultima posizione si trovava al di sotto della soglia e la nuova posizione rilevata al di sopra, si aggiorna il contatore in ingresso. 
+    \item Se l'ultima posizione si trovava al di sopra della soglia e la nuova posizione rilevata al di sotto, si aggiorna il contatore in uscita. 
     \end{itemize}
 \item Si effettua l'update del parametro \verb|age| dei passeggeri.
 \item Se il passeggero si trova fuori dal raggio d'azione della telecamera se ne aggiorna la posizione con l'ultima conosciuta.
 \item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\`e troppo a lungo fuori dal raggio visivo della telecamera.
 \end{enumerate}
 
-Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\`e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera figura del passeggero.
+Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\`e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
 
-Come nel caso precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
+Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
 
 \begin{figure}[h!]
   \centering
@@ -2445,10 +2441,10 @@ Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o crear
 \newpage
 
 \section{Risultati ottenuti}
-In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare anche le prestazioni delle due telecamere.
+In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare le prestazioni delle due telecamere.
 
 \subsection{Dimostrazione funzionamento telecamera R200}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a(metodo \verb|getColorMap()|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (metodo \verb|getFrame()|).
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a (contenute nella variabile \verb|depthColorMap|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (conentute nella variabile \verb|frame|).
 
 \begin{figure}[h!]
   \centering
@@ -2491,7 +2487,7 @@ In figura \ref{fig:R2003} il pallino verde in alto a destra nell'immagine indica
 \newpage
 
 \subsection{Dimostrazione funzionamento telecamera SR300}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Il formato dei frame \`e lo stesso del caso precedente.
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore effettuata utilizzando la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Il formato dei frame \`e lo stesso del caso precedente.
 
 \begin{figure}[h!]
   \centering
@@ -2516,7 +2512,7 @@ Si noti che in questo caso nell'immagine coi dati di profondit\`a non viene rile
   \label{fig:SR3003}
 \end{figure}
 
-Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un raggio minimo molto migliore poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a dell'immagine.
+Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un range di funzionamento molto migliore poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a dell'immagine.
 
 %% Interruzione di pagina
 \newpage
@@ -2574,12 +2570,12 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Sottrazione del rumore & 8.69046 ms & 0.295688 ms \\ \hline
     Algoritmo rilevamento contorni & 2.0645 ms & 0.228186 ms \\ \hline
     Rilevamento e tracking degli oggetti & 0.033218 ms & 0.054902 ms \\ \hline
-    Frame Rate & 30 FPS & 30 FPS \\ \hline
+    Frame Rate & 30 fps & 30 fps \\ \hline
 	\end{tabular}
     \caption{Performance Passenger Counter con telecamera RealSense SR300}
 \end{table}
 
-Anche in questo caso all'interno del tempo di esecuzione del loop principale \`e considerato il tempo speso ad attendere i frame dalla telecamera.
+Anche in questo caso all'interno del tempo di esecuzione del loop principale \`e incluso il tempo speso ad attendere i frame dalla telecamera.
 
 %% Interruzione di pagina
 \newpage
@@ -2627,7 +2623,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Sottrazione del rumore & 1.81564 ms & 0.162011 ms \\ \hline
     Algoritmo rilevamento contorni & 0.962472 ms & 0.095771 ms \\ \hline
     Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
-    Frame Rate & 60 FPS & 60 FPS \\ \hline
+    Frame Rate & 60 fps & 60 fps \\ \hline
 	\end{tabular}
     \caption{Performance Passenger Counter con telecamera RealSense R200}
 \end{table}
@@ -2642,9 +2638,9 @@ Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop
 \section{Problemi}
 Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi, in questo caso sono pi\`u legati alle tecnologie impiegate.
 
-Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se presente la luce solare, la quale ha molte componenti infrarosse. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere notevolmente il funzionamento della telecamera.
+Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se \`e presente la luce solare, la quale ha una forte componente infrarossa. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere il funzionamento della telecamera.
 
-La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente outdoor poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione stereoscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10m, il range minimo di 40cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
+La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente esterno poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione stereoscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10 metri, il range minimo di 40 cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
 
 Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori alla telecamera SR300, ci\`o aumenta ulteriormente le difficolt\`a di tracciamento.
 
