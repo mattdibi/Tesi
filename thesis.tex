@@ -583,14 +583,17 @@ Il processo di build e le configurazioni necessarie a generare la distribuzione 
 % In pausa finch\`e non sei sicuro di usarlo.
 
 \chapter{Analisi degli ambienti di sviluppo disponibili per l'image processing embedded}\label{CapitoloAnalisiAmbienti}
-Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nei paragrafi seguenti.
+Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente di sviluppo adatto all'applicazione. Sono state considerate principalmente due possibilit\`a analizzate nelle sezioni seguenti.
 
 \section{Ambiente di sviluppo Xilinx}
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|}
-	\hline
+    \hline
+    \multicolumn{2}{| c |}{ \bf Ambiente Xilinx} \\
+    \hline
+    \hline
 	Piattaforma hardware & Avnet Zedboard \\ \hline
 	Acquisizione video & HDMI Webcam \\ \hline
     Ambiente di sviluppo & Xilinx SDSoC \\ \hline
@@ -606,15 +609,18 @@ Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrass
 \newpage
 
 \subsection{Hardware}
-La piattaforma target sarebbe stata una Avnet Zedboard.
+La piattaforma target sarebbe stata una Avnet Zedboard. Essa rappresenta un development kit completo basato sull'SoC Xilinx Zynq-7000, il quale contiene al suo interno una CPU ARM ed una FPGA. Si \`e voluto usare questa board poich\'e compatibile con il sistema di sviluppo SDSoC per la sintesi di alto livello, di cui parleremo nel seguito.
 
 Specifiche tecniche:
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|}
-	\hline
-    ZYNQ-7000 SOC XC7Z020 & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
+    \hline
+    \multicolumn{2}{| c |}{ \bf Specifiche tecniche ZYNQ-7000 XC7Z020} \\
+    \hline
+    \hline
+    SOC & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
     Memoria & 512 MB DDR3 + 256 Mb Quad-SPI Flash + 4GB SD card \\ \hline
     Espansione & FMC (Low Pin Count) + Pmod headers (2x6) \\ \hline
     Video & HDMI output (1080p60 + audio) + VGA \\
@@ -629,7 +635,7 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{Zynq7000.jpg}
+  \includegraphics[width=0.8\textwidth]{Zynq7000.jpg}
   \caption{Diagramma del SoC Zynq-7000}
   \label{fig:Zynq7000}
 \end{figure}
@@ -651,9 +657,9 @@ SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In f
 
 I compilatori del sistema SDSoC analizzano il programma per determinare il data flow tra le funzioni hardware e software e generano un application specific system-on-chip per realizzare il programma. Per raggiungere alte performance ogni funzione in hardware viene eseguita su un thread indipendente; il compilatore genera i componenti hardware e software che assicurano la sincronizzazione tra i thread hardware e software, mentre abilita la computazione e comunicazione in pipeline. Il codice applicativo pu\`o includere pi\`u funzioni hardware, molteplici istanze di una specifica funzione hardware, e chiamare la funzione hardware da parti diverse del programma.
 
-L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo "what if" permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
+L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo ``what if'' permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
 
-I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un systema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano segli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione a driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
+I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un systema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
 
 %% Interruzione di pagina
 \newpage
@@ -667,19 +673,22 @@ I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado
   \label{fig:BenchmarkAuvizCV}
 \end{figure}
 
-Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, la quale non \`e altro che un sottoinsieme delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx. Questa libreria sfrutta le potenzialit\`a di SDSoC in quanto \`e stata scritta interamente in codice di alto livello e, in fase di compilazione, le funzioni utilizzate vengono sintetizzate sulla FPGA. Questa API si mantiene coerente con OpenCV per facilitare l'implementazione e l'accelerazione in harware. In figura \ref{fig:BenchmarkAuvizCV} sono riportati i risultati dei benchmark confrontando l'accelerazione di alcuni algoritmi di OpenCV usando varie tecnologie.
+Come ulteriore punto a favore di questo ambiente, Xilinx vantava la compatibilit\`a del sistema con OpenCV per l'esecuzione su CPU mentre rendeva disponibile una libreria compatibile con OpenCV per l'esecuzione su FPGA. Quest'ultima prende il nome di \textbf{AuvizCV}, la quale non \`e altro che un sottoinsieme delle funzioni disponibili in OpenCV pre-ottimizzate per l'esecuzione sulle FPGA Xilinx. Questa libreria sfrutta le potenzialit\`a di SDSoC in quanto \`e stata scritta interamente in codice di alto livello e, in fase di compilazione, le funzioni utilizzate vengono sintetizzate sulla FPGA. Questa API si mantiene coerente con OpenCV per facilitare l'implementazione e l'accelerazione in harware. In figura \ref{fig:BenchmarkAuvizCV} sono riportati i risultati dei benchmark confrontando l'accelerazione di alcuni algoritmi di OpenCV usando varie tecnologie tra cui AuvizCV.
 
 %% Interruzione di pagina
 \newpage
 
 %TODO: Approfondire?
 \section{Ambiente di sviluppo Intel - Yocto}
-Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
+Come seconda opzione si \`e considerata la possibilit\`a di usare l'hardware reso disponibile da Eurotech e realizzare da zero l'infrastruttura software sfruttando il progetto Yocto.
 
 \begin{table}[h!]
     \centering
 	\begin{tabular}{|c|c|}
-	\hline
+    \hline
+    \multicolumn{2}{| c |}{ \bf Ambiente Intel - Yocto} \\
+    \hline
+    \hline
 	Piattaforma hardware & Eurotech ReliaGate 20-25 \\ \hline
 	Acquisizione video & Webcam - Telecamere Intel RealSense \\ \hline
     Ambiente di sviluppo & Toolchain generata con Yocto \\ \hline
@@ -690,7 +699,7 @@ Come seconda possibilit\`a si \`e considerata la possibilit\`a di usare l'hardwa
 \end{table}
 
 \subsubsection{Hardware}
-L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\`e le telecamere Intel RealSense.
+L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\'e le telecamere Intel RealSense.
 
 \begin{table}[ht]
 \begin{minipage}[b]{0.56\linewidth}
@@ -732,7 +741,7 @@ I vantaggi di questa piattaforma sono dovuti in gran parte all'architettura del 
 Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
 \begin{itemize}
 \item \textbf{Flessibilit\`a}: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
-\item \textbf{Completezza}: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate.
+\item \textbf{Completezza}: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate. AuvizCV infatti possiede solamente 50 dei 2500 e pi\`u algoritmi presenti sulla versione completa di OpenCV.
 \item \textbf{Performance}: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
 \item \textbf{Compatibilit\`a}: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software.
 \end{itemize}
