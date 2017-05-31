@@ -849,7 +849,7 @@ Nella computer vision i metodi di blob detection sono finalizzati a rilevare reg
 Nel caso dell'applicazione del Passenger Counter le regioni di interesse, o blob, saranno i passeggeri che vogliamo tracciare all'interno del raggio visivo della telecamera. Per andare a rilevare questi blob si \`e usata la funzione \verb|findContours|.
 
 \subsection{Principio di funzionamento}
-Alla base dell'algoritmo implementato dalla funzione \verb|findContours| c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE). Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o blob sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
+Alla base dell'algoritmo implementato dalla funzione \verb|findContours| c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE)\cite{freeman61}. Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o blob sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
 
 \begin{figure}[h!]
   \centering
