@@ -3790,7 +3790,7 @@ Anche in questo caso sono possibili dei miglioramenti:
 
 \chapter{Computer Stereo Vision}\label{ComputerStereoVision}
 
-La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{Stereopsi}.
+La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti di vista (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{Stereopsi}.
 
 \section{Principio di funzionamento}
 \begin{figure}[h!]
@@ -3829,13 +3829,13 @@ Cerchiamo il riquadro pi\`u simile nell'immagine di destra.
   \label{fig:rightSearchCrop}
 \end{figure}
 
-Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell'immagine template (indicate in figura \ref{fig:rightSearchCrop} con il riquadro bianco) e si cerca a destra e a sinistra di queste cooridinate fino ad una massima distanza decisa precedentemente. La regione pi\`u simile \`e evidenziata dal riquadro verde in figura \ref{fig:rightSearchCrop}. La disparit\`a \`e data dalla distanza orizzontale tra i centri del riguardo verde e il riquadro bianco. La metrica di similitudine tra le regioni nei riquadri \`e data dall'operazione nota come SAD (Sum of absolute differences).
+Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell'immagine template (indicate in figura \ref{fig:rightSearchCrop} con il riquadro bianco) e si cerca a destra e a sinistra di queste cooridinate fino ad una massima distanza decisa precedentemente. La regione pi\`u simile \`e evidenziata dal riquadro verde in figura \ref{fig:rightSearchCrop}. La disparit\`a \`e data dalla distanza orizzontale tra i centri del riguardo verde e il riquadro bianco. La metrica di similitudine tra le regioni nei riquadri \`e data dall'operazione nota come SAD (Sum of Absolute Differences, somma delle differenze finite).
 
 \begin{equation}
 \sum \left | L(r,c) - R(r,c - d)  \right |
 \end{equation}
 
-Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. "d" si riferisce alla dispari\`a dell'immagine di destra.
+Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. ``d'' si riferisce alla dispari\`a dell'immagine di destra.
 
 Prima di calcolare la disparity map convertiamo le due immagini in scala di grigi cosicch\`e si abbano solo valori compresi tra 0 e 255 per ogni pixel.
 
@@ -3850,7 +3850,7 @@ Per calcolare la somma delle differenze assolute tra la il riquadro template e l
 
 Per trovare la regione pi\`u simile al riquadro template, si calcola il SAD tra il template ed ogni blocco nella regione di ricerca, quindi si sceglie il riquadro con il valore di SAD pi\`u basso.
 
-Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, la quale \`e ottenuta ricavando la disparity ditutti i pixel dell'immagine nei quali si \`e ricavata il valore di SAD pi\`u basso.
+Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, la quale \`e ottenuta ricavando la disparity di tutti i pixel dell'immagine nei quali si \`e ricavata il valore di SAD pi\`u basso.
 
 \section{Rettificazione}
 
@@ -3890,7 +3890,7 @@ e quindi:
 Z = \frac{B \times f}{x_R - x_T} = \frac{B \times f}{d}
 \end{equation}
 
-Dove si definisce \textit{Disparit\`a} la differenza: 
+Dove si definisce \textit{Disparit\`a}:
 
 \begin{equation}
 d = x_R - x_T
@@ -3898,9 +3898,11 @@ d = x_R - x_T
 
 ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
 
+Nota quindi la disparity map \`e possibile ricavare le informazioni di distanza per ogni oggetto presente nelle immagini.
+
 \chapter{Luce strutturata}\label{LuceStrutturata}
 
-La luce strutturata \`e un processo attraverso il quale, proiettando dei pattern di luce (tipicamente griglie o barre orizzontali) su una scena, si ricavano informazioni circa la profondit\`a e la superficie degli oggetti all'interno della scena grazie alle deformazioni dei pattern ottenute quando questi colpiscono gli oggetti.
+La luce strutturata \`e un processo attraverso il quale, proiettando dei pattern di luce (tipicamente griglie o barre orizzontali) su una scena, si ricavano informazioni circa la profondit\`a e la superficie degli oggetti all'interno della scena grazie alle deformazioni dei pattern ottenute quando questi colpiscono la superficie degli oggetti.
 
 \section{Principio di funzionamento}
 
