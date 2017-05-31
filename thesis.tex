@@ -3315,7 +3315,7 @@ Il progetto \`e disponibile pubblicamente all'indirizzo:
 https://github.com/mattdibi/RSPassengerCounter
 \end{verbatim}
 
-\noindent La struttura della repo \`e la seguente:
+\noindent La struttura della repository \`e la seguente:
 
 \begin{itemize}
 \item \verb|build_config|: qui sono raccolti i file di configurazione del progetto Yocto e le istruzioni per generare la distribuzione per il ReliaGate 20-25.
@@ -3351,7 +3351,7 @@ $ git clone https://github.com/IntelRealSense/meta-intel-realsense.git -b morty
 $ git clone git://git.yoctoproject.org/meta-java
 \end{lstlisting}
 
-\noindent Importante: \`e necessario impostare il branch del layer \textbf{meta-java} come segue:
+\noindent Importante: \`e necessario impostare il branch del layer \textbf{meta-java} ad uno specifico commit come segue:
 
 \begin{lstlisting}[language=bash]
 $ git reset --hard 67e48693501bddb80745b9735b7b3d4d28dce9a1
@@ -3406,6 +3406,8 @@ Come descritto nel paragrafo \ref{ModRicettaOpenCV} \`e necessario modificare la
 $INSTALL_DIR/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
 \end{verbatim}
 
+\noindent Anche in questo caso nella repository \`e contenuta una versione del file gi\`a modificato.
+
 \subsubsection{Step 6: Lanciare la build}
 
 \noindent Lanciare il processo di build:
@@ -3414,25 +3416,25 @@ $INSTALL_DIR/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
 $ bitbake core-image-sato
 \end{lstlisting}
 
-\noindent I file dell'immagine del sistema operativo si trovano nella cartella:
+\noindent Una volta completato il processo i file dell'immagine del sistema operativo si trovano nella cartella:
 
 \begin{verbatim}
 $INSTALL_DIR/poky/build/tmp/deploy/images/intel-corei7-64/
 \end{verbatim}
 
-\noindent Lanciare il processo di build dell'installatore della toolchain di cross-compilazione:
+\noindent Sar\`a quindi necessario lanciare il processo di build dell'installatore della toolchain di cross-compilazione:
 
 \begin{lstlisting}[language=bash]
 $ bitbake core-image-sato -c populate_sdk
 \end{lstlisting}
 
-\noindent L'installatore si trova nella cartella:
+\noindent Una volta completata la task l'installatore della toolchain si trova nella cartella:
 
 \begin{verbatim}
 $INSTALL_DIR/poky/build/tmp/deploy/sdk/
 \end{verbatim}
 
-\noindent Scrivere l'immagine su supporto bootabile:
+\noindent A questo punto \`e necessario scrivere l'immagine del sistema operativo su un supporto di memoria dal quale il ReliaGate pu\`o effettuare il boot. A tal fine \`e possibile usare il comando riportato qui di seguito.
 
 \begin{lstlisting}[language=bash]
 $ sudo dd if=$INSTALL_DIR/poky/build/tmp/deploy/images/intel-corei7-64/core-image-base-intel-corei7-64.wic of=TARGET_DEVICE status=progress
@@ -3441,7 +3443,7 @@ $ sudo dd if=$INSTALL_DIR/poky/build/tmp/deploy/images/intel-corei7-64/core-imag
 \subsection{Script di installazione}
 Per semplificare il processo di installazione del build system Yocto per la generazione dell'immagine per il 20-25 \`e stato realizzato uno script di installazione disponibile all'interno della repository del progetto.
 
-Per effettuare l'installazione \`e necessario eseguire:
+Per effettuare l'installazione del build system \`e necessario eseguire i seguenti comandi:
 
 \begin{lstlisting}[language=bash]
 $ chmod +x build_install
@@ -3461,7 +3463,7 @@ $ bitbake core-image-sato
 \newpage
 
 \subsection{Problemi noti}
-Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interrompere il processo di build dell'immagine. Nel caso si presenti l'errore "\textbf{unrecognized command line option -fno-lifetime-dse}" \`e necessario modificare la ricetta \textbf{.../poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc} alla linea 224 come segue:
+Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interuompere il processo di build dell'immagine. Nel caso si presenti l'errore ``\textbf{unrecognized command line option -fno-lifetime-dse}'' \`e necessario modificare la ricetta \textbf{\$INSTALL\_DIR/poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc} alla linea 224 come segue:
 
 \begin{lstlisting}[language=diff]
 # GCC 6 sets the default C++ standard to C++14 and introduces dead store
@@ -3473,7 +3475,7 @@ Esiste un problema noto con alcune vecchie versioni del compilatore C++ che poss
 
 \subsection{Configurazione risultante}
 
-\begin{verbatim}
+\begin{lstlisting}
 BB_VERSION        = "1.32.0"
 BUILD_SYS         = "x86_64-linux"
 NATIVELSBSTRING   = "universal-4.8"
@@ -3490,7 +3492,7 @@ meta-intel        = "morty:6add41510412ca196efb3e4f949d403a8b6f35d7"
 meta-oe           = "morty:fe5c83312de11e80b85680ef237f8acb04b4b26e"
 meta-intel-realsense = "morty:2c0dfe9690d2871214fba9c1c32980a5eb89a421"
 meta-java         = "master:67e48693501bddb80745b9735b7b3d4d28dce9a1"
-\end{verbatim}
+\end{lstlisting}
 
 %% Interruzione di pagina
 \newpage
@@ -3510,6 +3512,8 @@ $ make
 $ ./RSPCN
 \end{lstlisting}
 
+\`E necessario assicurarsi di aver collegato correttamente le telecamere RealSense alla macchina host prima di eseguire il programma.
+
 \subsubsection{Compilazione ed esecuzione della versione per il ReliaGate 20-25}
 Dopo aver installato la toolchain di cross-compilazione resa disponibile dal progetto Yocto \`e sufficiente eseguire i seguenti comandi:
 
@@ -3526,7 +3530,18 @@ $ $CXX -std=c++11 -lX11 -pthread -o RSPCN20-25 main.cpp  \
 -lrealsense
 \end{lstlisting}
 
-\noindent Dove si presume che la cartella di installazione della toolchain sia quella di default.
+\noindent Dove si presume che la cartella di installazione della toolchain sia quella di default. \`E necessario quindi trasferire il binario compilato sulla macchina target ed eseguirlo normalmente.
+
+\subsubsection{Esecuzione remota}
+Poich\'e nell'immagine della build Yocto \`e presente \verb|ssh|, \`e possibile eseguire in remoto il programma del Passenger Counter effettuando il tunneling di X11 per mezzo del comando:
+
+\begin{lstlisting}[language=bash]
+$ ssh -X root@<IP macchina target>
+\end{lstlisting}
+
+In questo modo sar\`a possibile visualizzare sulla macchina host gli stream catturati dalle telecamere collegate alla macchina target ed il risultato della computazione.
+
+Si noti che questa modalit\`a degrada leggermente le prestazioni del contatore rendendo il framerate instabile.
 
 \subsubsection{Modalit\`a di esecuzione}
 L'applicativo supporta due modalit\`a di esecuzione:
@@ -3536,15 +3551,12 @@ L'applicativo supporta due modalit\`a di esecuzione:
 \item \verb|-s|: in aggiunta alle operazioni di cui sopra, salva in formato video gli stream in ingresso dalle telecamere nei vari passaggi intermedi dell'elaborazione.
 \end{itemize}
 
-%% Interruzione di pagina
-\newpage
-
 \subsubsection{Comandi run-time}
 Una volta lanciato l'applicativo, il programma resta in attesa di input dall'utente perch\`e vengano immessi i comandi run-time. I comandi disponibili sono i seguenti e vengono applicati a tutti i contatori attivi:
 
 \begin{itemize}
-\item \verb|r|: Resetta i contatori
-\item \verb|p|: Visualizza il conteggio attuale
+\item \verb|r|: Resetta i contatori.
+\item \verb|p|: Visualizza il conteggio attuale sulla console.
 \item \verb|c|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream a colori con le informazioni di conteggio e tracking.
 \item \verb|C|: Abilita/Disabilita le trackbar per effettuare la calibrazione dei settaggi del contatore, tra questi settaggi sono disponibili:
     \begin{itemize}
@@ -3555,17 +3567,14 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
     \item Area min: area minima per la quale l'oggetto rilevato viene tracciato.
     \item Passenger age: tempo per il quale i passeggeri tracciati vengono lasciati in memoria prima di essere cancellati quando non vengono pi\`u rilevati nel raggio visivo della telecamera.
     \end{itemize}
-\item \verb|d|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream della colorMap.
-\item \verb|D|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a grezzi provenienti dalla telecamera RealSense.
-\item \verb|f|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a post processati e che vengono dati in pasto all'algoritmo di rilevamento dei contorni.
+\item \verb|d|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream della colorMap (contenuto nella variabile \verb|depthColorMap|).
+\item \verb|D|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a grezzi provenienti dalla telecamera RealSense (contenuto nella variabile \verb|rawDepth|).
+\item \verb|f|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a post processati e che vengono dati in pasto all'algoritmo di rilevamento dei contorni (contenuto nella variabile \verb|frame|).
 \item \verb|s|: Abilita/Disabilita la stabilizzazione del framerate.
 \item \verb|q|: Termina il programma.
 \item \verb|h|: Visualizza il messaggio di aiuto.
-\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione e altri parametri.
 \end{itemize}
-
-%% Interruzione di pagina
-\newpage
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -3583,6 +3592,18 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
 \end{figure}
 
 Come \`e possibile notare dalle figure \ref{fig:preset0}, \ref{fig:preset1} e \ref{fig:preset2} i preset sono molto utili per gestire varie situazioni di illuminazione e permettono di variare leggermente il range di funzionamento delle telecamere.
+
+Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione normale e sono stati visualizzati lo stream a colori e abilitata la calibrazione dei settaggi del contatore.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{EsempioRSPCNcpp.png}
+  \caption{Schermata tipica RSPCN versione C++}
+  \label{fig:EsempioRSPCNcpp}
+\end{figure}
+
+%% Interruzione di pagina
+\newpage
 
 \subsection{Versione Java Wrap}
 
@@ -3624,7 +3645,7 @@ $ java Main
 \subsection{Versione Java}
 I seguenti comandi sono gli stessi per la macchina host e per il ReliaGate 20-25.
 
-Compilazione degli eseguibili:
+\noindent Compilazione degli eseguibili:
 
 \begin{lstlisting}[language=bash]
 $ cd java_src/
@@ -3653,7 +3674,7 @@ Anche in questo caso, all'avvio, viene istanziato un contatore per telecamera co
 \item \verb|B|: \textbf{Video recording in bare metal mode}. Vengono salvati su file gli stream video ma non vengono visualizzati in run-time.
 \end{enumerate}
 
-L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le finestre di questa versione basate sul framework Java e non su X, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
+L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le finestre di questa versione basate sul framework Java e non su X11, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
 
 \subsubsection{Comandi Run-time}
 Anche in questo caso le opzioni vengono applicate a tutti i contatori attualmente attivi sulla macchina.
@@ -3665,11 +3686,20 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
 \item \verb|t|: Imposta la soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
 \item \verb|x|: Imposta il numero di pixel dell'asse orizzontale per il tracking.
-\item \verb|x|: Imposta il numero di pixel dell'asse verticale per il tracking.
+\item \verb|y|: Imposta il numero di pixel dell'asse verticale per il tracking.
 \item \verb|b|: Imposta la quantit\`a di offuscamento dell'immagine per ridurre il rumore.
 \item \verb|a|: Imposta il tempo per il quale i passeggeri tracciati vengono lasciati in memoria prima di essere cancellati quando non vengono pi\`u rilevati nel raggio visivo della telecamera.
 \item \verb|h|: Visualizza il messaggio di aiuto.
 \end{itemize}
+
+Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione Normal Mode.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{EsempioRSPCNjava.png}
+  \caption{Schermata tipica RSPCN versione Java}
+  \label{fig:EsempioRSPCNjava}
+\end{figure}
 
 % Capitolo 5: Conclusioni
 \chapter{Conclusioni}\label{CapitoloConclusioni}
