@@ -1786,7 +1786,7 @@ I problemi principali rilevati in questa implementazione del Passenger Counter s
 \item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
 \item \textbf{Tracciamenti indesiderati}: Come visto nel paragrafo precedente, nonostante l'algoritmo riesca a rilevare la maggior parte delle ombre come tali, spesso le ombre vengono tracciate erroneamente. Ci\`o comporta errori nel conteggio.
 \item \textbf{Performance}: L'algoritmo di sottrazione del background, come riportato nel paragrafo precedente, \`e piuttosto oneroso dal punto di vista computazionale. Ci\`o ne limita le possibili applicazioni: non \`e possibile utilizzare telecamere con risoluzione elevata e bisogna limitare il numero di telecamere utilizzate contemporaneamente.
-\item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\`e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza, senza contare le vibrazioni del mezzo.
+\item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello di background costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\'e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza, senza contare le vibrazioni del mezzo.
 \end{enumerate}
 
 Per questo motivo si \`e passati ad una seconda implementazione sfruttando una tecnologia esente da queste problematiche: il Passenger Counter con telecamere RealSense.
@@ -1966,7 +1966,7 @@ RSPCN::RSPCN(device *assignedDevice) {
 
 Come \`e possibile notare al costruttore viene passato un oggetto della classe \verb|device| che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
 
-Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\`e le telecamera operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
+Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\'e le telecamera operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
 
 \begin{itemize}
 \item Telecamera R200: 320x240 pixel @ 60 fps.
@@ -2419,10 +2419,10 @@ Una volta aggiornate le posizioni viene letto l'intero database dei passaggeri a
     \end{itemize}
 \item Si effettua l'update del parametro \verb|age| dei passeggeri.
 \item Se il passeggero si trova fuori dal raggio d'azione della telecamera se ne aggiorna la posizione con l'ultima conosciuta.
-\item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\`e troppo a lungo fuori dal raggio visivo della telecamera.
+\item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\'e troppo a lungo fuori dal raggio visivo della telecamera.
 \end{enumerate}
 
-Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\`e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
+Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\'e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
 
 Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
 
@@ -3154,7 +3154,7 @@ Purtroppo questo layer risultava essere compatibile solamente con la versione 4.
 Il downgrade di OpenCV ha richiesto qualche accorgimento in fase di cross-compilazione del Passenger Counter in quanto la versione 3.2 di OpenCV aveva ridotto il numero di moduli, integrando pi\`u funzionalit\`a in uno stesso modulo.
 
 \subsection{Terza versione}
-Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment ed un JDK (Java Developer Kit). Si \`e scelto di installare OpenJDK-8 perch\`e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
+Questa versione \`e stata realizzata per supportare il Passenger Counter con telecamere RealSense e le varie versioni Java. Ci\`o ha significato installare una Java Run-time Environment ed un JDK (Java Developer Kit). Si \`e scelto di installare OpenJDK-8 perch\'e il processo di installazione era pi\`u semplice. Sono infatti noti dei problemi di installazione per la versione Oracle del JDK.
 
 \`E stato quindi necessario installare un nuovo layer: \textbf{meta-java}. Purtroppo il versioning di questo layer non seguiva lo standard dei restanti layer e mostrava problemi di compatibilit\`a con gli altri layer. \`E stato necessario percorrere all'indietro lo storico dei commit della repository contenente il layer, fino a trovare una versione compatibile con l'immagine realizzata finora.
 
@@ -3552,7 +3552,7 @@ L'applicativo supporta due modalit\`a di esecuzione:
 \end{itemize}
 
 \subsubsection{Comandi run-time}
-Una volta lanciato l'applicativo, il programma resta in attesa di input dall'utente perch\`e vengano immessi i comandi run-time. I comandi disponibili sono i seguenti e vengono applicati a tutti i contatori attivi:
+Una volta lanciato l'applicativo, il programma resta in attesa di input dall'utente perch\'e vengano immessi i comandi run-time. I comandi disponibili sono i seguenti e vengono applicati a tutti i contatori attivi:
 
 \begin{itemize}
 \item \verb|r|: Resetta i contatori.
@@ -3929,10 +3929,6 @@ In molte implementazioni pratiche di questa tecnica viene effettuate una serie d
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
-
-%% Riassunto (opzionale)
-%% \summary
-%% Maecenas tempor elit sed arcu commodo, dapibus sagittis leo egestas. Praesent at ultrices urna. Integer et nibh in augue mollis facilisis sit amet eget magna. Fusce at porttitor sapien. Phasellus imperdiet, felis et molestie vulputate, mauris sapien tincidunt justo, in lacinia velit nisi nec ipsum. Duis elementum pharetra lorem, ut pellentesque nulla congue et. Sed eu venenatis tellus, pharetra cursus felis. Sed et luctus nunc. Aenean commodo, neque a aliquam bibendum, mauris augue fringilla justo, et scelerisque odio mi sit amet diam. Nulla at placerat nibh, nec rutrum urna. Donec ut egestas magna. Aliquam erat volutpat. Phasellus vestibulum justo sed purus mattis, vitae lacinia magna viverra. Nulla rutrum diam dui, vel semper mi mattis ac. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec id vestibulum lectus, eget tristique est.
 
 %% Bibliografia (opzionale)
 \bibliographystyle{plain_\languagename}%% Carica l'omonimo file .bst, dove \languagename è la lingua attiva.
