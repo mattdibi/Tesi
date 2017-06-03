@@ -269,11 +269,10 @@ Qui di seguito \`e riportata l'organizzazione del testo:
 \item Capitolo \ref{CapitoloConclusioni}: Riassunto e conclusioni.
 \end{itemize}
 
-%% Capitolo 2: Contesto tecnologico di dettaglio
 \chapter{Contesto tecnologico di dettaglio}\label{CapitoloContestoTecnologico}
 Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utilizzate nello svolgimento della tesi.
 
-\section{Tecnologie PCN Eurotech}
+\section{Tecnologie Passenger Counter Eurotech}
 
 \begin{figure}[h!]
   \centering
@@ -286,9 +285,9 @@ Passiamo ora a descrivere pi\`u tecnicamente e nel dettaglio le tecnologie utili
 \newpage
 
 \subsection{Hardware}
-Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione delle immagini.
+Il sistema di conteggio dei passeggeri consta di due componenti hardware fondamentali: il gateway e il dispositivo di acquisizione ed elaborazione delle immagini.
 
-Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune interfacce di rete per il deployment mobile. Esso ha infatti interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\'e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud di Eurotech.
+Il gateway \`e un prodotto della Eurotech noto come ReliaGate 50-21. Utilizza un processore x86 Intel Atom Z510P al quale sono state aggiunte opportune connessioni di rete per il deployment mobile. Esso \`e dotato infatti di interfacce 2G/3G, WiFi, 802.15.4/Zigbee e GPS. Questo componente rappresenta l'unit\`a di elaborazione centrale del sistema nonch\'e il mezzo attraverso il quale i dati di conteggio vengono raccolti e trasmessi alla piattaforma cloud di Eurotech.
 
 \begin{figure}[h!]
   \centering
@@ -297,9 +296,9 @@ Il gateway \`e un altro prodotto della Eurotech noto come ReliaGATE 50-21. Utili
   \label{fig:DynaPCN1020}
 \end{figure}
 
-Il cuore del sistema \`e il DynaPCN 10-20, visibile in figura \ref{fig:DynaPCN1020}, il quale si incarica dell'elaborazione video e conteggio degli attraversamenti. Esso nasconde al suo interno una FPGA programmata con una IP proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
+Il cuore del sistema \`e il DynaPCN 10-20, visibile in figura \ref{fig:DynaPCN1020}, il quale si incarica dell'elaborazione video e conteggio degli attraversamenti. Esso nasconde al suo interno una FPGA programmata con una IP (Intellectual Property) proprietaria Eurotech che permette la ricostruzione in 3D delle immagini acquisite dalle telecamere stereoscopiche di cui \`e dotato il dispositivo.
 
-Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la scena, le telecamere ad infrarossi stereoscopiche acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che per mezzo di tecniche di ricostruzione stereoscopica, accelerate in hardware, permette di generare una immagine in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
+Il funzionamento \`e il seguente: i proiettori di luce infrarossa illuminano la scena, le telecamere ad infrarossi acquisiscono le immagini nello spettro della luce infrarossa. Le due immagini vengono passate alla FPGA che, per mezzo di tecniche di ricostruzione stereoscopica\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}, accelerate in hardware, permette di generare una immagine in scala di grigi dove l'informazione di profondit\`a \`e data dal colore del pixel. Queste immagini vengono quindi passate all'unit\`a di elaborazione centrale che vi applica un semplice algoritmo per il tracciamento dei passeggeri di cui discuteremo il funzionamento nel dettaglio nel prossimo paragrafo.
 
 %% Interruzione di pagina
 \newpage
@@ -323,7 +322,7 @@ Il cuore dell'algoritmo opera come segue:
 \end{enumerate}
 In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione di quanto accade durante il conteggio.
 
-I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al gateway ReliGate 50-21 per interfacciarsi alla rete IoT Eurotech, il quale li invia sulla cloud. \`E altres\`\i\ possibile sfruttare il GPIO presente sul contatore per interfacciarsi, ad esempio, alle porte automatiche di un'ambiente, per bloccarle qualora si sia raggiunto il limite massimo di occupanti di detto ambiente.
+I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al gateway ReliGate 50-21 il quale li invia sulla rete cloud Eurotech per mezzo delle connessioni di cui \`e dotato. \`E altres\`\i\ possibile sfruttare il GPIO presente sul dispositivo per interfacciarsi, ad esempio, alle porte automatiche di un'ambiente, per bloccarle qualora si sia raggiunto il limite massimo impostato di occupanti.
 
 %% Interruzione di pagina
 \newpage
@@ -333,11 +332,16 @@ I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al g
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{SoftwareStack.png}
-  \caption{Schematizzazione stack software del sistema di Passenger Counting.}
+  \caption{Stack software del sistema di Passenger Counter Eurotech.}
   \label{fig:StackSoftwarePCNEurotech}
 \end{figure}
 
-La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Al di sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. 
+
+OSGi (Open Services Gateway Initiative) \`e una organizzazione open standard fondata per specificare e mantenere lo standard OSGi, il quale \`e una specifica che descrive un sistema modulare e una service platform per il linguaggio Java che implementa un component model completo e dinamico. Applicazioni e componenti, i quali sono raccolti in ``bundle'' per il deployment, possono essere installati, fermati, aggiornati e disinstallati in remoto senza che sia necessario il reboot del sistema.
+
+Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
+
 Nei prossimi capitoli vedremo come sia stato necessario adattare l'applicazione realizzata nel corso di questa tesi alla infrastruttura qui descritta, nonch\'e modificare parte dell'infrastruttura per aggiungere funzionalit\`a mancanti e necessarie alla nuova versione del Passenger Counter.
 
 %% Interruzione di pagina
@@ -352,7 +356,7 @@ Questo sistema di conteggio dei passeggeri non \`e esente da problematiche, le q
 \item Per come \`e stata implementata la soluzione \`e necessario installare un gateway per ogni DynaPCN 10-20 presente nell'ambiente. Anche questo contribuisce ad aumentare i costi di produzione del sistema e ne diminuisce l'appetibilit\`a sul mercato.
 \end{enumerate}
 
-Vedremo che nella versione del Passenger Counter realizzata nel corso di questa tesi sono stati risolti in buona parte tutte queste problematiche, con vari gradi di successo.
+Vedremo che nella versione del Passenger Counter realizzata nel corso di questa tesi sono state risolte in buona parte tutte queste problematiche, con vari gradi di successo.
 
 %% Interruzione di pagina
 \newpage
