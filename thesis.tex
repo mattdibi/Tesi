@@ -761,9 +761,9 @@ Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i se
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
 
 \chapter{Passenger Counter con sottrazione del background}\label{CapitoloPCN}
-In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
+In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
-Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
 \section{Componenti hardware}\label{HardwarePCN}
 Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
@@ -821,7 +821,7 @@ Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione d
 \noindent L'algoritmo si compone di due fasi:
 
 \begin{enumerate}
-\item L'inizializzazione del background: dove viene creato il primo modello del background (BG Model).
+\item L'inizializzazione del background: dove viene creato il primo modello dello sfondo (BG Model).
 \item L'aggiornamento del modello: dove le informazioni sul modello del background vengono aggiornate per tenere conto degli eventuali cambiamenti nella scena osservata.
 \end{enumerate}
 
@@ -831,11 +831,11 @@ Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione d
 \subsection{Algoritmo OpenCV: MOG2}
 La funzione utilizzata nello sviluppo di questa versione del Passenger Counter, resa disponibile da OpenCV, implementa l'algoritmo Gaussian Mixture-based Background/Foreground Segmentation Algorithm nella sua versione migliorata nota come MOG2.
 
-L'algoritmo usato all'interno del codice di questa versione del contatore di passeggeri \`e basata su due paper pubblicati da Z.Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
+L'algoritmo usato all'interno del codice \`e basato su due paper pubblicati da Z. Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
 
 Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
 
-Tipicamente, per facilitare l'elaborazione delle immagini a valle dell'applicazione dell'algoritmo di background subtraction, si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background i pixel bianchi il primo piano detta foreground mask. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio. 
+Tipicamente si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background e i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio. 
 
 Questo algoritmo \`e reso disponibile per mezzo della struttura \verb|BackgroundSubtractorMOG2| dalla libreria OpenCV. Nei prossimi paragrafi vedremo come \`e stato utilizzato all'interno del codice del Passenger Counter.
 
@@ -849,7 +849,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
   \label{fig:EsempioBackSub}
 \end{figure}
 
-In figura \ref{fig:EsempioBackSub} si pu\`u notare come le persone vengano correttamente associate alla foreground mask poich\`e evidenziate dal colore bianco e come le ombre associate agli oggetti in movimento siano evidenziate dal colore grigio.
+In figura \ref{fig:EsempioBackSub} si pu\`o notare come le persone vengano correttamente associate alla foreground mask poich\`e evidenziate dal colore bianco e come le ombre associate agli oggetti in movimento siano evidenziate dal colore grigio.
 
 %% Interruzione di pagina
 \newpage
@@ -857,10 +857,10 @@ In figura \ref{fig:EsempioBackSub} si pu\`u notare come le persone vengano corre
 \section{Algoritmo per il rilevamento dei contorni}\label{AlgoritmoFindContours}
 Nella computer vision i metodi di blob detection sono finalizzati a rilevare regioni in un'immagine digitale che differiscano per propriet\`a, come luminosit\`a o colore, rispetto alle regioni circostanti. I blob, quindi, sono regioni di un'immagine nelle quali alcune propriet\`a sono costanti.
 
-Nel caso dell'applicazione del Passenger Counter le regioni di interesse, o blob, saranno i passeggeri che vogliamo tracciare all'interno del raggio visivo della telecamera. Per andare a rilevare questi blob si \`e usata la funzione \verb|findContours|.
+Nel caso dell'applicazione del Passenger Counter le regioni di interesse, o blob, saranno i passeggeri che si vuole tracciare all'interno del raggio visivo della telecamera. Per andare a rilevare questi ultimi si \`e usata la funzione \verb|findContours()|.
 
 \subsection{Principio di funzionamento}
-Alla base dell'algoritmo implementato dalla funzione \verb|findContours| c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE)\cite{freeman61}. Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o blob sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
+Alla base dell'algoritmo implementato dalla funzione \verb|findContours()| c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE)\cite{freeman61}. Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o blob sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
 
 \begin{figure}[h!]
   \centering
@@ -869,7 +869,7 @@ Alla base dell'algoritmo implementato dalla funzione \verb|findContours| c'\`e i
   \label{fig:Freeman}
 \end{figure}
 
-Si consideri in ingresso una immagine monocroma, la quale, ad esempio, rappresenta una scena a cui \`e stato sottratto lo sfondo. Il foreground sar\`a rappresentato per mezzo di pixel bianchi mentre lo sfondo con pixel neri. L'algoritmo si compone delle seguenti operazioni.
+Si consideri in ingresso una immagine monocroma, la quale, ad esempio, rappresenta una scena a cui \`e stato sottratto lo sfondo. Il foreground sia rappresentato per mezzo di pixel bianchi mentre lo sfondo con pixel neri. L'algoritmo si compone delle seguenti operazioni.
 
 Anzitutto si scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine.
 
@@ -917,7 +917,7 @@ In figura \ref{fig:EsempioFindContours} l'immagine a sinistra rappresenta l'imma
   \label{fig:PCNUML}
 \end{figure}
 
-In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le funzioni dei vari componenti del progetto sono le seguenti:
+In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le finalit\`a dei vari componenti del progetto sono le seguenti:
 \begin{enumerate}
 \item \textbf{Passenger}: implementa la struttura adatta a rappresentare e memorizzare i passeggeri all'interno del programma.
 \item \textbf{PCN}: implementa il contatore di passeggeri vero e proprio. Questa classe si incarica dell'interfacciamento con le telecamere, l'elaborazione delle immagini e dei dati, espone metodi per controllare il funzionamento real-time ed effettua il conteggio degli attraversamenti. Permette inoltre la parallelizzazione dei contatori: \`e infatti possibile istanziare un contatore per telecamera.
@@ -1011,10 +1011,10 @@ Oltre a queste variabili, le cui finalit\`a sono puramente funzionali, \`e stata
 
 \begin{itemize}
 \item \verb|getTracks()|: ritorna l'intero storico delle posizioni rilevate del passeggero.
-\item \verb|getTrackColor()|: ritorna il colore col quale tracciare la cornologia delle posizioni del passeggero.
+\item \verb|getTrackColor()|: ritorna il colore col quale tracciare la cronologia delle posizioni del passeggero.
 \item \verb|getCurrentPoint()|: ritorna la posizione corrente assunta dal passeggero all'interno del raggio visivo della telecamera. Questa posizione \`e salvata come \verb|Point|, tipo definito da OpenCV, il quale rappresenta una coordinata in pixel.
 \item \verb|getLastPoint()|: ritorna l'ultima posizione conosciuta del passeggero.
-\item \verb|updateCoords()|: aggiorna l'ultima coordinata conosciuta del passeggero.
+\item \verb|updateCoords()|: aggiorna la posizione corrente del passeggero.
 \item \verb|updateAge()|: aggiorna la variabile \verb|age| del passeggero.
 \item \verb|resetAge()|: resetta a zero la variabile \verb|age| del passeggero.
 \end{itemize}
@@ -1031,7 +1031,7 @@ Questa classe ha come obiettivi principali:
 \begin{itemize}
 \item Implementare un oggetto contatore che fornisca interfacce verso l'esterno per poterne controllare i comportamenti.
 \item Effettuare l'interfacciamento al dispositivo di acquisizione delle immagini.
-\item Implementare il kernel del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui abbiamo parlato in precedenza.
+\item Implementare il ``nucleo'' del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui abbiamo parlato in precedenza.
 \item Permettere l'esecuzione parallela di pi\`u contatori contemporaneamente, uno per telecamera collegata al unit\`a di elaborazione.
 \item Permettere la visualizzazione e la registrazione dei risultati dell'elaborazione.
 \end{itemize}
@@ -1112,7 +1112,7 @@ private:
     \begin{itemize}
     \item \verb|displayColor|, \verb|displayBacksub|, \verb|displayDenoise|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
     \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
-    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
+    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
     \end{itemize}
 \end{itemize}
 
@@ -1146,10 +1146,10 @@ Nel seguito sono riportati i parametri di impostazione della funzione che implem
     \item \verb|detectShadows|: questo booleano imposta il sottrattore in modo tale che cerchi di rilevare le ombre. Le ombre saranno contrassegnate dal colore grigio.
     \end{itemize}
 
-Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\`e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione ed utilizza una sintassi diversa.
+Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\'e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione ed utilizza una sintassi diversa.
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
-\item \verb|count()|: \`e il kernel del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel prossimo paragrafo.
+\item \verb|count()|: \`e il nucleo del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel prossimo paragrafo.
 \end{itemize}
 
 \subsubsection{Utilizzo della classe PCN}
@@ -1163,7 +1163,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 %% Interruzione di pagina
 \newpage
 
-\section{Analisi del kernel del programma: funzione count()}\label{kernelPCN}
+\section{Analisi del nucleo del programma: funzione count()}\label{kernelPCN}
 La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
