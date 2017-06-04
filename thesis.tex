@@ -615,7 +615,7 @@ Nella fase iniziale del progetto si \`e studiato quale potesse essere l'ambiente
     \caption{Riassunto componenti ambiente di sviluppo Xilinx.}
 \end{table}
 
-Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possibile sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo per accelerare in hardware le parti dell'applicativo pi\`u pesanti dal punto di vista computazionale, in modo semplice e con un approccio di alto livello. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto vengono fornite anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
+Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrasse una CPU ARM e una FPGA, in modo che fosse possibile sfruttare i tool di sintesi di alto livello messi a disposizione da Xilinx per lo sviluppo, accelerando in hardware le parti dell'applicativo pi\`u pesanti dal punto di vista computazionale, in modo semplice e con un approccio di alto livello. Utilizzando questo ambiente di sviluppo integrato sarebbe stato possibile realizzare applicazioni ad altissime prestazioni con la flessibilit\`a di un linguaggio ad alto livello come C/C++. Uno dei target di punta di questi sistemi di sviluppo \`e appunto l'image processing e come supporto vengono fornite anche librerie proprietarie pre-ottimizzate per l'hardware Xilinx.
 
 %% Interruzione di pagina
 \newpage
@@ -632,8 +632,8 @@ Specifiche tecniche:
     \multicolumn{2}{| c |}{ \bf Specifiche tecniche ZYNQ-7000 XC7Z020} \\
     \hline
     \hline
-    SOC & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
-    Memoria & 512 MB DDR3 + 256 Mb Quad-SPI Flash + 4GB SD card \\ \hline
+    SoC & Dual-core ARM Cortex-A9 + FPGA Kintex-7 \\ \hline
+    Memoria & 512 MB DDR3 + 256 MB Quad-SPI Flash + 4GB SD card \\ \hline
     Espansione & FMC (Low Pin Count) + Pmod headers (2x6) \\ \hline
     Video & HDMI output (1080p60 + audio) + VGA \\
     \hline
@@ -656,7 +656,7 @@ In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 \newpage
 
 \subsection{Piattaforma per lo sviluppo SDSoC}
-La piattaforma per lo sviluppo SDSoC (Software-defined system-on-chip) permette uno sviluppo integrato dell'applicativo e dell'IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
+La piattaforma per lo sviluppo SDSoC (Software-Defined System-on-Chip) permette uno sviluppo integrato dell'applicativo e delle IP hardware utilizzando un linguaggio di alto livello come il C o il C++. Vista la maggiore familiarit\`a con i linguaggi di alto livello l'utilizzo di questo ambiente di sviluppo avrebbe comportato una maggior flessibilit\`a e velocit\`a nello sviluppo con il vantaggio di potersi avvalere dell'accelerazione hardware sfruttando la FPGA presente sul SoC.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
 \begin{center}
@@ -667,11 +667,11 @@ La piattaforma per lo sviluppo SDSoC (Software-defined system-on-chip) permette 
 
 SDSoC permette di scrivere l'intera applicazione in codice di alto livello. In fase di compilazione si va a specificare quale funzione si vuole eseguire sulla FPGA, per sfruttarne l'accelerazione hardware. A seguito dell'intervento del programmatore per specificare mappatura della memoria e ottimizzazioni per l'esecuzione in hardware, viene generato il bitstream necessario alla programmazione della FPGA assieme all'applicativo destinato alla CPU. 
 
-I compilatori del sistema SDSoC analizzano il programma per determinare il data flow tra le funzioni hardware e software e generano un application specific system-on-chip per realizzare il programma. Per raggiungere alte performance ogni funzione in hardware viene eseguita su un thread indipendente; il compilatore genera i componenti hardware e software che assicurano la sincronizzazione tra i thread hardware e software, mentre abilita la computazione e comunicazione in pipeline. Il codice applicativo pu\`o includere pi\`u funzioni hardware, molteplici istanze di una specifica funzione hardware, e chiamare la funzione hardware da parti diverse del programma.
+I compilatori del sistema SDSoC infatti analizzano il programma per determinare il data flow tra le funzioni hardware e software e generano un application specific system-on-chip per realizzare il programma. Per raggiungere alte performance ogni funzione in hardware viene eseguita su un thread indipendente; il compilatore genera i componenti hardware e software che assicurano la sincronizzazione tra i thread hardware e software, mentre abilita la computazione e comunicazione in pipeline. Il codice applicativo pu\`o includere pi\`u funzioni hardware, molteplici istanze di una stessa funzione, e chiamare la funzione hardware da parti diverse del programma.
 
 L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo ``what if'' permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
 
-I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un systema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
+I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un sistema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
 
 %% Interruzione di pagina
 \newpage
@@ -742,7 +742,7 @@ L'azienda ha fornito come piattaforma hardware un ReliaGate 20-25 nonch\'e le te
 \subsubsection{Software e piattaforma per lo sviluppo}
 Gli strumenti che si sarebbe andati ad utilizzare sono quelli di cui si \`e parlato nel paragrafo \ref{TecnologieTesi} a pagina \pageref{TecnologieTesi}: Yocto per la realizzazione della distribuzione Linux, la toolchain di Yocto per la cross-compilazione dei sorgenti, OpenCV per l'image processing.
 
-Solo in un secondo momento sono state integrate nel sistema le telecamere RealSense con annessa libreria a causa delle prestazioni non soddisfacenti della prima versione del software.
+Solo in un secondo momento sono state integrate nel sistema le telecamere RealSense, con annessa libreria, a causa delle prestazioni non soddisfacenti della prima versione del software.
 
 I vantaggi di questa piattaforma sono dovuti in gran parte all'architettura del processore Intel: avendo a disposizione un x86 il software disponibile \`e molto ampio e si \`e in grado di avere grande flessibilit\`a nello sviluppo dell'applicazione.
 
@@ -753,9 +753,9 @@ I vantaggi di questa piattaforma sono dovuti in gran parte all'architettura del 
 Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i seguenti motivi:
 \begin{itemize}
 \item \textbf{Flessibilit\`a}: la possibilit\`a di aggiungere librerie e strumenti software grazie al progetto Yocto permetteva di avere un ambiente di lavoro molto pi\`u flessibile della controparte Xilinx.
-\item \textbf{Completezza}: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una installazione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate. AuvizCV infatti possiede solamente 50 dei 2500 e pi\`u algoritmi presenti sulla versione completa di OpenCV.
-\item \textbf{Performance}: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, si sarebbero perse molte performance usando l'ambiente Xilinx.
-\item \textbf{Compatibilit\`a}: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software.
+\item \textbf{Completezza}: la libreria AuvizCV, seppur molto performante, mancava di moltissime funzioni rispetto ad una versione completa di OpenCV, la quale poteva essere comodamente installata sul ReliaGate. AuvizCV infatti possiede solamente 50 dei 2500 e pi\`u algoritmi presenti sulla versione completa della libreria.
+\item \textbf{Performance}: la CPU Intel \`e molto pi\`u performante dell'ARM presente sulla Zedboard. Siccome sarebbe stato comunque necessario eseguire parte del codice OpenCV sulla CPU, le performance ne avrebbero risentito usando l'ambiente Xilinx.
+\item \textbf{Compatibilit\`a}: anche se inizialmente non era previsto l'impiego delle telecamere RealSense, la board Xilinx non sarebbe potuta essere compatibile con queste ultime vista la mancanza di una porta USB 3.0 e il supporto software. Vista la mole di dati da trasferire infatti, le telecamere RealSense necessitano di un bitrate molto elevato, che pu\`o essere garantito solamente dallo standard USB 3.0.
 \end{itemize}
 
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
