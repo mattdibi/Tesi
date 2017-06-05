@@ -489,7 +489,7 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
 Siccome una parte centrale del progetto verteva sull'elaborazione delle immagini \`e stato necessario integrare nel sistema l'uso di OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
 
-OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. Essa \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali e contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di elaborazione di immagini, computer vision e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\`e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
+OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. Essa \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali e contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di elaborazione di immagini, computer vision e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\'e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
 \subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
@@ -1784,7 +1784,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
 
 Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo che la stabilit\`a del framerate risulta compromessa. Nominalmente il flusso video dovrebbe essere stabile sui 30 fps ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
 
-Infine \`e opportuno notare che la durata del loop principale nel caso della telecamera a 30 fps, \`e simile sui due sistemi poich\`e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 fps poich\`e fornisce i frame pi\`u velocemente.
+Infine \`e opportuno notare che la durata del loop principale nel caso della telecamera a 30 fps, \`e simile sui due sistemi poich\'e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 fps poich\'e fornisce i frame pi\`u velocemente.
 
 %% Interruzione di pagina
 \newpage
@@ -1930,7 +1930,7 @@ private:
 \noindent Variabili:
 \begin{itemize}
 \item \verb|dev|: \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
-\item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere i due modelli di telecamere usati durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
+\item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere i due modelli di telecamere usati durante lo sviluppo del progetto poich\'e necessitano di settaggi diversi per il loro funzionamento.
 \item \verb|ImageWidth|, \verb|ImageHeight|, \verb|CameraFramerate|: sono le impostazioni di risoluzione e framerate dei flussi video in ingresso dalle telecamere.
 \item \verb|scale|: \`e il fattore di scala alla quale viene impostata la telecamera, ricavato in run-time.
 \item \verb|cnt_in|, \verb|cnt_out|: sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
@@ -2453,7 +2453,7 @@ Come nella versione precedente si \`e deciso di plottare a schermo tutte le info
   \label{fig:RSPCN}
 \end{figure}
 
-Si noti che la lieve differenza nella posizione delle due telecamere fa in modo che il rettangolo che inscrive l'oggetto tracciato, e cos\`\i\ pure il centro dell'oggetto, siano leggermente spostati rispetto all'oggetto poich\`e il tracking viene effettuato sullo stream proveniente dalla telecamera a infrarossi, mentre il rettangolo viene disegnato sullo stream proveniente dalla telecamera a colori. 
+Si noti che la lieve differenza nella posizione delle due telecamere fa in modo che il rettangolo che inscrive l'oggetto tracciato, e cos\`\i\ pure il centro dell'oggetto, siano leggermente spostati rispetto all'oggetto poich\'e il tracking viene effettuato sullo stream proveniente dalla telecamera a infrarossi, mentre il rettangolo viene disegnato sullo stream proveniente dalla telecamera a colori. 
 
 Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o creare confusione durante la visualizzazione dei video.
 
@@ -2482,7 +2482,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
 
 Si noti ancora una volta come in figura \ref{fig:R2002} il rettangolo appare non centrato sulla testa del passeggero. Ci\`o \`e dovuto al fatto che la telecamera a colori e quelle a infrarossi hanno posizioni diverse.
 
-Inoltre \`e opportuno notare come il centro della testa del passeggero, sempre in figura \ref{fig:R2002}, sia oscurato. Questo \`e dovuto al fatto che il modello R200, poich\`e basato sulla visione stereoscopica, ha un range di funzionamento minimo di circa 30 cm e, in questo caso, una parte della testa si trova fuori dal range operativo della telecamera.
+Inoltre \`e opportuno notare come il centro della testa del passeggero, sempre in figura \ref{fig:R2002}, sia oscurato. Questo \`e dovuto al fatto che il modello R200, poich\'e basato sulla visione stereoscopica, ha un range di funzionamento minimo di circa 30 cm e, in questo caso, una parte della testa si trova fuori dal range operativo della telecamera.
 
 %% Interruzione di pagina
 \newpage
@@ -2532,7 +2532,7 @@ Si noti che a differenza del caso precedente nell'immagine contenente i dati di 
   \label{fig:SR3003}
 \end{figure}
 
-In questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un range di funzionamento molto migliore poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a.
+In questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un range di funzionamento molto migliore poich\'e sfrutta la luce strutturata per ricostruire i dati di profondit\`a.
 
 %% Interruzione di pagina
 \newpage
@@ -2662,9 +2662,9 @@ Anzitutto \`e necessario considerare che il programma \`e molto dipendente dall'
 
 Inoltre \`e necessario considerare le caratteristiche tecniche delle telecamere utilizzate.
 
-Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\`e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se \`e presente la luce solare, la quale ha una forte componente infrarossa. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere il funzionamento della telecamera.
+Come riportato nella tabella \ref{table:SR300Spec} a pagina \pageref{table:SR300Spec} la telecamera SR300 ha un buon range di funzionamento, poich\'e basata sulla luce strutturata per il rilevamento dei dati di profondit\`a, ma non funziona in ambienti esterni. Ci\`o \`e dovuto al fatto che la luce infrarossa emessa dai proiettori della telecamera risulterebbero quasi invisibile sugli oggetti sui quali viene proiettata se \`e presente la luce solare, la quale ha una forte componente infrarossa. Siccome l'ambito di applicazione del contatore \`e dato dai mezzi pubblici, ci si aspetta una illuminazione naturale abbastanza importante e ci\`o pu\`o compromettere il funzionamento della telecamera.
 
-La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente esterno poich\`e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione stereoscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10 metri, il range minimo di 40 cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
+La telecamera R200, i cui dati sono riportati nella tabella \ref{table:R200Spec} a pagina \pageref{table:R200Spec}, garantisce un buon funzionamento in ambiente esterno poich\'e basata sulla visione stereoscopica invece che la luce strutturata. La luce solare in questo caso ne migliora il funzionamento invece che interferire. Purtroppo essendo basata sulla visione stereoscopica il range di funzionamento \`e molto peggiore rispetto alla SR300 per il nostro caso applicativo. Dovendo installare la telecamera ad una altezza di 2,10 metri, il range minimo di 40 cm genera problemi di rilevamento per tutti i passeggeri con una statura superiore al metro e ottanta. Infatti in figura \ref{fig:R2002} \`e possibile notare come parte della testa del passeggero risulti non rilevata correttamente. Nel caso questa area non rilevata fosse troppo ampia si perderebbero le capacit\`a di tracciare i passeggeri e quindi il funzionamento della telecamera risulterebbe compromesso.
 
 Inoltre la telecamera R200 ha un FOV e una risoluzione leggermente inferiori alla telecamera SR300, ci\`o aumenta ulteriormente le difficolt\`a di tracciamento.
 
@@ -2874,7 +2874,7 @@ Per quanto riguarda la versione con telecamere RealSense non ci sono invece prob
 \endminipage
 \end{figure}
 
-In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioPCN1}, \ref{fig:IncrocioPCN2} e \ref{fig:IncrocioPCN3} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| ingloba nello stesso blob due passeggeri che transitano sotto la telecamera se troppo vicini tra loro. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Ci\`o implica che verr\`a tracciata una nuova entit\`a composta dai due passeggeri che resta ferma al centro del frame finch\`e le due persone non sono sufficientemente lontane da tornare ad essere rilevate come due blob separati. Il risultato \`e un comportamento impredicibile del programma.
+In questo caso il comportamento del Passenger Counter a sottrazione del background peggiora notevolmente, fino al completo fallimento del conteggio. Come visibile in figura \ref{fig:IncrocioPCN1}, \ref{fig:IncrocioPCN2} e \ref{fig:IncrocioPCN3} il contatore rileva attraversamenti multipli senza che siano avvenuti a causa dell'interferenza delle ombre rilevate erroneamente come passeggeri e al fatto che, come spiegato in precedenza, la funzione \verb|findContours| ingloba nello stesso blob due passeggeri che transitano sotto la telecamera se troppo vicini tra loro. Quindi le due persone nel raggio visivo della telecamera, raggiunto il centro, verranno inglobate nello stesso blob, a discapito dei blob ai quali erano associati precedentemente. Ci\`o implica che verr\`a tracciata una nuova entit\`a composta dai due passeggeri che resta ferma al centro del frame finch\'e le due persone non sono sufficientemente lontane da tornare ad essere rilevate come due blob separati. Il risultato \`e un comportamento impredicibile del programma.
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -2909,7 +2909,7 @@ Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecno
 Bisogna altres\`\i\ considerare il fatto che il PCN necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
 \subsection{Conclusioni}
-Poich\`e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere ad infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense.
+Poich\'e i vantaggi della versione con telecamere RealSense superano di gran lunga gli svantaggi, si \`e ritenuto opportuno utilizzare questa come versione principale del progetto. Nel seguito verranno trattati i vari porting e versioni del codice, tutte queste sono riferite alla versione con telecamere ad infrarossi. La versione a sottrazione del background, a causa della sua imprecisione ed eccessivo costo computazionale, non \`e stata considerata meritevole di ulteriore attenzione e quindi accantonata in favore della versione RealSense.
 
 %% Interruzione di pagina
 \newpage
@@ -2938,7 +2938,7 @@ SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo
 La versione del Passenger Counter realizzata con questo tool conserva le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsection{Versione Java}
-Il porting dell'applicazione ha comportato fin da subito dei problemi di compatibilit\`a dato che, bench\`e OpenCV avesse recentemente introdotto il support a Java, \`e stato necessario utilizzare un wrapper third-party di OpenCV poich\'e lo richiedeva il wrapper ufficiale della libreria librealsense. Entrambi questi wrapper sono stati realizzati dal progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp.}.
+Il porting dell'applicazione ha comportato fin da subito dei problemi di compatibilit\`a dato che, bench\'e OpenCV avesse recentemente introdotto il support a Java, \`e stato necessario utilizzare un wrapper third-party di OpenCV poich\'e lo richiedeva il wrapper ufficiale della libreria librealsense. Entrambi questi wrapper sono stati realizzati dal progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp.}.
 
 JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Inoltre \`e basato sulla Java Native Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
 
@@ -3740,7 +3740,7 @@ Non soddisfatti del risultato ottenuto con la sottrazione del background si \`e 
 
 Prima di poter procedere nello sviluppo del contatore si \`e ritenuto necessario integrarle nell'immagine del sistema operativo. Solo una volta installate le librerie e i driver con successo si \`e potuti proseguire nello sviluppo. Questa fase si \`e rivelata non priva di problematiche viste le limitazioni nella compatibilit\`a delle librerie di interfacciamento verso le telecamere.
 
-\`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento sulle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\`e gran parte dell'elaborazione avviene sull'ASIC presente all'interno delle telecamere RealSense.
+\`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento sulle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\'e gran parte dell'elaborazione avviene sull'ASIC presente all'interno delle telecamere RealSense.
 
 Una volta constatato che questa versione dell'applicativo soddisfava i requisiti di precisione e qualit\`a richiesti si \`e proceduto ad effettuare il porting del codice nel linguaggio adottato dall'azienda. Infatti l'applicazione \`e stata sviluppata in C++, linguaggio nativo delle libreria OpenCV e librealsense, ma in Eurotech il linguaggio pi\`u usato e adottato come standard \`e il Java.
 
@@ -3934,7 +3934,7 @@ Proiettare una stretta banda di luce su una superficie tridimensionale produce u
   \label{}
 \end{figure}
 
-Per effettuare la scansione di un intera superficie velocemente vengono proiettati dei pattern che consistono di molte bande di luce, disposte ad una distanza arbitraria, poich\`e cos\`\i\ facendo si raccolgono molti campioni contemporaneamente. Visti da punti di vista diversi, i pattern vengono distorti geometricamente a causa della forma degli oggetti.
+Per effettuare la scansione di un intera superficie velocemente vengono proiettati dei pattern che consistono di molte bande di luce, disposte ad una distanza arbitraria, poich\'e cos\`\i\ facendo si raccolgono molti campioni contemporaneamente. Visti da punti di vista diversi, i pattern vengono distorti geometricamente a causa della forma degli oggetti.
 
 \section{Analisi dei pattern}
 
