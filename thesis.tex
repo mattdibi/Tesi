@@ -2681,9 +2681,9 @@ Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie ed algoritmi utilizzati del punto di vista delle prestazioni del programma.
 
 \subsection{Costo computazionale}
-L'algoritmo di sottrazione del background oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
+L'algoritmo di sottrazione dello sfondo oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
 
-In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam poich\`e posseggono la stessa risoluzione e lo stesso framerate.
+In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam Logitech poich\'e posseggono la stessa risoluzione e lo stesso framerate.
 
 %% Interruzione di pagina
 \newpage
@@ -2768,7 +2768,7 @@ Per confrontare i due sistemi di Passenger Counter si \`e utilizzata la seguente
 }
 \end{table}
 
-Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Il numero di falsi positivi nel tracciamento \`e molto maggiore del numero di oggetti tracciati correttamente.
+Le prestazioni del Passenger Counter a sottrazione del background sono di gran lunga peggiori dell'implementazione successiva. Risulta evidente che il problema maggiore del PCN sono i falsi positivi nel tracciamento.
 
 %% Interruzione di pagina
 \newpage
@@ -2789,7 +2789,7 @@ Le prestazioni del Passenger Counter a sottrazione del background sono di gran l
 \end{minipage}
 \end{figure}
 
-Il fatto che nel RSPCN venga tracciata solo la testa dei passeggeri permette un tracking molto pi\`u preciso. Infatti nel caso del PCN la forma del soggetto tracciato varia continuamente e, poich\`e il tracciamento \`e riferito al centro dell'area, ci\`o comporta spostamenti repentini. In figura \ref{fig:trackPCN} possiamo notare come la traccia lasciata dal passeggero sia ricca di discontinuit\`a e linee spezzate, d'altra parte in figura \ref{fig:trackRSPCN} la linea di tracciamento risulta molto pi\`u continua.
+Il fatto che nel RSPCN venga tracciata solo la testa dei passeggeri permette un tracking molto pi\`u preciso. Infatti nel caso del PCN la forma del blob varia continuamente e, poich\'e il tracciamento \`e riferito al centro del blob, ci\`o comporta spostamenti repentini. In figura \ref{fig:trackPCN} possiamo notare come la traccia lasciata dal passeggero sia ricca di discontinuit\`a e linee spezzate, d'altra parte in figura \ref{fig:trackRSPCN} la linea di tracciamento risulta molto pi\`u continua.
 
 Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso della sottrazione del background questo \`e un problema molto grave. Qui di seguito \`e riportato un confronto tra le due versioni.
 
@@ -2809,7 +2809,7 @@ Inoltre bisogna tenere conto dei falsi positivi generati dalle ombre. Nel caso d
 \end{minipage}
 \end{figure}
 
-Appare evidente che l'RSPCN \`e completamente esente da falsi positivi nel tracciamento dovuti alle ombre, mentre nel caso del PCN sono presenti ben due falsi positivi dovuti ad esse. Questo accade nonostante l'algoritmo per la sottrazione del background sia stato pensato per rilevarle ed eliminarle.
+Appare evidente che l'RSPCN \`e completamente esente da falsi positivi nel tracciamento dovuti alle ombre, mentre nel caso del PCN sono presenti ben due falsi positivi dovuti ad esse. Questo accade nonostante l'algoritmo per la sottrazione del background sia stato pensato per rilevarle e quindi permetterne l'eliminazione.
 
 %% Interruzione di pagina
 \newpage
@@ -2892,7 +2892,7 @@ In questo caso il comportamento del Passenger Counter a sottrazione del backgrou
 \noindent La versione con telecamere ad infrarossi invece, ancora una volta, si conferma molto precisa e rileva correttamente gli attraversamenti anche in questa situazione.
 
 \subsection{Dipendenza dall'ambiente}
-La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante. Per lo stesso motivo necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto entrambe queste situazioni si verificano spesso e ci\`o degraderebbe le prestazioni del PCN, mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
+La versione a sottrazione del background ha una forte dipendenza dalle condizioni di luce. Variazioni troppo brusche nelle condizioni di illuminazione ne compromettono il funzionamento, essendo basato su un modello dello sfondo costante o almeno lentamente variabile. Per lo stesso motivo necessita che la telecamera sia montata su una struttura che non sia soggetta a vibrazioni. Nell'applicazione del sistema in un mezzo di trasporto entrambe queste situazioni si verificano spesso e ci\`o degraderebbe le prestazioni del PCN, mentre la versione RealSense del contatore \`e esente da entrambi questi problemi.
 
 Infine, in condizioni di bassa illuminazione, il PCN si trova ad avere a che fare con un rumore molto elevato e quindi un degrado delle prestazioni. D'altro canto, essendo le telecamere RealSense dotate di proiettori di luce infrarossa, il RSPCN non risente di problemi di scarsa illuminazione e anzi, pi\`u l'ambiente \`e privo di luce migliore \`e il suo funzionamento.
 
@@ -2922,31 +2922,31 @@ Il codice analizzato finora \`e riferito a questa versione del codice. Siccome O
 Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: http://www.swig.org/}.
 
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
-SWIG (Simplified Wrapper and Interface Generator - Wrapper semplificato e generatore di interfacce) \`e un wrapper open source utilizzato per collegare i programmi per elaboratore o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
+SWIG (Simplified Wrapper and Interface Generator) \`e un wrapper open source utilizzato per collegare i programmi o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
 
-L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da altri linguaggi di programmazione, passando tipi di dati complessi, mantenendo la memoria libera, ereditariet\`a delle classi dei vari linguaggi, ecc. Il programmatore scrive un file di interfaccia che contiene un elenco di funzioni C/C++ che devono essere rese visibili ad un interprete. SWIG compila il file di interfaccia e genera normale C/C++ ed il codice nel linguaggio di programmazione di destinazione. SWIG generer\`a codice di conversione o serializzazione per le funzioni con argomenti semplici; il codice di conversione per i tipi complessi di argomenti deve essere scritto dal programmatore. Lo strumento SWIG crea codice sorgente che fornisce il collante tra C/C++ e il linguaggio di destinazione. A seconda del linguaggio software, questo collante \`e disponibile in due forme:
+L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da altri linguaggi di programmazione, passando tipi di dati complessi, mantenendo la memoria libera, ereditariet\`a delle classi dei vari linguaggi, ecc. Al programmatore \`e delegato il compito di scrivere un file di interfaccia che contenga un elenco di funzioni C/C++ che devono essere rese visibili ad un interprete. SWIG compila il file di interfaccia e genera normale C/C++ ed il codice nel linguaggio di programmazione di destinazione. Quindi genera il codice di conversione o serializzazione per le funzioni con argomenti semplici; il codice di conversione per i tipi di argomenti complessi deve essere scritto dal programmatore. Lo strumento crea codice sorgente che fornisce il collante tra C/C++ e il linguaggio di destinazione, a seconda del linguaggio software, questo collante \`e disponibile in due forme:
 
 \begin{itemize}
-\item una libreria condivisa che un interprete esistente pu\`o collegare come una qualche forma di modulo di estensione, o
+\item una libreria condivisa che un interprete esistente pu\`o collegare come una qualche forma di modulo di estensione.
 \item una libreria condivisa che pu\`o essere collegata ad altri programmi compilati nel linguaggio di destinazione (ad esempio, utilizzando JNI in Java).
 \end{itemize}
 
 SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo, questo deve essere fatto dal programmatore manualmente.
 
-La versione realizzata con questo tool conserva le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
+La versione del Passenger Counter realizzata con questo tool conserva le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsection{Versione Java}
-Il porting dell'applicazione ha comportato subito grossi problemi di compatibilit\`a poich\'e, bench\'e OpenCV avesse introdotto recentemente il supporto a Java, a causa della libreria librealsense \`e stato necessario appoggiarsi al progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp}.
+Il porting dell'applicazione ha comportato fin da subito dei problemi di compatibilit\`a dato che, bench\`e OpenCV avesse recentemente introdotto il support a Java, \`e stato necessario utilizzare un wrapper third-party di OpenCV poich\'e lo richiedeva il wrapper ufficiale della libreria librealsense. Entrambi questi wrapper sono stati realizzati dal progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp.}.
 
-JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Sfrutta la Java Nativi Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
+JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Inoltre \`e basato sulla Java Native Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
 
-Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets}.
+Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets.}.
 
-JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le configurazioni e le classi di interfacciamento verso le librerie C++ pi\`u usate realizzate sfruttando JavaCPP. I file di configurazione nel pacchetto org.bytedeco.javacpp sono usati dal Parser per creare dai file header C/C++ le interfacce Java che puntano al pacchetto di JavaCPP, il quale a sua volta \`e usato dal Generator e il compilatore nativo C++ per produrre le librerie JNI richieste.
+JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le configurazioni e le classi di interfacciamento verso le librerie C++ pi\`u usate sfruttando JavaCPP. I file di configurazione nel pacchetto org.bytedeco.javacpp sono usati dal Parser per creare dai file header C/C++ le interfacce Java che puntano al pacchetto di JavaCPP, il quale a sua volta \`e usato dal Generator e il compilatore nativo C++ per produrre le librerie JNI richieste.
 
-Nella repository del progetto sono inoltre disponibili i file \verb|.jar| precompilati per l'interfacciamento alle librerie librealsense, i quali sono stati usati per facilitare il porting dell'applicazione in Java.
+Nella repository del progetto sono inoltre disponibili i file \verb|.jar| precompilati per l'interfacciamento alle librerie librealsense, i quali sono stati usati per facilitare il porting dell'applicazione RSPCN in Java.
 
-Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e pi\`u vecchio dell'attuale interfacciamento ufficiale a Java di OpenCV e molto pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
+Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv.}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e stato rilasciato molto prima dell'attuale wrapper Java ufficiale di OpenCV e risulta pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
 Caratteristiche di questa implementazione:
 \begin{itemize}
@@ -2955,9 +2955,6 @@ Caratteristiche di questa implementazione:
 \item Aumento della portabili\`a del codice
 \end{itemize}
 Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla Java Virtual Machine ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
-
-%% Interruzione di pagina
-\newpage
 
 Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni principali del Passenger Counter con telecamere RealSense in Java. I dati sono riferiti all'uso della telecamera R200 sul ReliaGate 20-25.
 
