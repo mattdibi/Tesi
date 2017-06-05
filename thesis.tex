@@ -3828,7 +3828,7 @@ In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali 
 \section{Stereo correspondance: simple block matching}
 Si abbiano due immagini ricavate da altrettante telecamere disposte sullo stesso piano ad una distanza nota tra di loro. Essenzialmente viene presa una piccola regione di pixel nell'immagine proveniente dalla telecamera sinistra (ad esempio) e si cerca la regione pi\`u simile a quella considerata nell'immagine proveniente dalla telecamera destra.
 
-Per esempio, si consideri la regione di pixel contenuta nel riquadro nero nell'immagine proveniente dalla telecamera sinistra.
+Per esempio, si consideri la regione di pixel contenuta nel riquadro nero nell'immagine proveniente dalla telecamera sinistra, chiameremo questa regione ``riquadro template''.
 
 \begin{figure}[h!]
   \centering
@@ -3846,7 +3846,7 @@ Cerchiamo il riquadro pi\`u simile nell'immagine di destra.
   \label{fig:rightSearchCrop}
 \end{figure}
 
-Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell'immagine template (indicate in figura \ref{fig:rightSearchCrop} con il riquadro bianco) e si cerca a destra e a sinistra di queste cooridinate fino ad una massima distanza decisa precedentemente. La regione pi\`u simile \`e evidenziata dal riquadro verde in figura \ref{fig:rightSearchCrop}. La disparit\`a \`e data dalla distanza orizzontale tra i centri del riguardo verde e il riquadro bianco. La metrica di similitudine tra le regioni nei riquadri \`e data dall'operazione nota come SAD (Sum of Absolute Differences, somma delle differenze finite).
+Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell'immagine template (indicate in figura \ref{fig:rightSearchCrop} con il riquadro bianco) e si cerca a destra e a sinistra di queste coordinate fino ad una massima distanza decisa precedentemente. La regione pi\`u simile \`e evidenziata dal riquadro verde in figura \ref{fig:rightSearchCrop}. La disparit\`a \`e data dalla distanza orizzontale tra i centri del riguardo verde e il riquadro bianco. La metrica di similitudine tra le regioni nei riquadri \`e data dall'operazione nota come SAD (Sum of Absolute Differences, somma delle differenze finite).
 
 \begin{equation}
 \sum \left | L(r,c) - R(r,c - d)  \right |
@@ -3854,9 +3854,9 @@ Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell
 
 Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. ``d'' si riferisce alla dispari\`a dell'immagine di destra.
 
-Prima di calcolare la disparity map convertiamo le due immagini in scala di grigi cosicch\`e si abbano solo valori compresi tra 0 e 255 per ogni pixel.
+Prima di calcolare la disparity map convertiamo le due immagini in scala di grigi cosicch\`e si abbiano solo valori compresi tra 0 e 255 per ogni pixel.
 
-Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, sottraiamo ogni pixel nel riquadro template dal pixel corrispondente nella regione e prendiamo il valore assoluto di questa differenza. Quindi sommiamo tutte le differenze e questo ci da un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che le immagini sono molto simili.
+Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, sottraiamo ogni pixel nel riquadro template dal pixel corrispondente nella regione e prendiamo il valore assoluto di questa differenza. Quindi sommiamo tutte le differenze e questo ci da un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che i riquadri sono molto simili.
 
 \begin{figure}[h!]
   \centering
@@ -3871,10 +3871,10 @@ Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, l
 
 \section{Rettificazione}
 
-Si noti come nel simple block matching si \`e cercata la corrispondenza tra blocchi solamente in orizzontale e non in verticale. Ci\`o \`e reso possibile dall'operazione di rettificazione delle immagini. Questa operazione, la quale coinvolge il rilevamento di un insieme di keypoint (usando algoritmi come SIFT o SURF) delle due immagini, e quindi l'applicazione di trasformazioni sulle immagini in modo tale che i keypoint siano allineati verticalmente. Ci\`o permette di eliminare eventuali rotazioni o deformazioni dovute alle lenti nelle immagini e si pu\`o ignorare la componente verticale nella ricerca dei riquadri simili durante l'operazione di simple block matching.
+Si noti come nel simple block matching si \`e cercata la corrispondenza tra blocchi solamente in orizzontale e non in verticale. Ci\`o \`e reso possibile dall'operazione di rettificazione delle immagini. Questa operazione consiste nel rilevare un insieme di keypoint, o punti di interesse, all'interno dei due piani, per mezzo di algoritmi di keypoint detection come SIFT o SURF, e quindi applicare delle trasformazioni sulle immagini in modo tale che questi punti siano allineati verticalmente. Ci\`o permette di eliminare eventuali rotazioni o deformazioni dovute alle lenti nelle immagini e si pu\`o ignorare la componente verticale nella ricerca dei riquadri simili durante l'operazione di simple block matching.
 
 \section{Triangolazione}
-Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini ricavate da queste due telecamere si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
+Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini catturate si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
 
 %% Interruzione di pagina
 \newpage
@@ -3895,7 +3895,7 @@ In figura \ref{fig:SchemaStereoVision} abbiamo che:
 \item f: \`e la distanza focale delle due telecamere.
 \end{itemize}
 
-Quindi sfruttando il fatto che i triangoli PO\ped{R}O\ped{T} e Ppp' sono triangoli simili possiamo ricavare:
+Quindi, sfruttando il fatto che i triangoli PO\ped{R}O\ped{T} e Ppp' sono triangoli simili, possiamo ricavare:
 
 \begin{equation}
 \frac{B}{Z} = \frac{(B + x_T) - x_R}{Z - f}
@@ -3910,7 +3910,7 @@ Z = \frac{B \times f}{x_R - x_T} = \frac{B \times f}{d}
 Dove si definisce \textit{Disparit\`a}:
 
 \begin{equation}
-d = x_R - x_T
+d \overset{\Delta}{=} x_R - x_T
 \end{equation}
 
 ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
