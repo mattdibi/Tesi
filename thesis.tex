@@ -119,7 +119,7 @@ L'applicazione Passenger Counter ha come scopo quello di contare i passeggeri ch
 Lo sviluppo si \`e diviso in tre fasi principali:
 \begin{itemize}
 \item Una indagine preliminare atta ad individuare la miglior piattaforma hardware/software sulla quale sviluppare l'applicazione.
-\item Progettazione ed implementazione del contatore basato interamente su algoritmi di elaborazione delle immagini, individuando i passaggi pi\`u pesanti dal punto di vista computazionale. Nel resto del testo ci riferiremo a questa versione del software come: Passenger Counter a sottrazione dello sfondo, o PCN.
+\item Progettazione e implementazione del contatore basato interamente su algoritmi di elaborazione delle immagini, individuando i passaggi pi\`u pesanti dal punto di vista computazionale. Nel resto del testo ci riferiremo a questa versione del software come: Passenger Counter a sottrazione dello sfondo, o PCN.
 \item Progettazione e implementazione del contatore sfruttando telecamere ad infrarossi Intel RealSense. Nel resto del testo ci riferiremo a questa versione dell'applicazione come: Passenger Counter con telecamere RealSense, o RSPCN.
 \end{itemize}
 
@@ -156,7 +156,7 @@ In questo capitolo tratteremo il contesto all'interno del quale si configura l'a
   \label{fig:IoTInfrastructure}
 \end{figure}
 
-L'Internet of Things (IoT) \`e l'interconnesione di device, veicoli, edifici e oggetti dotati di elettronica, software, sensori, attuatori e connettivit\`a che permettono a questi oggetti di raccogliere e scambiare dati. L'IoT permette agli oggetti di essere rilevati e controllati in remoto attraverso l'infrastruttura di rete esistente, creando opportunit\`a per una integrazione pi\`u diretta del mondo fisico all'interno di sistemi informatizzati, con l'obbiettivo di aumentare l'efficienza, la precisione e il beneficio economico riducendo al contempo la necessit\`a dell'intervento umano. Tipicamente ci si aspetta che l'IoT offra connettivit\`a avanzata tra device, sistemi e servizi che vadano oltre la comunicazione Machine-to-machine (M2M) e coprano una variet\`a di protocolli, domini ed applicazioni. L'obiettivo \`e quello di introdurre processi di automazione in tutti i settori.
+L'Internet of Things (IoT) \`e l'interconnesione di device, veicoli, edifici e oggetti dotati di elettronica, software, sensori, attuatori e connettivit\`a che permettono a questi oggetti di raccogliere e scambiare dati. L'IoT permette agli oggetti di essere rilevati e controllati in remoto attraverso l'infrastruttura di rete esistente, creando opportunit\`a per una integrazione pi\`u diretta del mondo fisico all'interno di sistemi informatizzati, con l'obbiettivo di aumentare l'efficienza, la precisione e il beneficio economico riducendo al contempo la necessit\`a dell'intervento umano. Tipicamente ci si aspetta che l'IoT offra connettivit\`a avanzata tra device, sistemi e servizi che vadano oltre la comunicazione Machine-to-machine (M2M) e coprano una variet\`a di protocolli, domini e applicazioni. L'obiettivo \`e quello di introdurre processi di automazione in tutti i settori.
 
 %% Storia dell'IoT
 \subsection{Storia dell'Internet of Things}
@@ -192,15 +192,15 @@ L'integrazione di sistemi IoT all'interno di catene di produzione permette la pr
 Come visto in precedenza i concetti della rivoluzione industriale 4.0 sono interamente basati sull'integrazione tra sistemi di produzione e l'Internet of Things.
 
 \subsection{Gestione dell'energia}
-L'integrazione di reti di sensori e attuatori, connessi ad internet, si pensa possa ottimizzare il consumo energetico in ambito industriale e casalingo. L'integrazione di device IoT all'interno di contatori per l'energia, cos\`\i\ come dispositivi domestici e industriali, capaci di comunicare con le compagnie per la rete elettrica possono permettere una gestione migliore della generazione ed utilizzo dell'energia. Questo tipo di device inoltre consente agli utenti di regolare in remoto i loro dispositivi, o controllarli centralmente grazie a interfacce web accessibili tramite la rete cloud IoT, in modo tale da implementare funzioni avanzate come la programmazione delle accensioni/spegnimenti o dell'utilizzo dei dispositivi. Uno dei prodotti consumer pi\`u comuni in questo ambito \`e il termostato IoT\cite{Thermostat}, diffuso soprattutto in applicazioni domotiche.
+L'integrazione di reti di sensori e attuatori, connessi ad internet, si pensa possa ottimizzare il consumo energetico in ambito industriale e casalingo. L'integrazione di device IoT all'interno di contatori per l'energia, cos\`\i\ come dispositivi domestici e industriali, capaci di comunicare con le compagnie per la rete elettrica possono permettere una gestione migliore della generazione e utilizzo dell'energia. Questo tipo di device inoltre consente agli utenti di regolare in remoto i loro dispositivi, o controllarli centralmente grazie a interfacce web accessibili tramite la rete cloud IoT, in modo tale da implementare funzioni avanzate come la programmazione delle accensioni/spegnimenti o dell'utilizzo dei dispositivi. Uno dei prodotti consumer pi\`u comuni in questo ambito \`e il termostato IoT\cite{Thermostat}, diffuso soprattutto in applicazioni domotiche.
 
-\subsection{Settore medicale ed assistenza sanitaria}
+\subsection{Settore medicale e assistenza sanitaria}
 Dispositivi connessi all'Internet delle Cose possono abilitare il monitoraggio remoto dello stato di salute dei pazienti e sistemi di notifica delle emergenze. Le applicazioni di queste device possono variare dal rilevamento della pressione arteriosa fino al conteggio dei battiti del cuore. Alcuni ospedali hanno cominciato ad utilizzare ``letti smart'' in grado di rilevare quanto il letto \`e occupato e quando il paziente sta cercando di alzarsi. 
 
 Ormai sono molto diffusi dispositivi per il tracciamento delle attivit\`a dell'utente che incoraggiano uno stile di vita salutare, in questo ambito rientrano le wearable device come i fitness trackers.
 
 \subsection{Settore dei trasporti}
-L'IoT pu\`o dare assistenza nella integrazione delle comunicazioni, controlli e elaborazione delle informazioni attraverso vari sistemi di trasporto. Le applicazioni dell'IoT si estendono a tutti gli aspetti dei sistemi di trasporto: i veicoli, l'infrastruttura, il pilota e i passeggeri. L'interazione dinamica tra questi componenti permette una comunicazione inter e intra veicolare, controllo del traffico intelligente, smart parking, gestione della logistica e delle flotte, controllo dei veicoli e sicurezza stradale.
+L'IoT pu\`o dare assistenza nella integrazione delle comunicazioni, controlli ed elaborazione delle informazioni attraverso vari sistemi di trasporto. Le applicazioni dell'IoT si estendono a tutti gli aspetti dei sistemi di trasporto: i veicoli, l'infrastruttura, il pilota e i passeggeri. L'interazione dinamica tra questi componenti permette una comunicazione inter e intra veicolare, controllo del traffico intelligente, smart parking, gestione della logistica e delle flotte, controllo dei veicoli e sicurezza stradale.
 
 L'applicazione sviluppata nel corso della tesi \`e appunto legata a questo ambito di applicazione dell'IoT e nel prossimo paragrafo ne analizzeremo gli obiettivi e le funzionalit\`a.
 
@@ -225,7 +225,7 @@ Il dispositivo deve essere in grado di effettuare il conteggio in modo non invas
   \label{fig:SchemPCN}
 \end{figure}
 
-Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo, di comunicare tra loro trasferendo le informazioni rilevanti alle business application ed alle infrastrutture IT. Il Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
+Il lavoro presentato in questa tesi \`e stato commissionato da Eurotech: azienda dedicata alla ricerca, sviluppo e produzione di sistemi embedded e computer ad alte prestazioni con sede ad Amaro. L'azienda inoltre ha una forte rilevanza in ambito IoT in quanto, oltre a fornire dispositivi IoT ready, ha realizzato una piattaforma Machine-to-Machine che consente ai dispositivi, ai sensori e a tutti i sistemi distribuiti sul campo, di comunicare tra loro trasferendo le informazioni rilevanti alle business application e alle infrastrutture IT. Il Passenger Counter \`e uno dei prodotti di punta dell'azienda ed \`e stato selezionato come progetto per questa tesi.
 
 %% Interruzione di pagina
 \newpage
@@ -252,7 +252,7 @@ Il sistema di conteggio di passeggeri consta di tre parti fondamentali come sche
 L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Passenger Counter di Eurotech basandosi sull'hardware fornito dall'azienda, cercando di migliorare quanto gi\`a fatto dalla stessa, esplorando soluzioni tecnologiche alternative. Il lavoro \`e stato quindi suddiviso in tre parti:
 \begin{enumerate}
 \item Identificare gli ambienti di sviluppo pi\`u idonei alla realizzazione del progetto.
-\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione ed abbattere i costi, che fosse compatible con le tecnologie usate dall'azienda per i suoi prodotti. 
+\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione e abbattere i costi, che fosse compatible con le tecnologie usate dall'azienda per i suoi prodotti. 
 \item Realizzare una infrastruttura software che fornisse tutti gli strumenti e le librerie necessarie all'implementazione del Passenger Counter realizzato e che potesse essere installata sulla piattaforma hardware fornita da Eurotech.
 \end{enumerate}
 
@@ -436,7 +436,7 @@ Specifiche tecniche:
 \end{minipage}
 \end{figure}
 
-La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. L'illuminatore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti ed ottenere altre informazioni sulla superficie\footnote{Per approfondire il funzionamento della Luce Strutturata si faccia riferimento all'appendice \ref{LuceStrutturata} a pagina \pageref{LuceStrutturata}.}. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera. Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando un circuito ASIC.
+La telecamera S300 utilizza una tecnica di rilevamento tridimensionale nota come luce strutturata. L'illuminatore presente sul modulo proietta un pattern noto sulla scena. La deformazione dell'immagine proiettata permette ai sistemi di visione di calcolare la profondit\`a degli oggetti colpiti e ottenere altre informazioni sulla superficie\footnote{Per approfondire il funzionamento della Luce Strutturata si faccia riferimento all'appendice \ref{LuceStrutturata} a pagina \pageref{LuceStrutturata}.}. L'acquisizione delle immagini a infrarossi in questo caso viene effettuata da un singolo scanner 3D a luce strutturata. In figura \ref{fig:SchemaFunzSR300} \`e schematizzato il funzionamento della telecamera. Anche i questo caso l'informazione di profondit\`a viene ricostruita utilizzando un circuito ASIC.
 
 \begin{figure}[h!]
   \centering
@@ -483,7 +483,7 @@ Vi sono per\`o delle minime differenze tra le due telecamere per quanto riguarda
 \item Per la Intel RealSense SR300: il formato dello stream di profondit\`a \`e di 16 bit privi di segno interpolati su un range di 8 metri nonostante il range della telecamere arrivi ad un massimo di 1,5 m. Ci\`o implica che la risoluzione della profondit\`a \`e 0,125 mm. 
 \item Per la Intel RealSense R200: il formato \`e di 16 bit privi di segno interpolati su un range di circa 65 m. Ci\`o implica una risoluzione di profondit\`a di 1 mm.
 \end{itemize}
-Questo fatto non ha per\`o comportato problemi dal punto di vista della funzionalit\`a dell'applicazione in quanto la risoluzione delle telecamere non \`e critica per il corretto funzionamento del contatore ed il fattore di scala viene ricavato run-time.
+Questo fatto non ha per\`o comportato problemi dal punto di vista della funzionalit\`a dell'applicazione in quanto la risoluzione delle telecamere non \`e critica per il corretto funzionamento del contatore e il fattore di scala viene ricavato run-time.
 
 %% Copiato spudoratamente dalla mia presentazione su OpenCV.
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
@@ -494,7 +494,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 \subsubsection{Moduli principali e finalit\`a}
 \begin{itemize}
 \item \textbf{Modulo core}: lo scopo del modulo \`e  definire interfacce e funzionalit\`a che permettano di semplificare la manipolazione di immagini e flussi video. Il modulo contiene le funzioni alla base delle libreria e ne definisce le strutture fondamentali nonch\'e gestisce la memoria. 
-\item \textbf{Modulo highui}: High-level GUI e Media I/O. Il modulo HighGUI \`e stato progettato per fornire funzioni che permettano di provare le feature della libreria ed osservare i risultati velocemente. Fornisce semplici interfacce per creare e manipolare finestre che possano visualizzare immagini e aggiungervi slider, gestire semplici eventi come click del mouse e comandi da tastiera.
+\item \textbf{Modulo highui}: High-level GUI e Media I/O. Il modulo HighGUI \`e stato progettato per fornire funzioni che permettano di provare le feature della libreria e osservare i risultati velocemente. Fornisce semplici interfacce per creare e manipolare finestre che possano visualizzare immagini e aggiungervi slider, gestire semplici eventi come click del mouse e comandi da tastiera.
 \item \textbf{Modulo imgproc}: image processing. Il modulo di Image Processing contiene funzioni e classi per l'elaborazione di immagini. Ci\`o comprende:
     \begin{itemize}
     \item Image Filtering: funzioni per la convoluzione di immagini con un kernel, dilatazione di immagini, filtro Sobel, GaussianBlur ecc.
@@ -520,7 +520,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 
 \noindent La struttura fondamentale della libreria OpenCV \`e l'oggetto \verb|Mat|, il quale \`e usato come contenitore delle immagini. Esso \`e una classe C++ formata da due componenti principali:
 \begin{itemize}
-\item Un header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata ed un puntatore alla matrice.
+\item Un header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata e un puntatore alla matrice.
 \item Una matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc.).
 \end{itemize}
 Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile. Questa conversione \`e garantita dal modulo imgcodecs, la quale funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo \verb|Mat|.
@@ -546,7 +546,7 @@ Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione
 
 Le architettura supportate dal progetto sono le pi\`u diffuse in questo ambito: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
 
-OpenEmbedded \`e un framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di ``ricette'' ed esegue task in base a questi metadati. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione ed installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare la cross-compilazione dei pacchetti affinch\'e sia possibile installarli sulla target distribution.
+OpenEmbedded \`e un framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di ``ricette'' ed esegue task in base a questi metadati. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione e installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare la cross-compilazione dei pacchetti affinch\'e sia possibile installarli sulla target distribution.
 
 \subsubsection{Componenti del progetto Yocto}
 \begin{itemize}
@@ -623,7 +623,7 @@ Inizialmente si era pensato di usare una scheda di sviluppo Xilinx che integrass
 \newpage
 
 \subsection{Hardware}
-La piattaforma target sarebbe stata una Avnet Zedboard. Essa rappresenta un development kit completo basato sull'SoC Xilinx Zynq-7000, il quale contiene al suo interno una CPU ARM ed una FPGA. Si \`e voluto usare questa board poich\'e compatibile con il sistema di sviluppo SDSoC per la sintesi di alto livello, di cui parleremo nel seguito.
+La piattaforma target sarebbe stata una Avnet Zedboard. Essa rappresenta un development kit completo basato sull'SoC Xilinx Zynq-7000, il quale contiene al suo interno una CPU ARM e una FPGA. Si \`e voluto usare questa board poich\'e compatibile con il sistema di sviluppo SDSoC per la sintesi di alto livello, di cui parleremo nel seguito.
 
 Specifiche tecniche:
 
@@ -673,7 +673,7 @@ I compilatori del sistema SDSoC infatti analizzano il programma per determinare 
 
 L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo ``what if'' permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
 
-I compilatori di SDSoC mirano ad una piattaforma base ed invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un sistema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
+I compilatori di SDSoC mirano ad una piattaforma base e invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un sistema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
 
 %% Interruzione di pagina
 \newpage
@@ -763,7 +763,7 @@ Si \`e infine scelto di utilizzare l'ambiente di sviluppo Intel - Yocto per i se
 Nei prossimi capitoli procederemo con la descrizione del codice che \`e stato realizzato per la realizzazione del Passenger Counter.
 
 \chapter{Passenger Counter con sottrazione del background}\label{CapitoloPCN}
-In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+In questo capitolo tratteremo la prima versione realizzata del contatore di passeggeri. Inizialmente descriveremo l'hardware utilizzato, tratteremo le tecniche implementate, quindi passeremo a descrivere la struttura del codice e il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
 
 Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
@@ -1148,7 +1148,7 @@ Nel seguito sono riportati i parametri di impostazione della funzione che implem
     \item \verb|detectShadows|: questo booleano imposta il sottrattore in modo tale che cerchi di rilevare le ombre. Le ombre saranno contrassegnate dal colore grigio.
     \end{itemize}
 
-Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\'e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione ed utilizza una sintassi diversa.
+Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\'e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione e utilizza una sintassi diversa.
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
 \item \verb|count()|: \`e il nucleo del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel prossimo paragrafo.
@@ -1679,7 +1679,7 @@ In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzi
 \newpage
 
 \subsection{Performance}
-Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
+Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando due telecamere di pari risoluzione ma con diverso framerate su due diversi dispositivi: il ReliaGate 20-25 e una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la webcam descritta nel paragrafo \ref{HardwarePCN}: 
 
@@ -1808,14 +1808,14 @@ https://github.com/mattdibi/PassengerCounter
 \end{verbatim}
 
 \chapter{Passenger Counter con telecamere RealSense}\label{CapitoloRSPCN}
-In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e i problemi principali.
+In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati e il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e i problemi principali.
 
 \section{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
 
 \begin{enumerate}
 \item \textbf{Passenger}: \`e la stessa classe usata nella versione precedente del programma.
-\item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense} ed assolve gli stessi compiti della classe PCN visti nella versione precedente del Passenger Counter.
+\item \textbf{RSPCN}: \`e la classe che implementa il contatore di passeggeri. Questa fa uso della libreria librealsense di cui si \`e discusso nel paragrafo \ref{librealsense} e assolve gli stessi compiti della classe PCN visti nella versione precedente del Passenger Counter.
 \item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time delle telecamere e del contatore. Si noti inoltre che rileva automaticamente il numero di telecamere collegate e istanzia un contatore per ognuna di esse.
 \end{enumerate}
 
@@ -2213,7 +2213,7 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
   \label{fig:getFrameStep3}
 \end{figure}
 
-L'obiettivo di queste operazioni \`e andare a ricavare una foreground mask contenente solo la testa dei passeggeri che transitano sotto la telecamera. Rilevando solamente la testa delle persone, infatti, otteniamo un tracciamento molto pi\`u preciso ed affidabile rispetto all'implementazione del Passenger Counter precedente.
+L'obiettivo di queste operazioni \`e andare a ricavare una foreground mask contenente solo la testa dei passeggeri che transitano sotto la telecamera. Rilevando solamente la testa delle persone, infatti, otteniamo un tracciamento molto pi\`u preciso e affidabile rispetto all'implementazione del Passenger Counter precedente.
 
 \section{Analisi del nucleo del programma: funzione count()}
 
@@ -2545,7 +2545,7 @@ In questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. 
 \end{figure}
 
 \subsection{Performance}
-Per la misura dei tempi di esecuzione si \`e fatto nuovamente uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
+Per la misura dei tempi di esecuzione si \`e fatto nuovamente uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 e una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
 
@@ -2680,7 +2680,7 @@ Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 \end{itemize}
 
 \section{Prestazioni}
-Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie ed algoritmi utilizzati del punto di vista delle prestazioni del programma.
+Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie e algoritmi utilizzati del punto di vista delle prestazioni del programma.
 
 \subsection{Costo computazionale}
 L'algoritmo di sottrazione dello sfondo oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
@@ -2926,7 +2926,7 @@ Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nati
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
 SWIG (Simplified Wrapper and Interface Generator) \`e un wrapper open source utilizzato per collegare i programmi o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
 
-L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da altri linguaggi di programmazione, passando tipi di dati complessi, mantenendo la memoria libera, ereditariet\`a delle classi dei vari linguaggi, ecc. Al programmatore \`e delegato il compito di scrivere un file di interfaccia che contenga un elenco di funzioni C/C++ che devono essere rese visibili ad un interprete. SWIG compila il file di interfaccia e genera normale C/C++ ed il codice nel linguaggio di programmazione di destinazione. Quindi genera il codice di conversione o serializzazione per le funzioni con argomenti semplici; il codice di conversione per i tipi di argomenti complessi deve essere scritto dal programmatore. Lo strumento crea codice sorgente che fornisce il collante tra C/C++ e il linguaggio di destinazione, a seconda del linguaggio software, questo collante \`e disponibile in due forme:
+L'obiettivo \`e quello di consentire la chiamata di funzioni native (C o C++) da altri linguaggi di programmazione, passando tipi di dati complessi, mantenendo la memoria libera, ereditariet\`a delle classi dei vari linguaggi, ecc. Al programmatore \`e delegato il compito di scrivere un file di interfaccia che contenga un elenco di funzioni C/C++ che devono essere rese visibili ad un interprete. SWIG compila il file di interfaccia e genera normale C/C++ e il codice nel linguaggio di programmazione di destinazione. Quindi genera il codice di conversione o serializzazione per le funzioni con argomenti semplici; il codice di conversione per i tipi di argomenti complessi deve essere scritto dal programmatore. Lo strumento crea codice sorgente che fornisce il collante tra C/C++ e il linguaggio di destinazione, a seconda del linguaggio software, questo collante \`e disponibile in due forme:
 
 \begin{itemize}
 \item una libreria condivisa che un interprete esistente pu\`o collegare come una qualche forma di modulo di estensione.
@@ -3046,7 +3046,7 @@ Come spiegato nella sezione \ref{Yocto} a pagina \pageref{Yocto}, il progetto Yo
 \item Installa il pacchetto software nella distribuzione.
 \end{enumerate}
 
-Una volta scaricate ed installate nella distribuzione tutte le ricette, viene creata l'immagine del sistema operativo che pu\`o essere scritta su un supporto di memoria e caricata sull'hardware.
+Una volta scaricate e installate nella distribuzione tutte le ricette, viene creata l'immagine del sistema operativo che pu\`o essere scritta su un supporto di memoria e caricata sull'hardware.
 
 Il build system di Yocto \`e organizzato in cartelle: la directory principale, o \textbf{Source Directory}, viene creata in seguito alla clonazione della repository Git di Poky. La Source Directory contiene BitBake, metadati, documentazione e altri file che supportando il progetto Yocto. Al suo interno sono presenti i layer fondamentali per la costruzione della distribuzione template e qui andranno scaricati i layer per le ricette aggiuntive. Qui verr\`a creata la \textbf{Build Directory}. Questo termine si riferisce all'area usata dall'OpenEmbedded build system per effettuare la build della distribuzione.
 
@@ -3094,7 +3094,7 @@ La sorgente del file bblayers.conf.sample dipende dalla variabile \verb|$TEMPLAT
 Questa directory contiene i sorgenti della documentazione del progetto Yocto e template e tool necessari a generare le versioni PDF e HTML dei manuali. Ogni manuale \`e contenuto in una sotto cartella.
 
 \subsubsection{meta}
-Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder \url{meta/recipes-sato}, la quale contiene Sato demo/reference UI/UX ed i dati associati alle sue applicazioni e configurazioni.
+Questa cartella contiene i metadati di OpenEmbedded Core. La directory contiene ricette, classi comuni e file di configurazione per le architetture da emulare (qemux86, qemuarm ecc.). Ad esempio all'interno di questa cartella \`e presente la folder \url{meta/recipes-sato}, la quale contiene Sato demo/reference UI/UX e i dati associati alle sue applicazioni e configurazioni.
 
 \subsubsection{meta-yocto}
 Questa directory contiene le configurazioni per la distribuzione reference di Poky.
@@ -3349,7 +3349,7 @@ Per poter eseguire l'applicativo su una macchina host \`e necessario che su ques
 \item openjdk-8
 \end{itemize}
 
-Inoltre \`e necessario assicurarsi di avere delle porte USB 3.0 disponibili per il collegamento con le telecamere RealSense ed un hardware sufficientemente prestante.
+Inoltre \`e necessario assicurarsi di avere delle porte USB 3.0 disponibili per il collegamento con le telecamere RealSense e un hardware sufficientemente prestante.
 
 \section{Generazione dell'immagine Yocto}
 Qui sono riportati i passaggi per poter generare correttamente l'immagine dell'OS per il ReliaGate 20-25 a supporto del progetto.
@@ -3559,7 +3559,7 @@ Poich\'e nell'immagine della build Yocto \`e presente \verb|ssh|, \`e possibile 
 $ ssh -X root@<IP macchina target>
 \end{lstlisting}
 
-In questo modo sar\`a possibile visualizzare sulla macchina host gli stream catturati dalle telecamere collegate alla macchina target ed il risultato della computazione.
+In questo modo sar\`a possibile visualizzare sulla macchina host gli stream catturati dalle telecamere collegate alla macchina target e il risultato della computazione.
 
 Si noti che questa modalit\`a degrada leggermente le prestazioni del contatore rendendo il framerate instabile.
 
@@ -3728,7 +3728,7 @@ L'obiettivo di questa tesi era quello di sviluppare un sistema di Passenger Coun
 
 Il lavoro si \`e svolto come segue.
 
-Inizialmente ci si \`e dedicati all'indagine sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time in ambito embedded, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa fase \`e stato necessario prendere confidenza con la libreria OpenCV, l'ambiente di sviluppo Xilinx ed il progetto Yocto, per poter capire quali fossero i tool pi\`u adatti all'obiettivo che ci si prefiggeva. 
+Inizialmente ci si \`e dedicati all'indagine sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time in ambito embedded, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa fase \`e stato necessario prendere confidenza con la libreria OpenCV, l'ambiente di sviluppo Xilinx e il progetto Yocto, per poter capire quali fossero i tool pi\`u adatti all'obiettivo che ci si prefiggeva. 
 
 Una volta deciso quale tecnologia/ambiente di sviluppo  adottare, \`e cominciato lo sviluppo dell'applicazione.
 
@@ -3746,7 +3746,7 @@ Una volta constatato che questa versione dell'applicativo soddisfava i requisiti
 
 Inizialmente si \`e effettuato un wrapping Java sfruttando il tool SWIG. Successivamente si \`e deciso di effettuare un porting completo dell'applicazione appoggiandosi al progetto open-source JavaCPP. Anche questo passaggio ha comportato notevoli difficolt\`a in quanto \`e stato necessario appoggiarsi ad una API Java di OpenCV non ufficiale, la quale non era completamente compatibile con quanto realizzato fino a questo punto.
 
-A supporto di questa versione dell'applicativo si \`e aggiunto all'immagine del sistema operativo del ReliaGate 20-25 un Java Real-time Environment ed un JDK. Inoltre si \`e deciso di rendere disponibile la API Java ufficiale di OpenCV. Quest'ultimo passaggio \`e stato complicato dai problemi di compatiblit\`a delle telecamere RealSense e si \`e reso necessario modificare a mano i metadati del progetto Yocto necessari all'installazione della API Java di OpenCV.
+A supporto di questa versione dell'applicativo si \`e aggiunto all'immagine del sistema operativo del ReliaGate 20-25 un Java Real-time Environment e un JDK. Inoltre si \`e deciso di rendere disponibile la API Java ufficiale di OpenCV. Quest'ultimo passaggio \`e stato complicato dai problemi di compatiblit\`a delle telecamere RealSense e si \`e reso necessario modificare a mano i metadati del progetto Yocto necessari all'installazione della API Java di OpenCV.
 
 A questo punto dello sviluppo si \`e ritenuto il progetto completato. 
 
@@ -3822,7 +3822,7 @@ La computer stereo vision \`e una tecnica per l'estrazione di informazioni di pr
 In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali per ricavare le informazioni 3D.
 
 \begin{enumerate}
-\item \textbf{Rettificazione}: le due immagini ottenute dalle telecamere vanno proiettate su un piano comune per permettere la comparazione tra le due. Questo passaggio \`e noto come image rectification. Ed \`e necessaria a semplificare il passaggio di stereo correpondance.
+\item \textbf{Rettificazione}: le due immagini ottenute dalle telecamere vanno proiettate su un piano comune per permettere la comparazione tra le due. Questo passaggio \`e noto come image rectification, ed \`e necessario a semplificare il passaggio di stereo correpondance.
 \item \textbf{Stereo correspondance}: questa operazione permette la generazione della disparity map. La disparity map si riferisce alla differenza tra i pixel ricavata da due immagini stereo dovuta al diverso posizionamento delle telecamere.
 \item \textbf{Triangolazione}: \`e il processo che determina un punto nello spazio 3D data la sua proiezione su due o pi\`u immagini. In questo caso \`e il passaggio necessario a ricostruire le informazioni di distanza a partire dalla disparity map.
 \end{enumerate}
@@ -3867,7 +3867,7 @@ Per calcolare la somma delle differenze assolute tra la il riquadro template e l
   \label{fig:}
 \end{figure}
 
-Per trovare la regione pi\`u simile al riquadro template, si calcola il SAD tra il template ed ogni blocco nella regione di ricerca, quindi si sceglie il riquadro con il valore di SAD pi\`u basso.
+Per trovare la regione pi\`u simile al riquadro template, si calcola il SAD tra il template e ogni blocco nella regione di ricerca, quindi si sceglie il riquadro con il valore di SAD pi\`u basso.
 
 Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, la quale \`e ottenuta ricavando la disparity di tutti i pixel dell'immagine nei quali si \`e ricavata il valore di SAD pi\`u basso.
 
@@ -3876,7 +3876,7 @@ Una volta ricavate le regioni simili \`e possibile calcolare la disparity map, l
 Si noti come nel simple block matching si \`e cercata la corrispondenza tra blocchi solamente in orizzontale e non in verticale. Ci\`o \`e reso possibile dall'operazione di rettificazione delle immagini. Questa operazione consiste nel rilevare un insieme di keypoint, o punti di interesse, all'interno dei due piani, per mezzo di algoritmi di keypoint detection come SIFT o SURF, e quindi applicare delle trasformazioni sulle immagini in modo tale che questi punti siano allineati verticalmente. Ci\`o permette di eliminare eventuali rotazioni o deformazioni dovute alle lenti nelle immagini e si pu\`o ignorare la componente verticale nella ricerca dei riquadri simili durante l'operazione di simple block matching.
 
 \section{Triangolazione}
-Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini catturate si vuole ricavare la distanza tra le due telecamere ed un oggetto P.
+Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini catturate si vuole ricavare la distanza tra le due telecamere e un oggetto P.
 
 %% Interruzione di pagina
 \newpage
