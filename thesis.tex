@@ -252,7 +252,7 @@ Il sistema di conteggio di passeggeri consta di tre parti fondamentali come sche
 L'obiettivo della tesi \`e stato quello di realizzare una nuova versione del Passenger Counter di Eurotech basandosi sull'hardware fornito dall'azienda, cercando di migliorare quanto gi\`a fatto dalla stessa, esplorando soluzioni tecnologiche alternative. Il lavoro \`e stato quindi suddiviso in tre parti:
 \begin{enumerate}
 \item Identificare gli ambienti di sviluppo pi\`u idonei alla realizzazione del progetto.
-\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione e abbattere i costi, che fosse compatible con le tecnologie usate dall'azienda per i suoi prodotti. 
+\item Realizzare una nuova versione del Passenger Counter puntando a migliorare le prestazione e abbattere i costi, che fosse compatibile con le tecnologie usate dall'azienda per i suoi prodotti. 
 \item Realizzare una infrastruttura software che fornisse tutti gli strumenti e le librerie necessarie all'implementazione del Passenger Counter realizzato e che potesse essere installata sulla piattaforma hardware fornita da Eurotech.
 \end{enumerate}
 
@@ -324,7 +324,7 @@ Il cuore dell'algoritmo opera come segue:
 \end{enumerate}
 In figura \ref{fig:SchemAlgrTrackPCNEurotech} \`e riportata una schematizzazione di quanto accade durante il conteggio.
 
-I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al gateway ReliGate 50-21 il quale li invia sulla rete cloud Eurotech per mezzo delle connessioni di cui \`e dotato. \`E altres\`\i\ possibile sfruttare il GPIO presente sul dispositivo per interfacciarsi, ad esempio, alle porte automatiche di un'ambiente, per bloccarle qualora si sia raggiunto il limite massimo impostato di occupanti.
+I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al gateway ReliGate 50-21 il quale li invia sulla rete cloud Eurotech per mezzo delle connessioni di cui \`e dotato. \`E altres\`\i\ possibile sfruttare il GPIO presente sul dispositivo per interfacciarsi, ad esempio, alle porte automatiche di un ambiente, per bloccarle qualora si sia raggiunto il limite massimo impostato di occupanti.
 
 %% Interruzione di pagina
 \newpage
@@ -673,7 +673,7 @@ I compilatori del sistema SDSoC infatti analizzano il programma per determinare 
 
 L'ambiente di sviluppo integrato SDSoC supporta il workflow di sviluppo software tramite analisi delle performance di sistema, profiling, compilazione, linking e debugging. Inoltre, l'ambiente fornisce un tool per la stima delle performance dell'applicativo per poter effettuare analisi di tipo ``what if'' permettendo di esplorare diverse soluzioni prima di impegnarsi in una compilazione interamente in hardware. 
 
-I compilatori di SDSoC mirano ad una piattaforma base e invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sinstetizzabili nella logica programmabile. Quindi generano un sistema hardware completo che includa DMA, interconnesioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
+I compilatori di SDSoC mirano ad una piattaforma base e invocano il tool Vivado High-Level Synthesis (HLS) per compilare funzioni C/C++ sintetizzabili nella logica programmabile. Quindi generano un sistema hardware completo che includa DMA, interconnessioni, buffer hardware e altre IP, e un bitstream per la FPGA invocando i tool della Vivado Design Suite. Per assicurarsi che tutte le chiamate alle funzioni hardware preservino il comportamento originale, i compilatori generano degli stub software e dati di configurazione specifici per il sistema. Il programma include chiamate di funzione ai driver necessari per usare i blocchi IP generati. L'applicazione e il software generato sono compilati e linkati usando toolchain standard GNU.
 
 %% Interruzione di pagina
 \newpage
@@ -851,7 +851,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
   \label{fig:EsempioBackSub}
 \end{figure}
 
-In figura \ref{fig:EsempioBackSub} si pu\`o notare come le persone vengano correttamente associate alla foreground mask poich\`e evidenziate dal colore bianco e come le ombre associate agli oggetti in movimento siano evidenziate dal colore grigio.
+In figura \ref{fig:EsempioBackSub} si pu\`o notare come le persone vengano correttamente associate alla foreground mask poich\'e evidenziate dal colore bianco e come le ombre associate agli oggetti in movimento siano evidenziate dal colore grigio.
 
 %% Interruzione di pagina
 \newpage
@@ -997,10 +997,10 @@ void Passenger::updateCoords(Point newCenter) {
 \item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
 \item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Per l'implementazione si \`e scelto di usare la classe template \verb|vector|, la quale rappresenta una struttura LIFO (Last In First Out), per mantenere la compatibilit\`a con la funzione OpenCV \verb|polylines|, dedicata al plot delle tracce dei passeggeri. La struttura viene riempita come una pila: le coordinate del centro del passeggero pi\`u vecchie si trovano in fondo, quelle pi\`u nuove in cima. Quando si \`e raggiunto il limite massimo di posizioni memorizzate, all'aggiunta di una nuova coordinata segue la cancellazione della coordinata pi\`u vecchia, contenuta nella locazione in fondo alla pila.
 
-Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si vuole mantere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps, una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
+Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si vuole mantenere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps, una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore. 
 
-Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizone conosciuta e ``invecchiano'' ad ogni frame, viene aggiornata cio\`e la variabile \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria. Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha una telecamera da 30 fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
+Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizione conosciuta e ``invecchiano'' ad ogni frame, viene aggiornata cio\`e la variabile \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria. Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha una telecamera da 30 fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
 
 \end{enumerate}
 
@@ -1139,7 +1139,7 @@ PCN::PCN(int device) {
 }
 \end{lstlisting}
 
-Come \`e possibile notare dal codice, al costrutture viene passato un intero che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
+Come \`e possibile notare dal codice, al costruttore viene passato un intero che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
 
 Nel seguito sono riportati i parametri di impostazione della funzione che implementa l'algoritmo di sottrazione del background:
     \begin{itemize}
@@ -1263,7 +1263,7 @@ void PCN::count() {
     dstPixel(x,y) = \begin{cases} MAXRGBVAL, & \mbox{se } srcPixel(x,y) > threshold \\ 0, & \mbox{altrimenti } \end{cases}
     \end{equation}
 
-    Cos\`\i\ facendo le ombre, che hanno un colore il cui valore RGB \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti, diminuiendo cos\`\i\ gli errori nel conteggio.
+    Cos\`\i\ facendo le ombre, che hanno un colore il cui valore RGB \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti, diminuendo cos\`\i\ gli errori nel conteggio.
     \item Erosione: Questa operazione ha come risultato quello di espandere le regioni scure dell'immagine. L'obiettivo \`e quello di eliminare il rumore bianco gaussiano dall'immagine.
     \item Dilatazione: Questa operazione ha come risultato quello di far ``crescere'' le regioni bianche dell'immagine. L'obiettivo \`e quello di rendere pi\`u facilmente rilevabili gli oggetti appartenenti alla foreground mask.
     \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore dell'immagine. Questa funzione utilizza una semplice filtro lineare.
@@ -2428,7 +2428,7 @@ for(unsigned int i = 0; i < passengers.size(); i++) {
 %% Interruzione di pagina
 \newpage
 
-Una volta aggiornate le posizioni viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
+Una volta aggiornate le posizioni viene letto l'intero database dei passeggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
 
 \begin{enumerate}
 \item Se ne disegna la traccia dello storico delle posizioni per mezzo della funzione \verb|polylines()|.
@@ -2953,8 +2953,8 @@ Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Reposi
 Caratteristiche di questa implementazione:
 \begin{itemize}
 \item Utilizzo del framework Java per il display delle immagini al posto del modulo HighGui di OpenCV assente in questa versione della libreria.
-\item Parallelizzazione della computazione affidata a Java
-\item Aumento della portabili\`a del codice
+\item Parallelizzazione della computazione affidata a Java.
+\item Aumento della portabili\`a del codice.
 \end{itemize}
 Nonostante l'overhead computazionale dovuto all'interfacciamento Java, l'ottima parallelizzazione compiuta dalla Java Virtual Machine ha permesso una distribuzione del calcolo su tutti i thread disponibili sul ReliaGate che mitiga questo problema. Il codice cos\`\i\ realizzato quindi ha delle ottime performance anche su macchine poco prestanti.
 
@@ -3137,7 +3137,7 @@ You can also run generated qemu images with a command like 'runqemu qemux86'
              
 Lo script ricava la lista dei defalut target dal file conf-notes.txt, il quale si trova nella directory \url{meta-yocto/}.
 
-Eseguire questo script senza una Build Directory crea una build directory all'interno dell'attuale working directory. Se viene fornita una Build Directory come argomento quando viene eseguito lo script, l'OpenEmbedded build system crea la Build Directory scelta. Ad esempio, il seguente comando crea una Build Directory chiamata mybuild che si trova fuori dalla Source Directory.
+Eseguire questo script senza una Build Directory crea una build directory all'interno dell'attuale working directory. Se viene fornita una Build Directory come argomento quando viene eseguito lo script, l'OpenEmbedded build system crea la Build Directory scelta. Ad esempio, il seguente comando crea una Build Directory chiamata \url{mybuild} che si trova fuori dalla Source Directory.
 
 \begin{lstlisting}[language=bash]
 $ source oe-init-build-env ~/mybuilds
@@ -3231,7 +3231,7 @@ Vediamo ora nel dettaglio il significato di questi parametri:
 
 \begin{itemize}
 \item \verb|MACHINE|: Specifica la target device per la quale l'immagine viene generata. La variabile corrisponde ad un file di configurazione della macchina con lo stesso nome, attraverso il quale le configurazioni specifiche per quella macchina vengono impostate. Di conseguenza, quando \verb|MACHINE| \`e impostato a \verb|quemux86| esister\`a un file qemux86.conf corrispondente nella directory \url{meta/conf/machine}. Nel nostro caso stiamo generando una distribuzione per una architettura Intel 64-bit e il file di configurazione della macchina si trova nel layer \textbf{meta-intel}.
-\item \verb|DISTRO|: Il nome della distribuzione. Questa variabile corrisponde ad un file di configurazione di distribuzione la cui radice del nome \`e la stessa dell'argomento della variabile e la cui esensione \`e .conf. Per esempio, il file di configurazione della distribuzione Poky \`e poky.conf e risiede in \url{meta-poky/conf/distro}.
+\item \verb|DISTRO|: Il nome della distribuzione. Questa variabile corrisponde ad un file di configurazione di distribuzione la cui radice del nome \`e la stessa dell'argomento della variabile e la cui estensione \`e .conf. Per esempio, il file di configurazione della distribuzione Poky \`e poky.conf e risiede in \url{meta-poky/conf/distro}.
 \item \verb|PACKAGE_CLASSES|: specifica il package manager che viene usato dal build system di OpenEmbedded quando vengono creati i pacchetti del software in fase di build.
 \item \verb|SDKMACHINE|: La macchina per la quale \`e costruita la toolchain di cross-sviluppo. In altre parole, il SDK \`e costruito in modo tale che possa essere eseguito su un target specifico con il valore \verb|SDKMACHINE|. Il valore punta ad un file .conf corrispondente sotto la cartella \url{conf/machine-sdk/}. Possono essere usati ``\verb|i686|'' e ``\verb|x86_64|'' come possibili valori per questa variabile.
 \item \verb|EXTRA_IMAGE_FEATURES|: Una lista di feature addizionali da includere nell'immagine. Ad esempio ``\verb|debug-tweaks|'' rende l'immagine adatta al debugging, permettendo il login come root senza l'uso di password e abilitando il logging post-installazione.
@@ -3578,7 +3578,7 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
 \item \verb|r|: Resetta i contatori.
 \item \verb|p|: Visualizza il conteggio attuale sulla console.
 \item \verb|c|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream a colori con le informazioni di conteggio e tracking.
-\item \verb|C|: Abilita/Disabilita le trackbar per effettuare la calibrazione dei settaggi del contatore, tra questi settaggi sono disponibili:
+\item \verb|C|: Abilita/Disabilita le trackbar per effettuare la calibrazione dei settaggi del contatore, tra queste impostazioni sono disponibili:
     \begin{itemize}
     \item Threshold: soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
     \item Blur: quantit\`a di offuscamento dell'immagine per ridurre il rumore.
@@ -3756,7 +3756,7 @@ A questo punto dello sviluppo si \`e ritenuto il progetto completato.
 \section{Risultati Passenger Counter con telecamere RealSense}
 I risultati ottenuti da questa versione del contatore sono stati ritenuti molto buoni. \`E stato possibile infatti migliorare tutti i punti deboli della versione del contatore attualmente implementata da Eurotech.
 
-Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte come segue.
+Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste sono state risolte come segue.
 
 \begin{enumerate}
 \item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel \`e intenzionata a fornire supporto a questa tecnologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
@@ -3774,7 +3774,7 @@ Nonostante si ritenga questa soluzione soddisfacente sotto molti punti di vista,
 \item \textbf{Implementazione di algoritmi pi\`u sofisticati per il rilevamento dei passeggeri}: l'implementazione realizzata in questa tesi \`e sicuramente un solido proof of concept ma per una applicazione nel mondo reale \`e necessario implementare un rilevamento dei passeggeri pi\`u solido. Una soluzione interessante sarebbe quella di adottare algoritmi di machine learning per il riconoscimento delle sagome dei passeggeri che transitano sotto la telecamera. Questo permetterebbe una maggior precisione diminuendo il numero di falsi positivi rilevati dalla telecamera.
 \item \textbf{Carico computazionale}: al momento il carico computazionale \`e interamente assorbito dalla CPU del ReliaGate. Scaricare parte di questo carico sulla GPU potrebbe permettere di aumentare il numero massimo di istanze del contatore contemporaneamente presenti sull'unit\`a computazionale abbassando ulteriormente i costi di produzione del sistema.
 \item \textbf{Test e calibrazioni}: i mezzi a mia disposizione per effettuare test e calibrazioni dei parametri del contatore non sono adeguati ad ottenere risultati adatti all'applicazione in ambito industriale del sistema e questo \`e un punto in cui investire risorse per effettuare dei miglioramenti.
-\item \textbf{Porting in OSGi}: l'infrastruttura Eurotech \`e realizzata interamente seguento le specifiche OSGi e sarebbe opportuno completare il porting del codice del progetto adattandolo a queste specifiche.
+\item \textbf{Porting in OSGi}: l'infrastruttura Eurotech \`e realizzata interamente seguendo le specifiche OSGi e sarebbe opportuno completare il porting del codice del progetto adattandolo a queste specifiche.
 \end{itemize}
 
 Purtroppo non \`e stato possibile applicare questi miglioramenti in quanto \`e stata data la precedenza ad altri aspetti del progetto che hanno sottratto tempo e risorse, quindi sono lasciati ad implementazioni future.
@@ -3915,7 +3915,7 @@ Dove si definisce \textit{Disparit\`a}:
 d \overset{\Delta}{=} x_R - x_T
 \end{equation}
 
-ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
+Ovvero la differenza tra le coordinate x di due punti corrispondenti. La disparit\`a \`e pi\`u alta per i punti pi\`u vicini alla telecamera.
 
 Nota quindi la disparity map \`e possibile ricavare le informazioni di distanza per ogni oggetto presente nelle immagini.
 
@@ -3938,13 +3938,13 @@ Per effettuare la scansione di un intera superficie velocemente vengono proietta
 
 \section{Analisi dei pattern}
 
-Vi sono molte informazioni relative alla profondit\`a contenute all'interno dei pattern di luce osservati. Il discostamento di ogni singola banda pu\`o essere direttamente convertito in coordinate 3D. A questo scopo, le bande vegnono identificate individualmente tramite diversi metodi.
+Vi sono molte informazioni relative alla profondit\`a contenute all'interno dei pattern di luce osservati. Il discostamento di ogni singola banda pu\`o essere direttamente convertito in coordinate 3D. A questo scopo, le bande vengono identificate individualmente tramite diversi metodi.
 
 Un'altra informazione importante sulla profondit\`a \`e data dalla variazione di spessore delle bande proiettate sulla superficie degli oggetti. Lo spessore delle bande \`e una funzione della ripidezza della superficie, la derivata prima della elevazione.
 
 La frequenza e la fase delle bande portano informazioni simili che possono essere analizzate per mezzo di una trasformata di Fourier.
 
-In molte implementazioni pratiche di questa tecnica viene effettuate una serie di misure che combinano la pattern recognition, identificazione delle bande e traformate di Fourier per ottenere una ricostruzione non ambigua delle forme in 3D.
+In molte implementazioni pratiche di questa tecnica viene effettuate una serie di misure che combinano la pattern recognition, identificazione delle bande e trasformate di Fourier per ottenere una ricostruzione non ambigua delle forme in 3D.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
