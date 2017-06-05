@@ -3587,11 +3587,11 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
     \end{itemize}
 \item \verb|d|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream della colorMap (contenuto nella variabile \verb|depthColorMap|).
 \item \verb|D|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a grezzi provenienti dalla telecamera RealSense (contenuto nella variabile \verb|rawDepth|).
-\item \verb|f|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a post processati e che vengono dati in pasto all'algoritmo di rilevamento dei contorni (contenuto nella variabile \verb|frame|).
+\item \verb|f|: Abilita/Disabilita la finestra nella quale viene visualizzato lo stream dei dati di profondit\`a post processati e che vengono passati all'algoritmo di rilevamento dei contorni (contenuto nella variabile \verb|frame|).
 \item \verb|s|: Abilita/Disabilita la stabilizzazione del framerate.
 \item \verb|q|: Termina il programma.
 \item \verb|h|: Visualizza il messaggio di aiuto.
-\item \verb|0-5|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione e altri parametri.
+\item \verb|0-5|: Seleziona i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione e altri parametri.
 \end{itemize}
 
 \begin{figure}[!htb]
@@ -3611,7 +3611,7 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
 
 Come \`e possibile notare dalle figure \ref{fig:preset0}, \ref{fig:preset1} e \ref{fig:preset2} i preset sono molto utili per gestire varie situazioni di illuminazione e permettono di variare leggermente il range di funzionamento delle telecamere.
 
-Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione normale e sono stati visualizzati lo stream a colori e abilitata la calibrazione dei settaggi del contatore.
+Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione senza argomenti e sono stati visualizzati lo stream a colori e abilitata la calibrazione dei settaggi del contatore.
 
 \begin{figure}[h!]
   \centering
@@ -3626,7 +3626,7 @@ Qui di seguito \`e riportato uno screenshot della schermata tipica di funzioname
 \subsection{Versione Java Wrap}
 
 \subsubsection{Compilazione ed esecuzione della versione per la macchina host}
-Per semplificare la compilazione sono stati resi disponibili degli script.
+Per semplificare la compilazione sono stati resi disponibili degli script il cui uso \`e riportato nel seguito.
 
 \begin{lstlisting}[language=bash]
 $ cd java_wrap/
@@ -3638,7 +3638,7 @@ $ java Main
 \end{lstlisting}
 
 \subsubsection{Compilazione ed esecuzione della versione per il ReliaGate 20-25}
-Dopo aver installato la toolchain di cross-compilazione generata dal progetto Yocto.
+Dopo aver installato la toolchain di cross-compilazione generata dal progetto Yocto \`e necessario eseguire:
 
 \begin{lstlisting}[language=bash]
 $ source /opt/poky/2.2.1/environment-setup-corei7-64-poky-linux
@@ -3648,7 +3648,7 @@ $ scp -r swig_output_20-25/ root@<ReliGATE 20-25 IP address>:
 
 \noindent Anche qui si presume che la cartella di installazione della toolchain sia quella di default.
 
-Una volta connessi al ReliaGate 20-25:
+Una volta connessi al ReliaGate 20-25 e aver trasferito l'intera cartella di output sul dispositivo target \`e possibile eseguire il programma per mezzo dei comandi:
 
 \begin{lstlisting}[language=bash]
 $ cd swig_output_2025/
@@ -3692,7 +3692,7 @@ Anche in questo caso, all'avvio, viene istanziato un contatore per telecamera co
 \item \verb|B|: \textbf{Video recording in bare metal mode}. Vengono salvati su file gli stream video ma non vengono visualizzati in run-time.
 \end{enumerate}
 
-L'ultima modalit\`a di esecuzione si \`e resa necessaria poich\`e, essendo le finestre di questa versione basate sul framework Java e non su X11, impediscono il corretto funzionamento del programma sul ReliaGate 20-25.
+La modalit\`a bare metal e la relativa modalit\`a di registrazione si sono rese necessarie poich\'e, essendo le finestre di questa versione del contatore basate sul framework Java e non su X11, la visualizzazione degli stream video impedirebbe il corretto funzionamento del programma sul ReliaGate 20-25.
 
 \subsubsection{Comandi Run-time}
 Anche in questo caso le opzioni vengono applicate a tutti i contatori attualmente attivi sulla macchina.
@@ -3701,7 +3701,7 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \item \verb|q|: Termina il programma.
 \item \verb|r|: Resetta i contatori
 \item \verb|c|: Visualizza il conteggio attuale
-\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc ecc..
+\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc.
 \item \verb|t|: Imposta la soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
 \item \verb|x|: Imposta il numero di pixel dell'asse orizzontale per il tracking.
 \item \verb|y|: Imposta il numero di pixel dell'asse verticale per il tracking.
