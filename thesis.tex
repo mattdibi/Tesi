@@ -338,7 +338,7 @@ I dati raccolti dal DynaPCN 10-20 vengono quindi passati, tramite Ethernet, al g
 
 La piattaforma sulla quale si basa il Passenger Counter Eurotech \`e basata su una distribuzione custom di Linux realizzata per mezzo del progetto Yocto (Per approfondimenti circa questo strumento si veda il paragrafo \ref{Yocto}). Ad essa sono stati aggiunti i driver proprietari per le tecnologie Eurotech. Al di sopra di essa \`e presente la Java Virtual Machine la quale permette l'esecuzione del framework OSGi. 
 
-OSGi (Open Services Gateway Initiative) \`e una organizzazione open standard fondata per specificare e mantenere lo standard OSGi, il quale \`e una specifica che descrive un sistema modulare e una service platform per il linguaggio Java che implementa un component model completo e dinamico. Applicazioni e componenti, i quali sono raccolti in ``bundle'' per il deployment, possono essere installati, fermati, aggiornati e disinstallati in remoto senza che sia necessario il reboot del sistema.
+OSGi (Open Service Gateway Initiative) \`e un framework Java per lo sviluppo e il deployment di programmi software e librerie modulari. Applicazioni e componenti, i quali sono raccolti in ``bundle'' per il deployment, possono essere installati, fermati, aggiornati e disinstallati in remoto senza che sia necessario il reboot del sistema.
 
 Su OSGi \`e basato il framework proprietario di Eurotech: Everyware Software Framework (ESF). Esso permette il deployment di applicazioni del cliente in modo flessibile tramite interfaccia grafica web, la quale \`e resa disponibile dall'infrastruttura M2M di Eurotech.
 
@@ -3719,7 +3719,6 @@ Qui di seguito \`e riportato uno screenshot della schermata tipica di funzioname
   \label{fig:EsempioRSPCNjava}
 \end{figure}
 
-% Capitolo 5: Conclusioni
 \chapter{Conclusioni}\label{CapitoloConclusioni}
 
 \section{Riassunto}
@@ -3727,7 +3726,7 @@ L'obiettivo di questa tesi era quello di sviluppare un sistema di Passenger Coun
 
 Il lavoro si \`e svolto come segue.
 
-Inizialmente ci si \`e dedicati all'indagine sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa fase \`e stato necessario prendere confidenza con la libreria OpenCV, l'ambiente di sviluppo Xilinx ed il progetto Yocto, per poter capire quale fosse lo strumento pi\`u adatto all'obiettivo che ci si prefiggeva. 
+Inizialmente ci si \`e dedicati all'indagine sullo stato attuale delle tecnologie disponibili per l'elaborazione delle immagini in real-time in ambito embedded, considerando al contempo l'hardware disponibile per lo sviluppo, e di studio degli strumenti disponibili. In questa fase \`e stato necessario prendere confidenza con la libreria OpenCV, l'ambiente di sviluppo Xilinx ed il progetto Yocto, per poter capire quali fossero i tool pi\`u adatti all'obiettivo che ci si prefiggeva. 
 
 Una volta deciso quale tecnologia/ambiente di sviluppo  adottare, \`e cominciato lo sviluppo dell'applicazione.
 
@@ -3737,17 +3736,17 @@ A corredo di questa soluzione \`e stata realizzata una distribuzione customizzat
 
 Non soddisfatti del risultato ottenuto con la sottrazione del background si \`e visto nelle telecamere Intel RealSense il tassello mancante all'applicazione.
 
-Prima di poter procedere nello sviluppo dell'applicazione si \`e ritenuto necessario integrarle nell'immagine del sistema operativo. Solo una volta installate le librerie e i driver con successo si \`e potuti proseguire nello sviluppo. Questa fase si \`e rivelata non priva di problematiche viste le limitazioni nella compatibilit\`a delle librerie di interfacciamento verso le telecamere.
+Prima di poter procedere nello sviluppo del contatore si \`e ritenuto necessario integrarle nell'immagine del sistema operativo. Solo una volta installate le librerie e i driver con successo si \`e potuti proseguire nello sviluppo. Questa fase si \`e rivelata non priva di problematiche viste le limitazioni nella compatibilit\`a delle librerie di interfacciamento verso le telecamere.
 
-\`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento sulle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\`e gran parte dell'elaborazione avviene all'interno di un ASIC presente all'interno delle telecamere.
+\`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento sulle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\`e gran parte dell'elaborazione avviene sull'ASIC presente all'interno delle telecamere RealSense.
 
-Una volta constatato che la soluzione con le telecamera RealSense soddisfava i requisiti di precisione e qualit\`a richiesti si \`e proceduto ad effettuare il porting del codice nel linguaggio adottato dall'azienda. Infatti l'applicazione \`e stata sviluppata in C++, linguaggio nativo delle libreria OpenCV e librealsense, ma in Eurotech il linguaggio pi\`u usato e adottato come standard \`e il Java.
+Una volta constatato che questa versione dell'applicativo soddisfava i requisiti di precisione e qualit\`a richiesti si \`e proceduto ad effettuare il porting del codice nel linguaggio adottato dall'azienda. Infatti l'applicazione \`e stata sviluppata in C++, linguaggio nativo delle libreria OpenCV e librealsense, ma in Eurotech il linguaggio pi\`u usato e adottato come standard \`e il Java.
 
-Inizialmente si \`e effettuato un wrapping Java sfruttando il tool SWIG. Successivamente si \`e deciso di effettuare un porting completo dell'applicazione appoggiandosi al progetto open-source JavaCPP. Anche questo passaggio ha comportato notevoli problematiche in quanto \`e stato necessario appoggiarsi ad una API Java di OpenCV non ufficiale, la quale non era completamente compatibile con quanto realizzato fino a questo punto.
+Inizialmente si \`e effettuato un wrapping Java sfruttando il tool SWIG. Successivamente si \`e deciso di effettuare un porting completo dell'applicazione appoggiandosi al progetto open-source JavaCPP. Anche questo passaggio ha comportato notevoli difficolt\`a in quanto \`e stato necessario appoggiarsi ad una API Java di OpenCV non ufficiale, la quale non era completamente compatibile con quanto realizzato fino a questo punto.
 
 A supporto di questa versione dell'applicativo si \`e aggiunto all'immagine del sistema operativo del ReliaGate 20-25 un Java Real-time Environment ed un JDK. Inoltre si \`e deciso di rendere disponibile la API Java ufficiale di OpenCV. Quest'ultimo passaggio \`e stato complicato dai problemi di compatiblit\`a delle telecamere RealSense e si \`e reso necessario modificare a mano i metadati del progetto Yocto necessari all'installazione della API Java di OpenCV.
 
-A questo punto dello sviluppo si \`e ritenuto il progetto completato e ci si \`e ritenuti soddisfatti dei risultati ottenuti.
+A questo punto dello sviluppo si \`e ritenuto il progetto completato. 
 
 %% Interruzione di pagina
 \newpage
@@ -3755,7 +3754,7 @@ A questo punto dello sviluppo si \`e ritenuto il progetto completato e ci si \`e
 \section{Risultati Passenger Counter con telecamere RealSense}
 I risultati ottenuti da questa versione del contatore sono stati ritenuti molto buoni. \`E stato possibile infatti migliorare tutti i punti deboli della versione del contatore attualmente implementata da Eurotech.
 
-Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte come segue:
+Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCNEurotech} il contatore realizzato da Eurotech presentava delle criticit\`a che mi \`e stato chiesto di risolvere durante lo sviluppo di questa versione del Passenger Counter. Queste criticit\`a sono state risolte come segue.
 
 \begin{enumerate}
 \item \textbf{Difficolt\`a nel reperire l'hardware}: le telecamere RealSense sono un dispositivo di nuova concezione e da poco sul mercato. La Intel \`e intenzionata a fornire supporto a questa tecnologia a lungo e quindi non sembra possano insorgere problemi di reperibilit\`a a breve termine.
@@ -3767,22 +3766,22 @@ Come visto nel paragrafo \ref{ProblemiPCNEurotech} a pagina \pageref{ProblemiPCN
 In conclusione si pu\`o affermare che la soluzione adottata da questo Passenger Counter sembra essere promettente e raggiunge tutti gli obiettivi che ci si era prefissati all'inizio della tesi.
 
 \subsection{Possibili miglioramenti e sviluppi futuri}
-Nonostante si ritenga questa soluzione soddisfacente sotto molti punti di vista, sono sicuramente possibili dei miglioramenti:
+Nonostante si ritenga questa soluzione soddisfacente sotto molti punti di vista, sono sicuramente possibili dei miglioramenti.
 
 \begin{itemize}
 \item \textbf{Implementazione di algoritmi pi\`u sofisticati per il rilevamento dei passeggeri}: l'implementazione realizzata in questa tesi \`e sicuramente un solido proof of concept ma per una applicazione nel mondo reale \`e necessario implementare un rilevamento dei passeggeri pi\`u solido. Una soluzione interessante sarebbe quella di adottare algoritmi di machine learning per il riconoscimento delle sagome dei passeggeri che transitano sotto la telecamera. Questo permetterebbe una maggior precisione diminuendo il numero di falsi positivi rilevati dalla telecamera.
 \item \textbf{Carico computazionale}: al momento il carico computazionale \`e interamente assorbito dalla CPU del ReliaGate. Scaricare parte di questo carico sulla GPU potrebbe permettere di aumentare il numero massimo di istanze del contatore contemporaneamente presenti sull'unit\`a computazionale abbassando ulteriormente i costi di produzione del sistema.
 \item \textbf{Test e calibrazioni}: i mezzi a mia disposizione per effettuare test e calibrazioni dei parametri del contatore non sono adeguati ad ottenere risultati adatti all'applicazione in ambito industriale del sistema e questo \`e un punto in cui investire risorse per effettuare dei miglioramenti.
-\item \textbf{Porting in OSGi}: OSGi (Open Service Gateway Initiative) \`e un framework Java per lo sviluppo e il deployment di programmi software e librerie modulari. L'infrastruttura Eurotech \`e realizzata interamente seguento le specifiche OSGi e sarebbe opportuno completare il porting del codice del progetto adattandolo a queste specifiche.
+\item \textbf{Porting in OSGi}: l'infrastruttura Eurotech \`e realizzata interamente seguento le specifiche OSGi e sarebbe opportuno completare il porting del codice del progetto adattandolo a queste specifiche.
 \end{itemize}
 
-Purtroppo a causa della mancanza di tempo per lo sviluppo, non \`e stato possibile applicare questi miglioramenti in quanto \`e stata data la precedenza ad altri aspetti del progetto che hanno sottratto tempo e risorse, quindi sono lasciati ad implementazioni future del progetto.
+Purtroppo non \`e stato possibile applicare questi miglioramenti in quanto \`e stata data la precedenza ad altri aspetti del progetto che hanno sottratto tempo e risorse, quindi sono lasciati ad implementazioni future.
 
 %% Interruzione di pagina
 \newpage
 
 \section{Risultati distribuzione Yocto}
-Anche in questo caso i risultati ottenuti sono stati pi\`u che soddisfacenti. Uno degli obiettivi della distribuzione era dimostrare che il RealiaGate potesse supportare librerie e tool software di largo uso come OpenCV e hardware specializzato come le telecamere RealSense. Questo permette di aumentare l'appetibilit\`a del gateway sul mercato e ne amplia gli ambiti di utilizzo in un'ottica non limitata solamente all'applicazione nel sistema del Passenger Counter.
+Anche in questo caso i risultati ottenuti sono stati pi\`u che soddisfacenti. Uno degli obiettivi della distribuzione era dimostrare che il RealiaGate pu\`o supportare librerie e tool software di largo uso come OpenCV e hardware specializzato come le telecamere RealSense. Questo permette di aumentare l'appetibilit\`a del gateway sul mercato e ne amplia gli ambiti di utilizzo in un'ottica non limitata solamente all'applicazione nel sistema del Passenger Counter.
 
 La distribuzione realizzata supporta:
 
@@ -3798,7 +3797,7 @@ Anche in questo caso sono possibili dei miglioramenti:
 
 \begin{itemize}
 \item \textbf{Installazione del supporto al calcolo parallelo su GPU}: da specifiche sappiamo che il processore installato sul ReliaGate possiede una GPU integrata e, per poter scaricare parte del carico computazionale su di essa, sarebbe necessario installare ulteriori componenti sulla distribuzione. Uno dei componenti fondamentali \`e OpenCL, il quale viene usato pesantemente da OpenCV per accelerare i suoi algoritmi. Purtroppo per inesperienza con il tool e per mancanza di supporto ufficiale da parte di Intel non \`e stato possibile effettuare questo passaggio. \`E sicuramente un miglioramento da tenere in considerazione per gli sviluppi futuri del progetto.
-\item \textbf{Integrazione delle feature nella distribuzione ufficiale di Eurotech}: i prossimi passi nello sviluppo del progetto prevedono l'integrazione delle feature presenti sull'immagine realizzata nel corso di questa tesi nell'immagine del sistema operativo ufficiale di Eurotech. Questo comporterebbe l'integrazione delle interfacce verso l'hardware proprietario di Eurotech per mezzo dei driver dell'azienda a cui non si \`e avuto accesso durante lo sviluppo della tesi. Questa integrazione non \`e banale visti i vincoli di compatiblit\`a imposti dalle telecamere RealSense.
+\item \textbf{Integrazione delle feature nella distribuzione ufficiale di Eurotech}: i prossimi passi nello sviluppo del progetto prevedono l'integrazione delle feature presenti sull'immagine realizzata nel corso di questa tesi nell'immagine del sistema operativo ufficiale di Eurotech. Questo comporterebbe l'integrazione delle interfacce verso l'hardware proprietario di Eurotech per mezzo dei driver dell'azienda a cui non si \`e avuto accesso durante lo sviluppo della tesi. Questa integrazione non \`e priva di difficolt\`a visti i vincoli di compatiblit\`a imposti dalle telecamere RealSense.
 \end{itemize}
 
 %% Fine dei capitoli normali, inizio dei capitoli-appendice (opzionali)
