@@ -1806,7 +1806,7 @@ https://github.com/mattdibi/PassengerCounter
 \end{verbatim}
 
 \chapter{Passenger Counter con telecamere RealSense}\label{CapitoloRSPCN}
-In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e le problematiche principali.
+In questo capitolo tratteremo la versione del contatore di passeggeri che utilizza le telecamere RealSense. Inizialmente descriveremo la struttura del codice, gli algoritmi utilizzati ed il suo funzionamento. Infine parleremo dei risultati ottenuti da questa implementazione e i problemi principali.
 
 \section{Struttura del codice}\label{StrutturaRSPCN}
 In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counter con telecamere RealSense. La struttura rimane molto simile a quella utilizzata per il contatore a sottrazione del background:
@@ -1835,7 +1835,7 @@ Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Co
 
 \begin{itemize}
 \item Interfacciarsi con le telecamere RealSense per mezzo della libreria librealsense in modo da poterne controllare i settaggi in tempo reale e ricavare i dati di profondit\`a.
-\item Convertire i dati ottenuti dalle telecamere RealSense in qualcosa di utilizzabile dall'algoritmo.
+\item Convertire i dati ottenuti dalle telecamere RealSense in qualcosa di utilizzabile dal resto del programma.
 \end{itemize}
 
 Qui di seguito \`e riportato l'header della classe RSPCN:
@@ -1928,9 +1928,9 @@ private:
 \noindent Variabili:
 \begin{itemize}
 \item \verb|dev|: \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
-\item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere le due telecamere usate durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
+\item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere i due modelli di telecamere usati durante lo sviluppo del progetto poich\`e necessitano di settaggi diversi per il loro funzionamento.
 \item \verb|ImageWidth|, \verb|ImageHeight|, \verb|CameraFramerate|: sono le impostazioni di risoluzione e framerate dei flussi video in ingresso dalle telecamere.
-\item \verb|scale|: \`e la scala alla quale viene impostata la telecamera. 
+\item \verb|scale|: \`e il fattore di scala alla quale viene impostata la telecamera, ricavato in run-time.
 \item \verb|cnt_in|, \verb|cnt_out|: sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
 \item \verb|pid| e \verb|passengers| assolvono gli stessi compiti visti nella versione del Passenger Counter a sottrazione del background.
 \item Opzioni: questi booleani permettono di modificare le impostazioni del contatore in real-time.
@@ -1939,7 +1939,7 @@ private:
     \item \verb|displayColor|, \verb|displayRawDepth|, \verb|displayDepth|, \verb|displayFrame|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
     \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
     \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
-    \item \verb|framerateStabilizationOn|: va ad agire sulla funzione per mezzo della quale andiamo a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante, che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
+    \item \verb|framerateStabilizationOn|: va ad agire sulla funzione per mezzo della quale si vanno a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
     \end{itemize}
 \end{itemize}
 
@@ -1987,7 +1987,7 @@ Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera 
 \item Telecamera SR300: 640x480 pixel @ 30 fps.
 \end{itemize}
 
-Infine si ricava la scala alla quale opera la telecamera e viene salvata all'interno della variabile \verb|scale|.
+Infine si ricava il fattore di scala al quale opera la telecamera e viene salvato all'interno della variabile \verb|scale|.
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
 \item \verb|count()|: anche in questo caso rappresenta il cuore del Passenger Counter e verr\`a analizzata separatamente. 
@@ -2007,7 +2007,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 \newpage
 
 \section{Metodo getColorMap()}
-Questo metodo \`e stato utile in fase di sviluppo poich\`e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale nel programma ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
+Questo metodo \`e stato utile in fase di sviluppo poich\'e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale nel programma ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
 Mat RSPCN::getColorMap(Mat depthImage) {
@@ -2165,18 +2165,18 @@ Mat RSPCN::getFrame(Mat depthImage, int thresholdCentimeters) {
 }
 \end{lstlisting}
 
-In ingresso abbiamo sempre il formato immagine illustrato in figura \ref{fig:rawDepthImage} e la soglia espressa in centimetri da applicare all'immagine in ingresso.
+In ingresso abbiamo il formato immagine illustrato in figura \ref{fig:rawDepthImage} e la soglia espressa in centimetri da applicare all'immagine in ingresso.
 
-Come nel caso precedente partiamo applicando la funzione \verb|setTo()| per imporre tutti i pixel nulli a 65535. Quindi convertiamo l'immagine da 16 bit privi di segno a 32 bit floating point. Questo passaggio  \`e necessario per poter dare in pasto l'immagine alla funzione \verb|threshold()|, la quale accetta solamente immagini nel formato 8 bit privi di segno o 32 bit floating point. Il risultato di questo passaggio \`e visibile in figura \ref{fig:getFrameStep1}.
+Come nel caso precedente applichiamo la funzione \verb|setTo()| per imporre tutti i pixel nulli a 65535. Quindi convertiamo l'immagine da 16 bit privi di segno a 32 bit floating point. Questo passaggio  \`e necessario per poter passare l'immagine alla funzione \verb|threshold()|, la quale accetta solamente immagini nel formato 8 bit privi di segno o 32 bit floating point. Il risultato di questo passaggio \`e visibile in figura \ref{fig:getFrameStep1}.
 
-Passiamo quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel rappresentano una distanza possiamo eliminare tutto ci\`o che si trova oltre una certa distanza dalla telecamera per mezzo della funzione \verb|threshold()|. Anzitutto \`e necessario convertire la soglia da cm al valore numerico applicabile sui pixel, quindi si passa all'applicazione della soglia vera e propria.
+Passiamo quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel rappresentano una distanza possiamo eliminare tutto ci\`o che si trova oltre una certa distanza dalla telecamera per mezzo della funzione \verb|threshold()|. Anzitutto \`e necessario convertire la soglia da centimetri al valore numerico applicabile sui pixel, quindi si passa all'applicazione della soglia vera e propria.
 
-\verb|scale| \`e la scala alla quale \`e impostata la telecamera e viene ricavata interrogandola per mezzo della libreria librealsense. Va moltiplicata per un fattore cento in quanto l'unit\`a di misura con la quale viene fornita sono i metri e noi abbiamo una soglia espressa in centimetri.
+\verb|scale| \`e la scala alla quale \`e impostata la telecamera e viene ricavata interrogandola per mezzo della libreria librealsense. Va moltiplicata per un fattore cento in quanto l'unit\`a di misura con la quale viene fornita sono i metri mentre la soglia \`e espressa in centimetri.
 
 %% Interruzione di pagina
 \newpage
 
-La soglia va quindi ad effettuare la seguente operazione:
+\verb|threshold()| va quindi ad effettuare la seguente operazione:
 
 \begin{equation}
 dstPixel(x,y) = \begin{cases} 65535, & \mbox{se } srcPixel(x,y) > threshPixel \\ 0, & \mbox{altrimenti } \end{cases}
@@ -2213,7 +2213,7 @@ Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e g
 
 L'obiettivo di queste operazioni \`e andare a ricavare una foreground mask contenente solo la testa dei passeggeri che transitano sotto la telecamera. Rilevando solamente la testa delle persone, infatti, otteniamo un tracciamento molto pi\`u preciso ed affidabile rispetto all'implementazione del Passenger Counter precedente.
 
-\section{Analisi del kernel del programma: funzione count()}
+\section{Analisi del nucleo del programma: funzione count()}
 
 La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuore del programma. Il codice \`e suddivisibile ancora una volta in tre sezioni:
 
@@ -2223,13 +2223,13 @@ La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuor
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
-\`E stato possibile riutilizzare il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Vi sono per\`o alcune differenze nel codice che vedremo nel seguito.
+\`E stato possibile riutilizzare in parte il codice della versione del contatore a sottrazione del background per le ultime due sezioni. Vi sono per\`o alcune differenze nel codice che vedremo nel seguito.
 
 \subsection{Estrazione degli oggetti in primo piano}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 1, style=customcpp]
-void RSPCN::count()
-{
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 1., style=customcpp]
+void RSPCN::count() {
+
     // Streams
     Mat frame;
     Mat rawDepth;
@@ -2255,11 +2255,11 @@ void RSPCN::count()
     // Start streaming
     dev->start();
 
-    while(!halt)
-    {
+    while(!halt) {
+
         // Synchronization
-        if( dev->is_streaming( ) )
-        {
+        if( dev->is_streaming( ) ) {
+
             if(framerateStabilizationOn)
                 dev->wait_for_frames( );
             else
@@ -2278,7 +2278,7 @@ void RSPCN::count()
 
 \end{lstlisting}
 
-Come nella versione precedente del Passenger Counter, in questa fase abbiamo l'estrazione degli oggetti in primo piano.
+Come nella versione precedente del Passenger Counter, in questa fase avviene l'estrazione degli oggetti in primo piano.
 
 \noindent Variabili:
 \begin{itemize}
@@ -2286,7 +2286,7 @@ Come nella versione precedente del Passenger Counter, in questa fase abbiamo l'e
 \item \verb|frame|: rappresenta l'output della funzione \verb|getFrame()| di cui si \`e parlato in precedenza.
 \item \verb|rawDepth|: questa \`e la matrice che conterr\`a i frame grezzi dello stream di profondit\`a in ingresso dalla telecamera ad infrarossi. \`E una copia della matrice \verb|depth| prima che sia passata alle funzioni di elaborazione delle immagini.
 \item \verb|depthColorMap|: rappresenta l'output della funzione \verb|getColorMap()|.
-\item \verb|morphTrans|: \`e la copia di \verb|frame| a seguito dell'applicazione degli algoritmi di riduzione del rumore.
+\item \verb|morphTrans|: \`e la copia di \verb|frame| a seguito dell'applicazione delle funzioni di riduzione del rumore.
 \end{itemize}
 
 \noindent Variabili di calibrazione del contatore:
@@ -2306,68 +2306,69 @@ Come nella versione precedente del Passenger Counter, in questa fase abbiamo l'e
 \begin{enumerate}
 \item Prima di raccogliere i frame in ingresso si attende che questi vengano ricevuti per mezzo della funzione \verb|wait_for_frames()|. Esiste la versione non bloccante \verb|poll_for_frames()| il cui utilizzo per\`o comporta problemi di stabilit\`a del framerate.
 \item A seguito di questa sincronizzazione vengono catturati i frame di profondit\`a grezzi dalla telecamera RealSense utilizzando la funzione \verb|get_frame_data()| resa disponibile dalla libreria RealSense e salvati nella variabile \verb|depth|.
-\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()| di cui si \`e parlato nel paragrafo precedente e salvati nella variabile \verb|frame|.
-\item Quindi si effettua una veloce operazione di riduzione del rumore per mezzo della funzione \verb|blur|.
+\item Questi frame vengono convertiti in un formato utilizzabile dalla funzione \verb|findContours()| di OpenCV grazie alla funzione \verb|getFrame()|, di cui si \`e parlato nel paragrafo precedente, e salvati nella variabile \verb|frame|.
+\item Quindi si effettua l'operazione di riduzione del rumore per mezzo della funzione \verb|blur()|.
 \end{enumerate}
 
 \subsection{Rilevamento e tracking degli oggetti di nostro interesse}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2, style=customcpp, firstnumber=48]
-        // --FINDING CONTOURS
-        findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2., style=customcpp, firstnumber=48]
+// --FINDING CONTOURS
+findContours(morphTrans, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
-        // For every detected object
-        for(unsigned int idx = 0; idx < contours.size(); idx++) {
-            // -- AREA
-            // Calculating area
-            double areaCurrentObject = contourArea(contours[idx]);
+// For every detected object
+for(unsigned int idx = 0; idx < contours.size(); idx++) {
 
-            // If calculated area is big enough begin tracking the object
-            if(areaCurrentObject > areaMin) {
-                // Get bounding rectangle
-                Rect br = boundingRect(contours[idx]);
-                Point2f objCenter = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
+    // Calculating area
+    double areaCurrentObject = contourArea(contours[idx]);
 
-                // Draw mass center and bounding rectangle
-                rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
-                circle( color, objCenter, 5, RED, 2, 8, 0 );
+    // If calculated area is big enough begin tracking the object
+    if(areaCurrentObject > areaMin) {
 
-                // --PASSENGERS DB UPDATE
-                bool newPassenger = true;
+        // Get bounding rectangle
+        Rect br = boundingRect(contours[idx]);
+        Point2f objCenter = Point2f((int)(br.x + br.width/2) ,(int)(br.y + br.height/2) );
 
-                for(unsigned int i = 0; i < passengers.size(); i++) {
+        // Draw mass center and bounding rectangle
+        rectangle( color, br.tl(), br.br(), GREEN, 2, 8, 0 );
+        circle( color, objCenter, 5, RED, 2, 8, 0 );
 
-                    // If the passenger is near a known passenger assume they are the same one
-                    if( abs(objCenter.x - passengers[i].getCurrentPoint().x) <= xNear &&
-                        abs(objCenter.y - passengers[i].getCurrentPoint().y) <= yNear ) {
+        // --PASSENGERS DB UPDATE
+        bool newPassenger = true;
 
-                        // Update coordinates
-                        newPassenger = false;
-                        passengers[i].updateCoords(objCenter);
-                        // If the object is being tracked it means its active we don't want it to disappear
-                        passengers[i].resetAge();
+        for(unsigned int i = 0; i < passengers.size(); i++) {
 
-                        break;
-                    }
-                }
+            // If the passenger is near a known passenger assume they are the same one
+            if( abs(objCenter.x - passengers[i].getCurrentPoint().x) <= xNear &&
+                abs(objCenter.y - passengers[i].getCurrentPoint().y) <= yNear ) {
 
-                // If wasn't near any known object is a new passenger
-                if(newPassenger) {
-                    Passenger p(pid, objCenter);
-                    passengers.push_back(p);
-                    pid++;
-                }
+                // Update coordinates
+                newPassenger = false;
+                passengers[i].updateCoords(objCenter);
+                // If the object is being tracked it means its active we don't want it to disappear
+                passengers[i].resetAge();
+
+                break;
             }
         }
+
+        // If wasn't near any known object is a new passenger
+        if(newPassenger) {
+            Passenger p(pid, objCenter);
+            passengers.push_back(p);
+            pid++;
+        }
+    }
+}
 \end{lstlisting}
 
-A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato calcoliamo l'area. Se l'area supera un valore minimo deciso arbitrariamente in fase sperimentale viene considerato un passeggero.
+A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato ne calcoliamo l'area, se l'area supera un valore minimo deciso arbitrariamente in fase sperimentale viene considerato un passeggero.
 
 \noindent Quindi si passa ad aggiornare la posizione dei passeggeri.
 
 \begin{itemize}
 \item Se il passeggero rilevato nei passaggi precedenti si trova entro una determinata distanza in pixel, data dalle variabili \verb|xNear| e \verb|yNear|, da un passeggero gi\`a presente nel database vengono considerati lo stesso passeggero e se ne aggiorna la posizione.
-\item Se il passeggero non \`e vicino a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
+\item Se il passeggero non si trova vicino a nessun passeggero nel database viene considerato un nuovo passeggero e inserito nel database \verb|passengers|.
 \end{itemize}
 
 \noindent Infine si va ad effettuare il conteggio degli attraversamenti.
@@ -2377,45 +2378,48 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 
 \subsection{Conteggio degli attraversamenti}
 
-\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3, style=customcpp, firstnumber=94]
-        // For every passenger in passengers DB
-        for(unsigned int i = 0; i < passengers.size(); i++) {
-            
-            if(passengers[i].getTracks().size() > 1) {
+\begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 3., style=customcpp, firstnumber=94]
+// For every passenger in passengers DB
+for(unsigned int i = 0; i < passengers.size(); i++) {
+    
+    if(passengers[i].getTracks().size() > 1) {
 
-                // -- DRAWING PASSENGER TRAJECTORIES
-                polylines(color, passengers[i].getTracks(), false, passengers[i].getTrackColor(),2);
+        // -- DRAWING PASSENGER TRAJECTORIES
+        polylines(color, passengers[i].getTracks(), false, passengers[i].getTrackColor(),2);
 
-                // -- COUNTING
-                // Up to down
-                if( (passengers[i].getLastPoint().y < frame.rows/2 && passengers[i].getCurrentPoint().y >= frame.rows/2) ||
-                    (passengers[i].getLastPoint().y <= frame.rows/2 && passengers[i].getCurrentPoint().y > frame.rows/2) ) {
+        // -- COUNTING
+        // Up to down
+        if( (passengers[i].getLastPoint().y < frame.rows/2 && passengers[i].getCurrentPoint().y >= frame.rows/2) ||
+            (passengers[i].getLastPoint().y <= frame.rows/2 && passengers[i].getCurrentPoint().y > frame.rows/2) ) {
 
-                    cnt_out++;
+            cnt_out++;
 
-                }
-
-                // Down to up
-                if( (passengers[i].getLastPoint().y > frame.rows/2 && passengers[i].getCurrentPoint().y <= frame.rows/2) ||
-                    (passengers[i].getLastPoint().y >= frame.rows/2 && passengers[i].getCurrentPoint().y < frame.rows/2) ) {
-
-                    cnt_in++;
-
-                }
-            }
-
-            // --UPDATE PASSENGER STATS
-            // Updating age
-            passengers[i].updateAge();
-
-            // If passenger is outside field of view update coords with last known position
-            if(passengers[i].getAge() > 1)
-                passengers[i].updateCoords(passengers[i].getCurrentPoint());
-
-            // Removing older passengers
-            if(passengers[i].getAge() > (maxPassengerAge * fps) )
-                passengers.erase(passengers.begin() + i);
+            // Visual feedback
+            circle(color, Point(color.cols - 20, 20), 8, RED, CV_FILLED);
         }
+
+        // Down to up
+        if( (passengers[i].getLastPoint().y > frame.rows/2 && passengers[i].getCurrentPoint().y <= frame.rows/2) ||
+            (passengers[i].getLastPoint().y >= frame.rows/2 && passengers[i].getCurrentPoint().y < frame.rows/2) ) {
+
+            cnt_in++;
+
+            // Visual feedback
+            circle(color, Point(color.cols - 20, 20), 8, GREEN, CV_FILLED);
+        }
+    }
+
+    // --UPDATE PASSENGER STATS
+    // Updating age
+    passengers[i].updateAge();
+
+    // If passenger is outside field of view update coords with last known position
+    if(passengers[i].getAge() > 1)
+        passengers[i].updateCoords(passengers[i].getCurrentPoint());
+
+    // Removing older passengers
+    if(passengers[i].getAge() > (maxPassengerAge * fps) )
+        passengers.erase(passengers.begin() + i);
 }
 \end{lstlisting}
 
@@ -2425,20 +2429,20 @@ A questo punto passiamo a rilevare i contorni degli oggetti in primo piano trami
 Una volta aggiornate le posizioni viene letto l'intero database dei passaggeri attualmente rilevati all'interno del raggio visivo della telecamera. Per ognuno di essi:
 
 \begin{enumerate}
-\item Se ne disegna la traccia dello storico delle posizioni.
+\item Se ne disegna la traccia dello storico delle posizioni per mezzo della funzione \verb|polylines()|.
 \item Si rilevano gli attraversamenti della soglia:
     \begin{itemize}
-    \item Se l'ultima posizione si trovava al di sotto della soglia e la nuova posizione rilevata al di sopra, si aggiorna il contatore in ingresso. 
-    \item Se l'ultima posizione si trovava al di sopra della soglia e la nuova posizione rilevata al di sotto, si aggiorna il contatore in uscita. 
+    \item Se l'ultima posizione si trova al di sotto della soglia e la nuova posizione rilevata al di sopra, si aggiorna il contatore in ingresso. 
+    \item Se l'ultima posizione si trova al di sopra della soglia e la nuova posizione rilevata al di sotto, si aggiorna il contatore in uscita. 
     \end{itemize}
 \item Si effettua l'update del parametro \verb|age| dei passeggeri.
 \item Se il passeggero si trova fuori dal raggio d'azione della telecamera se ne aggiorna la posizione con l'ultima conosciuta.
 \item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\'e troppo a lungo fuori dal raggio visivo della telecamera.
 \end{enumerate}
 
-Si noti che a differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\'e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
+A differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\'e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
 
-Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore in fase sperimentale \`e riportato in figura \ref{fig:RSPCN}.
+Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore \`e riportato in figura \ref{fig:RSPCN}.
 
 \begin{figure}[h!]
   \centering
@@ -2447,7 +2451,7 @@ Come nella versione precedente si \`e deciso di plottare a schermo tutte le info
   \label{fig:RSPCN}
 \end{figure}
 
-Si noti che la lieve differenza nella posizione delle due telecamere fa in modo che il rettangolo che inscrive l'oggetto tracciato sia leggermente spostato rispetto all'oggetto, e cos\`\i\ pure il centro dell'oggetto, poich\`e il tracking viene effettuato sullo stream proveniente dalla telecamera a infrarossi, mentre il rettangolo viene disegnato sullo stream proveniente dalla telecamera a colori. 
+Si noti che la lieve differenza nella posizione delle due telecamere fa in modo che il rettangolo che inscrive l'oggetto tracciato, e cos\`\i\ pure il centro dell'oggetto, siano leggermente spostati rispetto all'oggetto poich\`e il tracking viene effettuato sullo stream proveniente dalla telecamera a infrarossi, mentre il rettangolo viene disegnato sullo stream proveniente dalla telecamera a colori. 
 
 Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o creare confusione durante la visualizzazione dei video.
 
@@ -2455,10 +2459,10 @@ Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o crear
 \newpage
 
 \section{Risultati ottenuti}
-In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare le prestazioni delle due telecamere.
+In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare le prestazioni dei due modelli di telecamera.
 
 \subsection{Dimostrazione funzionamento telecamera R200}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a (contenute nella variabile \verb|depthColorMap|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (conentute nella variabile \verb|frame|).
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10 m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a (contenute nella variabile \verb|depthColorMap|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (contenute nella variabile \verb|frame|).
 
 \begin{figure}[h!]
   \centering
@@ -2501,7 +2505,7 @@ In figura \ref{fig:R2003} il pallino verde in alto a destra nell'immagine indica
 \newpage
 
 \subsection{Dimostrazione funzionamento telecamera SR300}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore effettuata utilizzando la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Il formato dei frame \`e lo stesso del caso precedente.
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore effettuata utilizzando la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10 m. Il formato dei frame \`e lo stesso del caso precedente.
 
 \begin{figure}[h!]
   \centering
@@ -2510,7 +2514,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
   \label{fig:SR3001}
 \end{figure}
 
-Si noti che in questo caso nell'immagine coi dati di profondit\`a non viene rilevato il pavimento. Questo \`e dovuto al fatto che il range operativo della telecamera SR300 \`e inferiore a quello della R200. Ci\`o per\`o non influisce sul corretto funzionamento del contatore.
+Si noti che a differenza del caso precedente nell'immagine contenente i dati di profondit\`a non viene rilevato il pavimento. Questo \`e dovuto al fatto che il range operativo della telecamera SR300 \`e inferiore a quello della R200. Ci\`o per\`o non influisce sul corretto funzionamento del contatore.
 
 \begin{figure}[h!]
   \centering
@@ -2526,7 +2530,7 @@ Si noti che in questo caso nell'immagine coi dati di profondit\`a non viene rile
   \label{fig:SR3003}
 \end{figure}
 
-Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un range di funzionamento molto migliore poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a dell'immagine.
+In questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. Questo \`e dovuto al fatto che la telecamera SR300 ha un range di funzionamento molto migliore poich\`e sfrutta la luce strutturata per ricostruire i dati di profondit\`a.
 
 %% Interruzione di pagina
 \newpage
@@ -2539,7 +2543,7 @@ Si noti che, in questo caso, \`e stata rilevata correttamente l'intera testa del
 \end{figure}
 
 \subsection{Performance}
-Per la misura dei tempi di esecuzione si \`e fatto uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
+Per la misura dei tempi di esecuzione si \`e fatto nuovamente uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 ed una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
 Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
 
@@ -2642,15 +2646,15 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Performance Passenger Counter con telecamera RealSense R200.}
 \end{table}
 
-Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato, ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
+Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato. Ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
 
-Sempre grazie a questo fatto possiamo notare come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi, ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingresso dalla telecamera (anche in questo caso il metodo \verb|wait_for_frames()| \`e bloccante).
+Si noti inoltre come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi: ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingresso dalla telecamera.
 
 %% Interruzione di pagina
 \newpage
 
 \section{Problemi}
-Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi, in questo caso sono pi\`u legati alle tecnologie impiegate.
+Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi.
 
 Anzitutto \`e necessario considerare che il programma \`e molto dipendente dall'altezza dei passeggeri. La soglia applicata alle informazioni di profondit\`a implica che i passeggeri aventi un'altezza inferiore a detta soglia non verranno rilevati, mentre i passeggeri troppo alti potrebbero risultare fuori dal range della telecamera. Siccome si suppone che la telecamera sia posta a circa 2 metri da terra, avendo una soglia massima posta a 45 cm, le persone pi\`u basse di 150 cm risultano invisibili al contatore. Questo problema potrebbe essere risolta applicando una soglia pi\`u ``intelligente'', che tenga conto dei massimi locali nell'immagine invece dei massimi assoluti.
 
