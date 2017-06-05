@@ -3318,7 +3318,7 @@ La distribuzione cos\`\i\ realizzata purtroppo non \`e esente da problemi.
 Nonostante questi problemi la distribuzione possiede tutti i tool necessari a supportare l'applicativo sviluppato nel corso della tesi, ed \`e ritenuta un ottimo proof of concept da parte di Eurotech.
 
 \chapter{Manuale d'uso del progetto}\label{CapitoloManuale}
-In questo capitolo verr\`a riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
+In questo capitolo \`e riportata la struttura del progetto e come replicare i risultati ottenuti nel corso dello sviluppo.
 
 \section{Repository Github}
 Il progetto \`e disponibile pubblicamente all'indirizzo:
@@ -3330,10 +3330,10 @@ https://github.com/mattdibi/RSPassengerCounter
 \noindent La struttura della repository \`e la seguente:
 
 \begin{itemize}
-\item \verb|build_config|: qui sono raccolti i file di configurazione del progetto Yocto e le istruzioni per generare la distribuzione per il ReliaGate 20-25.
-\item \verb|cpp_src|: in questa cartella sono contenuti i sorgenti per la versione C++ del codice.
-\item \verb|java_wrap|: qui sono contenuti i file di configurazione di SWIG per generare il wrapper Java del progetto.
-\item \verb|java_src|: qui sono contenuti i sorgenti e i file .jar necessari per la versione Java dell'applicativo.
+\item \verb|build_config|: file di configurazione del progetto Yocto e le istruzioni per generare la distribuzione per il ReliaGate 20-25.
+\item \verb|cpp_src|: sorgenti per la versione C++ del codice del RSPCN.
+\item \verb|java_wrap|: file di configurazione di SWIG per generare il wrapper Java del progetto.
+\item \verb|java_src|: sorgenti e file .jar necessari per la versione Java dell'applicativo.
 \end{itemize}
 
 \section{Prerequisiti}
@@ -3412,7 +3412,7 @@ Modificare i file di configurazione \textbf{local.conf} e \textbf{auto.conf} com
 
 \subsubsection{Step 5: Modificare la ricetta OpenCV}
 
-Come descritto nel paragrafo \ref{ModRicettaOpenCV} \`e necessario modificare la ricetta di OpenCV disponibile nella cartella:
+Come descritto nel paragrafo \ref{ModRicettaOpenCV} \`e necessario modificare la ricetta di OpenCV, il cui percorso \`e:
 
 \begin{verbatim}
 $INSTALL_DIR/poky/meta-openembedded/meta-oe/recipes-support/opencv/opencv_3.1.bb
@@ -3475,7 +3475,13 @@ $ bitbake core-image-sato
 \newpage
 
 \subsection{Problemi noti}
-Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interuompere il processo di build dell'immagine. Nel caso si presenti l'errore ``\textbf{unrecognized command line option -fno-lifetime-dse}'' \`e necessario modificare la ricetta \textbf{\$INSTALL\_DIR/poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc} alla linea 224 come segue:
+Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interrompere il processo di build dell'immagine. Nel caso si presenti l'errore ``\textbf{unrecognized command line option -fno-lifetime-dse}'' \`e necessario che alla ricetta presente al percorso
+
+\begin{verbatim}
+$INSTALL\_DIR/poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc
+\end{verbatim}
+
+\noindent siano applicate le seguenti modifiche presso la linea 224 del file.
 
 \begin{lstlisting}[language=diff]
 # GCC 6 sets the default C++ standard to C++14 and introduces dead store
