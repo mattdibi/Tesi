@@ -3822,7 +3822,7 @@ Anche in questo caso sono possibili dei miglioramenti.
 
 \chapter{Computer Stereo Vision}\label{ComputerStereoVision}
 
-La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti di vista (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{Stereopsi}.
+La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti di vista (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{stereopsi}.
 
 \section{Principio di funzionamento}
 \begin{figure}[h!]
@@ -3832,7 +3832,7 @@ La computer stereo vision \`e una tecnica per l'estrazione di informazioni di pr
   \label{fig:overviewStereoVision}
 \end{figure}
 
-In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali per ricavare le informazioni 3D.
+\noindent In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali per ricavare le informazioni 3D.
 
 \begin{enumerate}
 \item \textbf{Rettificazione}: le due immagini ottenute dalle telecamere vanno proiettate su un piano comune per permettere la comparazione tra le due. Questo passaggio \`e noto come image rectification, ed \`e necessario a semplificare il passaggio di stereo correpondance.
@@ -3841,7 +3841,24 @@ In figura \ref{fig:overviewStereoVision} sono riportati i passaggi fondamentali 
 \end{enumerate}
 
 \section{Stereo correspondance: simple block matching}
-Si abbiano due immagini ricavate da altrettante telecamere disposte sullo stesso piano ad una distanza nota tra di loro. Essenzialmente viene presa una piccola regione di pixel nell'immagine proveniente dalla telecamera sinistra (ad esempio) e si cerca la regione pi\`u simile a quella considerata nell'immagine proveniente dalla telecamera destra.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{8.5cm}
+  \centering
+  \includegraphics[width=8cm]{left.png}
+  \caption{Immagine telecamera sinistra.}
+  \label{fig:leftimage}
+\end{minipage}
+\ \hspace{2mm} \hspace{3mm} \
+\begin{minipage}[b]{8.5cm}
+ \centering
+  \includegraphics[width=8cm]{right.png}
+  \caption{Immagine telecamera destra.}
+  \label{fig:rightimage}
+\end{minipage}
+\end{figure}
+
+Si abbiano due immagini ricavate da altrettante telecamere disposte sullo stesso piano ad una distanza nota tra di loro. La tecnica di simple block matching consiste nel prendere una piccola regione di pixel nell'immagine proveniente dalla telecamera sinistra (ad esempio) e cercare la regione pi\`u simile a quella considerata nell'immagine proveniente dalla telecamera destra.
 
 Per esempio, si consideri la regione di pixel contenuta nel riquadro nero nell'immagine proveniente dalla telecamera sinistra, chiameremo questa regione ``riquadro template''.
 
@@ -3851,6 +3868,9 @@ Per esempio, si consideri la regione di pixel contenuta nel riquadro nero nell'i
   \caption{Dettaglio immagine ricavata dalla telecamera di sinistra.}
   \label{fig:}
 \end{figure}
+
+%% Interruzione di pagina
+\newpage
 
 Cerchiamo il riquadro pi\`u simile nell'immagine di destra.
 
@@ -3869,9 +3889,9 @@ Quando si cerca la regione di pixel simile si parte dalle stesse coordinate dell
 
 Dove L e R si riferiscono alle immagini di sinistra e di destra mentre r e c si riferiscono alla riga e colonna corrente delle immagini analizzate. ``d'' si riferisce alla dispari\`a dell'immagine di destra.
 
-Prima di calcolare la disparity map convertiamo le due immagini in scala di grigi cosicch\`e si abbiano solo valori compresi tra 0 e 255 per ogni pixel.
+Prima di calcolare la disparity map le due immagini vengono convertite in scala di grigi cosicch\`e si abbiano solo valori compresi tra 0 e 255 per ogni pixel.
 
-Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, sottraiamo ogni pixel nel riquadro template dal pixel corrispondente nella regione e prendiamo il valore assoluto di questa differenza. Quindi sommiamo tutte le differenze e questo ci da un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che i riquadri sono molto simili.
+Per calcolare la somma delle differenze assolute tra la il riquadro template e la regione di interesse, si sottrae ogni pixel nel riquadro template dal pixel corrispondente nella regione e si prende il valore assoluto di questa differenza. Quindi vengono sommate tutte le differenze il risultato di questa operazione \`e un singolo valore che approssima la misura di similitudine tra le due regioni delle immagini. Un valore basso significa che i riquadri sono molto simili.
 
 \begin{figure}[h!]
   \centering
@@ -3879,6 +3899,9 @@ Per calcolare la somma delle differenze assolute tra la il riquadro template e l
   \caption{Illustrazione SAD.}
   \label{fig:}
 \end{figure}
+
+%% Interruzione di pagina
+\newpage
 
 Per trovare la regione pi\`u simile al riquadro template, si calcola il SAD tra il template e ogni blocco nella regione di ricerca, quindi si sceglie il riquadro con il valore di SAD pi\`u basso.
 
@@ -3891,17 +3914,17 @@ Si noti come nel simple block matching si \`e cercata la corrispondenza tra bloc
 \section{Triangolazione}
 Si supponga di avere due telecamere disposte sullo stesso piano, poste ad una distanza nota B di cui si conosce la distanza focale f. Dalle immagini catturate si vuole ricavare la distanza tra le due telecamere e un oggetto P.
 
-%% Interruzione di pagina
-\newpage
-
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.6]{SchemaStereoVision.png}
+  \includegraphics[scale=0.65]{SchemaStereoVision.png}
   \caption{Schema triangolazione.}
   \label{fig:SchemaStereoVision}
 \end{figure}
 
-In figura \ref{fig:SchemaStereoVision} abbiamo che:
+%% Interruzione di pagina
+\newpage
+
+\noindent In figura \ref{fig:SchemaStereoVision} abbiamo che:
 
 \begin{itemize}
 \item P: \`e il punto di cui vogliamo ricavare la distanza dalle telecamere (Z).
@@ -3910,7 +3933,7 @@ In figura \ref{fig:SchemaStereoVision} abbiamo che:
 \item f: \`e la distanza focale delle due telecamere.
 \end{itemize}
 
-Quindi, sfruttando il fatto che i triangoli PO\ped{R}O\ped{T} e Ppp' sono triangoli simili, possiamo ricavare:
+\noindent Quindi, sfruttando il fatto che i triangoli PO\ped{R}O\ped{T} e Ppp' sono triangoli simili, possiamo ricavare:
 
 \begin{equation}
 \frac{B}{Z} = \frac{(B + x_T) - x_R}{Z - f}
@@ -3922,7 +3945,7 @@ e quindi:
 Z = \frac{B \times f}{x_R - x_T} = \frac{B \times f}{d}
 \end{equation}
 
-Dove si definisce \textit{Disparit\`a}:
+Dove si definisce \textit{disparit\`a}:
 
 \begin{equation}
 d \overset{\Delta}{=} x_R - x_T
@@ -3934,7 +3957,7 @@ Nota quindi la disparity map \`e possibile ricavare le informazioni di distanza 
 
 \chapter{Luce strutturata}\label{LuceStrutturata}
 
-La luce strutturata \`e un processo attraverso il quale, proiettando dei pattern di luce (tipicamente griglie o barre orizzontali) su una scena, si ricavano informazioni circa la profondit\`a e la superficie degli oggetti all'interno della scena grazie alle deformazioni dei pattern ottenute quando questi colpiscono la superficie degli oggetti.
+La luce strutturata \`e un processo attraverso il quale, proiettando dei pattern di luce (tipicamente griglie o barre orizzontali) su una scena, si ricavano informazioni circa la profondit\`a e la superficie degli oggetti all'interno dell'inquadratura grazie alle deformazioni dei pattern ottenute quando questi colpiscono la superficie degli oggetti.
 
 \section{Principio di funzionamento}
 
@@ -3957,7 +3980,7 @@ Un'altra informazione importante sulla profondit\`a \`e data dalla variazione di
 
 La frequenza e la fase delle bande portano informazioni simili che possono essere analizzate per mezzo di una trasformata di Fourier.
 
-In molte implementazioni pratiche di questa tecnica viene effettuate una serie di misure che combinano la pattern recognition, identificazione delle bande e trasformate di Fourier per ottenere una ricostruzione non ambigua delle forme in 3D.
+In molte implementazioni pratiche di questa tecnica vengono effettuate una serie di misure che combinano la pattern recognition, identificazione delle bande e trasformate di Fourier per ottenere una ricostruzione non ambigua delle forme in 3D.
 
 %% Parte conclusiva del documento; tipicamente per riassunto, bibliografia e/o indice analitico.
 \backmatter
