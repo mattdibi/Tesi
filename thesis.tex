@@ -3755,7 +3755,7 @@ Prima di poter procedere nello sviluppo del contatore si \`e ritenuto necessario
 
 \`E stato quindi realizzato il Passenger Counter con telecamere RealSense. Questa soluzione rileva il transito dei passeggeri facendo affidamento sulle informazioni di profondit\`a fornite dalle telecamere. In sostanza, l'applicazione elimina tutto ci\`o che si trova ad una distanza preimpostata dalla telecamera e traccia i massimi locali nell'immagine i quali corrispondono alla testa dei passeggeri. Di questi massimi viene tracciato il centro e, quando questo attraversa la soglia, vengono aggiornati i contatori. Questa soluzione si \`e rivelata essere molto precisa e dal costo computazionale basso, poich\'e gran parte dell'elaborazione avviene sull'ASIC presente all'interno delle telecamere RealSense.
 
-Una volta constatato che questa versione dell'applicativo soddisfava i requisiti di precisione e qualit\`a richiesti si \`e proceduto ad effettuare il porting del codice nel linguaggio adottato dall'azienda. Infatti l'applicazione \`e stata sviluppata in C++, linguaggio nativo delle libreria OpenCV e librealsense, ma in Eurotech il linguaggio pi\`u usato e adottato come standard \`e il Java.
+Una volta constatato che questa versione dell'applicativo soddisfava i requisiti di precisione e qualit\`a che ci si era prefissati, si \`e proceduto ad effettuare il porting del codice nel linguaggio adottato dall'azienda. Infatti l'applicazione \`e stata sviluppata in C++, linguaggio nativo delle libreria OpenCV e librealsense, ma in Eurotech il linguaggio pi\`u usato e adottato come standard \`e il Java.
 
 Inizialmente si \`e effettuato un wrapping Java sfruttando il tool SWIG. Successivamente si \`e deciso di effettuare un porting completo dell'applicazione appoggiandosi al progetto open-source JavaCPP. Anche questo passaggio ha comportato notevoli difficolt\`a in quanto \`e stato necessario appoggiarsi ad una API Java di OpenCV non ufficiale, la quale non era completamente compatibile con quanto realizzato fino a questo punto.
 
@@ -3784,7 +3784,7 @@ In conclusione si pu\`o affermare che la soluzione adottata da questo Passenger 
 Nonostante si ritenga questa soluzione soddisfacente sotto molti punti di vista, sono sicuramente possibili dei miglioramenti.
 
 \begin{itemize}
-\item \textbf{Implementazione di algoritmi pi\`u sofisticati per il rilevamento dei passeggeri}: l'implementazione realizzata in questa tesi \`e sicuramente un solido proof of concept ma per una applicazione nel mondo reale \`e necessario implementare un rilevamento dei passeggeri pi\`u solido. Una soluzione interessante sarebbe quella di adottare algoritmi di machine learning per il riconoscimento delle sagome dei passeggeri che transitano sotto la telecamera. Questo permetterebbe una maggior precisione diminuendo il numero di falsi positivi rilevati dalla telecamera.
+\item \textbf{Implementazione di algoritmi pi\`u sofisticati per il rilevamento dei passeggeri}: l'implementazione realizzata in questa tesi \`e sicuramente un buon proof of concept ma per una applicazione nel mondo reale \`e necessario implementare un rilevamento dei passeggeri pi\`u solido. Una soluzione interessante sarebbe quella di adottare algoritmi di machine learning per il riconoscimento delle sagome dei passeggeri che transitano sotto la telecamera. Questo permetterebbe una maggior precisione diminuendo il numero di falsi positivi rilevati dalla telecamera.
 \item \textbf{Carico computazionale}: al momento il carico computazionale \`e interamente assorbito dalla CPU del ReliaGate. Scaricare parte di questo carico sulla GPU potrebbe permettere di aumentare il numero massimo di istanze del contatore contemporaneamente presenti sull'unit\`a computazionale abbassando ulteriormente i costi di produzione del sistema.
 \item \textbf{Test e calibrazioni}: i mezzi a mia disposizione per effettuare test e calibrazioni dei parametri del contatore non sono adeguati ad ottenere risultati adatti all'applicazione in ambito industriale del sistema e questo \`e un punto in cui investire risorse per effettuare dei miglioramenti.
 \item \textbf{Porting in OSGi}: l'infrastruttura Eurotech \`e realizzata interamente seguendo le specifiche OSGi e sarebbe opportuno completare il porting del codice del progetto adattandolo a queste specifiche.
@@ -3808,7 +3808,7 @@ La distribuzione realizzata supporta:
 \end{itemize}
 
 \subsection{Possibili miglioramenti e sviluppi futuri}
-Anche in questo caso sono possibili dei miglioramenti:
+Anche in questo caso sono possibili dei miglioramenti.
 
 \begin{itemize}
 \item \textbf{Installazione del supporto al calcolo parallelo su GPU}: da specifiche sappiamo che il processore installato sul ReliaGate possiede una GPU integrata e, per poter scaricare parte del carico computazionale su di essa, sarebbe necessario installare ulteriori componenti sulla distribuzione. Uno dei componenti fondamentali \`e OpenCL, il quale viene usato pesantemente da OpenCV per accelerare i suoi algoritmi. Purtroppo per inesperienza con il tool e per mancanza di supporto ufficiale da parte di Intel non \`e stato possibile effettuare questo passaggio. \`E sicuramente un miglioramento da tenere in considerazione per gli sviluppi futuri del progetto.
