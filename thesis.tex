@@ -924,7 +924,7 @@ In figura \ref{fig:PCNUML} \`e riportata la struttura del programma. Le finalit\
 \begin{enumerate}
 \item \textbf{Passenger}: implementa la struttura adatta a rappresentare e memorizzare i passeggeri all'interno del programma.
 \item \textbf{PCN}: implementa il contatore di passeggeri vero e proprio. Questa classe si incarica dell'interfacciamento con le telecamere, l'elaborazione delle immagini e dei dati, espone metodi per controllare il funzionamento real-time ed effettua il conteggio degli attraversamenti. Permette inoltre la parallelizzazione dei contatori: \`e infatti possibile istanziare un contatore per telecamera.
-\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei PCN sfruttando i metodi pubblici resi disponibili dalla classe PCN.
+\item \textbf{main}: implementa l'interfaccia utente per gestire i settaggi run-time dei contatori sfruttando i metodi pubblici resi disponibili dalla classe PCN.
 \end{enumerate}
 
 %% Interruzione di pagina
@@ -996,12 +996,12 @@ void Passenger::updateCoords(Point newCenter) {
 \noindent Queste necessit\`a sono state assolte per mezzo delle seguenti variabili:
 \begin{enumerate}
 \item \textbf{pid}: \`e un intero assegnato in fase di registrazione all'entit\`a-passeggero. Esso andr\`a ad identificarlo univocamente all'interno del programma.
-\item \textbf{tracks}: \`e un vettore di coordinate che conservano la posizione dei passeggeri. Per l'implementazione si \`e scelto di usare la classe template \verb|vector|, la quale rappresenta una struttura LIFO (Last In First Out), per mantenere la compatibilit\`a con la funzione OpenCV \verb|polylines|, dedicata al plot delle tracce dei passeggeri. La struttura viene riempita come una pila: le coordinate del centro del passeggero pi\`u vecchie si trovano in fondo, quelle pi\`u nuove in cima. Quando si \`e raggiunto il limite massimo di posizioni memorizzate, all'aggiunta di una nuova coordinata segue la cancellazione della coordinata pi\`u vecchia, contenuta nella locazione in fondo alla pila.
+\item \textbf{tracks}: \`e un vettore di coordinate che conserva la posizione dei passeggeri. Per l'implementazione si \`e scelto di usare la classe template \verb|vector|, la quale rappresenta una struttura LIFO (Last In First Out), per mantenere la compatibilit\`a con la funzione OpenCV \verb|polylines|, dedicata al plot delle tracce dei passeggeri. La struttura viene riempita come una pila: le coordinate del centro del passeggero pi\`u vecchie si trovano in fondo, quelle pi\`u nuove in cima. Quando si \`e raggiunto il limite massimo di posizioni memorizzate, all'aggiunta di una nuova coordinata segue la cancellazione della coordinata pi\`u vecchia, contenuta nella locazione in fondo alla pila.
 
 Il massimo numero di posizioni mantenute in memoria \`e stato deciso in base alla durata massima della cronologia di posizioni che si vuole mantenere. Infatti, ad ogni frame ricevuto dalla telecamera, corrisponde una nuova posizione del passeggero. Nel caso si abbia un frame rate di 30 fps, una lunghezza massima di 60 posizioni memorizzate implicano 2 secondi di cronologia delle posizioni.
 \item \textbf{age}: \`e un intero che va a rappresentare da quanto tempo il passeggero non viene rilevato nel raggio d'azione della telecamera. Oltre un certo valore di questo parametro il passeggero verr\`a rimosso dalla memoria del contatore. 
 
-Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizione conosciuta e ``invecchiano'' ad ogni frame, viene aggiornata cio\`e la variabile \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria. Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha una telecamera da 30 fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
+Ad ogni frame ricevuto dalla telecamera si aggiornano le coordinate e si resetta la variabile \verb|age| di tutti i passeggeri rilevati. I passeggeri non pi\`u nel raggio d'azione della telecamera, invece, vengono aggiornati con l'ultima posizione conosciuta e ``invecchiano'' ad ogni frame, viene aggiornata cio\`e la variabile \verb|age|. Raggiunta una soglia massima i passeggeri vengono rimossi dalla memoria. Anche in questo caso la permanenza in memoria dei passeggeri non pi\`u rilevati \`e dettata dal frame rate della telecamera. Se viene impostata una \verb|age| massima di 60, e si ha un flusso video a 30 fps, dopo due secondi di assenza dal raggio visivo della telecamera i passeggeri vengono rimossi dal vettore.
 
 \end{enumerate}
 
@@ -1023,7 +1023,7 @@ Oltre a queste variabili, le cui finalit\`a sono puramente funzionali, \`e stata
 \end{itemize}
 
 \subsubsection{Utilizzo della classe Passenger}
-Si noti che questa rappresentazione dei passeggeri all'interno del contatore \`e stata usata anche dalla versione successiva del Passenger Counter con telecamere RealSense. Per dettagli si veda il paragrafo \ref{StrutturaRSPCN} a pagina \pageref{StrutturaRSPCN}.
+Si noti che questa rappresentazione dei passeggeri all'interno del contatore \`e stata usata anche dalla versione successiva del Passenger Counter con telecamere RealSense. Per dettagli si veda la sezione \ref{StrutturaRSPCN} a pagina \pageref{StrutturaRSPCN}.
 
 %% Interruzione di pagina
 \newpage
@@ -1034,12 +1034,12 @@ Questa classe ha come obiettivi principali:
 \begin{itemize}
 \item Implementare un oggetto contatore che fornisca interfacce verso l'esterno per poterne controllare i comportamenti.
 \item Effettuare l'interfacciamento al dispositivo di acquisizione delle immagini.
-\item Implementare il ``nucleo'' del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui abbiamo parlato in precedenza.
+\item Implementare il ``nucleo'' del programma, ovvero la parte di codice incaricata di effettuare il conteggio degli attraversamenti della soglia da parte dei passeggeri sfruttando gli algoritmi di cui si \`e parlato in precedenza.
 \item Permettere l'esecuzione parallela di pi\`u contatori contemporaneamente, uno per telecamera collegata al unit\`a di elaborazione.
 \item Permettere la visualizzazione e la registrazione dei risultati dell'elaborazione.
 \end{itemize}
 
-Qui di seguito \`e riportato l'header della classe PCN:
+\noindent Qui di seguito \`e riportato l'header della classe PCN:
 \begin{lstlisting}[language=C++, caption=PCN.h, style=customcpp]
 class PCN {
 
@@ -1102,11 +1102,11 @@ private:
 \noindent Variabili:
 \begin{itemize}
 \item \verb|cap|: questa variabile appartiene alla classe \verb|VideoCapture|, data da OpenCV, e rappresenta la telecamera utilizzata come ingresso dal contatore. Come vedremo viene inizializzata dal costruttore della classe.
-\item \verb|pMOG2|: questa struttura \`e definita da OpenCV e implementa l'oggetto che va ad applicare l'algoritmo di sottrazione del background MOG2 di cui abbiamo parlato in precedenza.
-\item \verb|halt|: \`e la variabile booleana che ci permette di chiudere il loop principale di cattura dei frame. Questa variabile \`e manipolata solamente dal metodo \verb|stop()|.
+\item \verb|pMOG2|: questa struttura \`e definita da OpenCV e implementa l'oggetto che va ad applicare l'algoritmo di sottrazione del background MOG2.
+\item \verb|halt|: \`e la variabile booleana che permette di chiudere il loop principale di cattura dei frame. Questa variabile \`e manipolata solamente dal metodo \verb|stop()|.
 \item \verb|cnt_in| e \verb|cnt_out| sono i contatori veri e propri, resi accessibili dall'esterno per mezzo dei selettori \verb|getCountIn()|, \verb|getCountOut()| e \verb|resetCounters()|.
-\item \verb|pid|: \`e l'intero che viene aumentato al rilevamento di ogni nuovo passeggero. Ci permette di assegnare un identificativo univoco a tutti gli oggetti rilevati dal contatore.
-\item \verb|passengers|: \`e il vettore che implementa la memoria del programma. Qui vengono salvati i passeggeri tracciati dal contatore come spiegato nel paragrafo \ref{ClassePassenger} a pagina \pageref{ClassePassenger}.
+\item \verb|pid|: \`e l'intero che viene aumentato al rilevamento di ogni nuovo passeggero. Permette di assegnare un identificativo univoco a tutti gli oggetti rilevati dal contatore.
+\item \verb|passengers|: \`e il vettore che implementa la memoria del programma. Qui vengono salvati i passeggeri tracciati dal contatore come spiegato nella sezione \ref{ClassePassenger}.
 
 %% Interruzione di pagina
 \newpage
@@ -1114,7 +1114,7 @@ private:
 \item Opzioni: questi booleani permettono di modificare il comportamento del Passenger Counter in real-time.
     \begin{itemize}
     \item \verb|displayColor|, \verb|displayBacksub|, \verb|displayDenoise|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
-    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
+    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare e inizializzare le strutture necessarie al salvataggio degli stream video.
     \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
     \end{itemize}
 \end{itemize}
@@ -1145,18 +1145,18 @@ Come \`e possibile notare dal codice, al costruttore viene passato un intero che
 Nel seguito sono riportati i parametri di impostazione della funzione che implementa l'algoritmo di sottrazione del background:
     \begin{itemize}
     \item \verb|history|: lunghezza della storia sulla quale costruire il modello del background.
-    \item \verb|varThreshold|: soglia sulla distanza quadratica di Mahalanobis per decidere se \`e ben descritta dal modello dello sfondo. Si \`e lasciato il valore associato a 4 sigma.
+    \item \verb|varThreshold|: soglia sulla distanza quadratica di Mahalanobis tra pixel e il modello dello sfondo, atta a discriminare qualora un pixel sia ben descritto dal modello. In caso negativo il pixel viene attribuito al foreground. Si \`e lasciato il valore di default associato a 4 sigma.
     \item \verb|detectShadows|: questo booleano imposta il sottrattore in modo tale che cerchi di rilevare le ombre. Le ombre saranno contrassegnate dal colore grigio.
     \end{itemize}
 
 Si noti che \`e stato necessario utilizzare delle direttive al compilatore per la chiamata alla funzione di creazione del sottrattore del background poich\'e la versione installata sul ReliaGate di OpenCV era diversa da quella presente sulla macchina usata per lo sviluppo dell'applicazione e utilizza una sintassi diversa.
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
-\item \verb|count()|: \`e il nucleo del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nel prossimo paragrafo.
+\item \verb|count()|: \`e il nucleo del programma. Al suo interno avvengono le operazioni di elaborazioni delle immagini e il conteggio degli attraversamenti. Questo metodo verr\`a analizzato separatamente nella prossima sezione.
 \end{itemize}
 
 \subsubsection{Utilizzo della classe PCN}
-La sequenza necessaria al funzionamento \`e la seguente:
+La sequenza necessaria al funzionamento \`e la seguente.
 \begin{itemize}
 \item Costruttore: per ogni telecamera va creato un oggetto della classe PCN assegnandogli, per mezzo dell'argomento passato al costruttore, una telecamera diversa dagli altri contatori.
 \item \verb|start()|: ogni oggetto della classe PCN va lanciato utilizzando il metodo \verb|start()|, questo far\`a in modo che tutti i contatori vengano eseguiti in parallelo su thread diversi.
@@ -1170,7 +1170,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 La funzione \verb|count()| \`e il cuore del Passenger Counter. Ne suddivideremo il codice in tre sezioni principali:
 \begin{enumerate}
 \item Estrazione degli oggetti in movimento.
-\item Rilevamento e tracking degli oggetti di nostro interesse.
+\item Rilevamento e tracking dei passeggeri.
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
@@ -1229,10 +1229,10 @@ void PCN::count() {
 
 \noindent Variabili:
 \begin{itemize}
-\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Rappresenta l'input che si andr\`a a manipolare per rilevare gli oggetti in movimento.
-\item \verb|fgMaskMOG2|: questa \`e la matrice che conterr\`a i frame in uscita dall'algoritmo di sottrazione del background, ovvero la foreground mask.
-\item \verb|denoisedMat|: questa \`e la matrice che conterr\`a i frame in uscita dall'algoritmo di sottrazione del background dopo che sono stati passati attraverso le funzioni di riduzione del rumore.
-\item \verb|morphTrans|: \`e una copia di \verb|denoisedMat| che verr\`a usata per ricavare i dati di tracciamento. \`E stato necessario creare una copia per poter visualizzare i risultati di riduzione del rumore prima che il flusso video fosse processato ulteriormente.
+\item \verb|color|: contiene i frame dello stream a colori in ingresso dalla telecamera. Rappresenta l'input che si va a manipolare per rilevare gli oggetti in movimento.
+\item \verb|fgMaskMOG2|: contiene i frame in uscita dall'algoritmo di sottrazione del background, ovvero la foreground mask.
+\item \verb|denoisedMat|: contiene il risultato dell'applicazione delle operazioni di riduzione del rumore sulla foreground mask.
+\item \verb|morphTrans|: \`e una copia di \verb|denoisedMat| che verr\`a usata per ricavare i dati di tracciamento. \`E necessario creare una copia per poter visualizzare i risultati di riduzione del rumore prima che il flusso video sia processato ulteriormente.
 \end{itemize}
 
 \noindent Variabili di calibrazione del contatore:
@@ -1254,11 +1254,11 @@ void PCN::count() {
 
 \noindent Il codice esegue le seguenti operazioni:
 \begin{enumerate}
-\item Anzitutto ci appoggiamo a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo \verb|Mat| per poter essere manipolati facilmente da OpenCV. Tutto questo \`e implementato dal metodo \verb|read()| della classe \verb|VideoCapture|. La matrice \verb|color| va a raccogliere questi dati di ingresso.
+\item Anzitutto si fa affidamento a OpenCV per andare a leggere i frame ricevuti dalla telecamera. Essi vengono direttamente convertiti in tipo \verb|Mat| per poter essere manipolati facilmente dal resto del programma. Tutto questo \`e implementato dal metodo \verb|read()| della classe \verb|VideoCapture|. La matrice \verb|color| va a raccogliere questi dati di ingresso.
 \item I frame vengono passati alla struttura che applica la sottrazione del background \verb|pMOG2|. OpenCV prevede la creazione di un oggetto \verb|BackgroundSubtractor| il quale ha tra i suoi metodi l'applicazione della sottrazione dello sfondo (metodo \verb|apply()|). Il risultato di questa operazione \`e la foreground mask, la quale \`e salvata nella matrice \verb|fgMaskMOG2|.
 \item Seguono delle trasformazioni sui frame atte a minimizzare il rumore nell'immagine e semplificare il lavoro della funzione di rilevamento dei contorni.
     \begin{enumerate}
-    \item Threshold: soglia atta ad eliminare le ombre. Come abbiamo visto in precedenza l'algoritmo di sottrazione del background rileva le ombre e le colora di grigio. \`E possibile eliminarle imponendo una soglia che agisca sul colore dell'immagine. \verb|threshold()| fa in modo che ogni pixel il cui valore numerico \`e inferiore al valore dato come soglia (\verb|whiteThreshold|) viene portato al valore \verb|MAXRGBVAL| cio\`e bianco. Ogni pixel che si trova sotto la soglia viene posto a 0, cio\`e nero. Ovvero:
+    \item Threshold: soglia atta ad eliminare le ombre. Come abbiamo visto in precedenza l'algoritmo di sottrazione del background rileva le ombre e le colora di grigio. \`E possibile eliminarle imponendo una soglia che agisca sul colore dell'immagine. \verb|threshold()| fa in modo che ogni pixel il cui valore numerico \`e superiore al valore dato come soglia (\verb|whiteThreshold|) viene portato al valore \verb|MAXRGBVAL| cio\`e bianco. Ogni pixel che si trova sotto la soglia viene posto a 0, cio\`e nero. Ovvero:
     
     \begin{equation}
     dstPixel(x,y) = \begin{cases} MAXRGBVAL, & \mbox{se } srcPixel(x,y) > threshold \\ 0, & \mbox{altrimenti } \end{cases}
@@ -1267,7 +1267,7 @@ void PCN::count() {
     Cos\`\i\ facendo le ombre, che hanno un colore il cui valore RGB \`e inferiore al valore di soglia, vengono portate a zero e non vengono rilevate nei passaggi seguenti, diminuendo cos\`\i\ gli errori nel conteggio.
     \item Erosione: Questa operazione ha come risultato quello di espandere le regioni scure dell'immagine. L'obiettivo \`e quello di eliminare il rumore bianco gaussiano dall'immagine.
     \item Dilatazione: Questa operazione ha come risultato quello di far ``crescere'' le regioni bianche dell'immagine. L'obiettivo \`e quello di rendere pi\`u facilmente rilevabili gli oggetti appartenenti alla foreground mask.
-    \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore dell'immagine. Questa funzione utilizza una semplice filtro lineare.
+    \item Blur: Questa operazione effettua una sfocatura dell'immagine. L'obiettivo \`e sempre quello di ridurre il rumore per mezzo di un semplice filtro lineare.
     \end{enumerate}
 \end{enumerate}
 
@@ -1290,7 +1290,7 @@ void PCN::count() {
 \item L'immagine a destra riporta il contenuto della matrice \verb|denoisedMat|.
 \end{itemize}
 
-\subsection{Rilevamento e tracking degli oggetti di nostro interesse}
+\subsection{Rilevamento e tracking dei passeggeri}
 
 \begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 2., style=customcpp, firstnumber=47]
 while(!halt) {
@@ -1324,12 +1324,12 @@ while(!halt) {
 
 \begin{enumerate}
 \item Ricava i contorni per mezzo della funzione \verb|findContours()| di cui abbiamo discusso l'algoritmo nella sezione \ref{AlgoritmoFindContours} a pagina \pageref{AlgoritmoFindContours}.
-\item Per ogni contorno completo rilevato dalla funzione eseguiamo le seguenti operazioni:
+\item Per ogni contorno completo rilevato dalla funzione vengono eseguite le seguenti operazioni:
     \begin{enumerate}
-    \item Ne calcoliamo l'area per mezzo della funzione OpenCV \verb|contourArea()|. Se supera una certa area minima (\verb|areaMin|) decidiamo che si tratta di una persona.
-    \item Ne ricaviamo il rettangolo che inscrive i contorni tramite la funzione \verb|boundingRectangle|.
-    \item Di questo rettangolo rileviamo il centro \verb|objCenter| grazie ad una semplice operazione geometrica.
-    \item Per semplificare lo sviluppo e il debugging andiamo a disegnare questo rettangolo e il rispettivo centro sull'immagine a colori per mezzo delle funzioni \verb|rectangle()| e \verb|circle()| rese disponibili da OpenCV.
+    \item Si calcola l'area per mezzo della funzione OpenCV \verb|contourArea()|. Se supera una certa area minima (\verb|areaMin|) si assume che si tratti di una persona.
+    \item Si ricava il rettangolo che inscrive i contorni tramite la funzione \verb|boundingRectangle()|.
+    \item Di questo rettangolo viene calcolato il centro \verb|objCenter| grazie ad una semplice operazione geometrica.
+    \item Per semplificare lo sviluppo e il debugging si va a disegnare questo rettangolo e il rispettivo centro sull'immagine a colori per mezzo delle funzioni \verb|rectangle()| e \verb|circle()| rese disponibili da OpenCV.
     \end{enumerate}
 \end{enumerate}
 L'informazione fondamentale per il resto del codice \`e data dalla posizione del centro di questo rettangolo, contenuto nella variabile \verb|objCenter|, che rappresenter\`a la posizione dei passeggeri all'interno del raggio visivo della telecamera.
@@ -1347,7 +1347,7 @@ Risultato delle operazioni:
 \begin{itemize}
 \item L'immagine a sinistra \`e il contenuto della variabile \verb|fgMaskMOG2|.
 \item L'immagine al centro rappresenta il contenuto della variabile \verb|denoisedMat| dove sono stati disegnati i contorni rilevati dalla funzione \verb|findContours()|.
-\item L'immagine a destra riporta l'immagine di ingresso sulla quale sono stati disegnati il bounding rectangle e il centro del rettangolo.
+\item L'immagine a destra riporta il frame di ingresso sul quale sono stati disegnati il rettangolo che inscrive il contorno e il suo centro.
 \end{itemize}
 
 %% Interruzione di pagina
@@ -1434,13 +1434,15 @@ if(areaCurrentObject > areaMin) {
 
 \noindent Il codice riportato esegue le seguenti operazioni:
 \begin{enumerate}
-\item Se il centro dell'entit\`a rilevata si trova entro una certa distanza massima da un passeggero che si trova all'interno del database assumiamo che siano lo stesso passeggero. Questa distanza \`e data dalle variabili \verb|xNear| e \verb|yNear| e in figura \ref{fig:NearRect} \`e visualizzato il rettangolo formato da questi due parametri. Alla ricezione di un nuovo frame dalla telecamere, se il nuovo centro dell'oggetto si trova all'interno del rettangolo verde pi\`u scuro, si assume che sia lo stesso oggetto rilevato precedentemente che si \`e spostato.
-\item Qualora si trattasse di un passeggero gi\`a presente in memoria ne aggiorniamo la posizione per mezzo del metodo \verb|updateCoord()| e ne resettiamo il parametro \verb|age|. Nel caso abbia uno storico maggiore di una singola coordinata, verifichiamo che non abbia superato la soglia virtuale rappresentata dalla met\`a del raggio visivo della telecamera. Il superamento della soglia \`e verificato come segue:
+\item Se il centro dell'entit\`a rilevata si trova entro una certa distanza massima da un passeggero che si trova all'interno del database, si assume che siano lo stesso passeggero. Questa distanza \`e data dalle variabili \verb|xNear| e \verb|yNear| e in figura \ref{fig:NearRect} \`e visualizzato il rettangolo formato da questi due parametri. Alla ricezione di un nuovo frame dalla telecamere, se il nuovo centro dell'oggetto si trova all'interno del rettangolo verde pi\`u scuro, si assume che sia lo stesso oggetto rilevato precedentemente che si \`e spostato.
+\item Qualora si trattasse di un passeggero gi\`a presente in memoria se ne aggiorna la posizione per mezzo del metodo \verb|updateCoord()| e resetta il parametro \verb|age|. Nel caso abbia uno storico maggiore di una singola coordinata, si verifica che non abbia superato la soglia virtuale rappresentata dalla met\`a del raggio visivo della telecamera. 
+
+Il superamento della soglia \`e verificato come segue:
     \begin{itemize}
-    \item Se la penultima coordinata registrata si trova al di sotto della soglia visiva e l'ultima coordinata sopra, aggiorniamo il contatore degli ingressi.
-    \item Se la penultima coordinata registrata si trova al di sopra della soglia visiva e l'ultima coordinata sotto, aggiorniamo il contatore delle uscite.
+    \item Se la penultima coordinata registrata si trova al di sotto della soglia visiva e l'ultima coordinata sopra, si aggiorna il contatore degli ingressi.
+    \item Se la penultima coordinata registrata si trova al di sopra della soglia visiva e l'ultima coordinata sotto, viene aggiornato il contatore delle uscite.
     \end{itemize}
-\item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto, ovvero non ricade all'interno del rettangolo formato da \verb|xNear| e \verb|yNear| per nessuno dei passeggeri in memoria, si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Procediamo quindi ad aggiornare il database creando  nuovo oggetto appartenente alla classe \verb|passenger| e aggiungendolo in memoria per mezzo del metodo \verb|push_back()|.
+\item Nel caso l'entit\`a non si trovasse vicino a nessun passeggero noto, ovvero non ricade all'interno del rettangolo formato da \verb|xNear| e \verb|yNear| per nessuno dei passeggeri in memoria, si tratta di un nuovo passeggero appena entrato all'interno del raggio visivo della telecamera. Si procede quindi ad aggiornare il database creando  nuovo oggetto appartenente alla classe \verb|passenger| e aggiungendolo in memoria per mezzo del metodo \verb|push_back()|.
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -1450,12 +1452,12 @@ if(areaCurrentObject > areaMin) {
   \label{fig:NearRect}
 \end{figure}
 
-Qualora nel raggio d'azione della telecamera siano presenti pi\`u passeggeri, bisogna tenere conto del funzionamento dell'algoritmo di sottrazione dello sfondo. Infatti, se due persone sono troppo vicine tra loro (ad esempio spalla a spalla), nella foreground mask figurer\`a un'unica sagoma bianca e avremo che i due passeggeri vengono inglobati in un unico blob. Quindi, per rilevare correttamente l'attraversamento di pi\`u persone contemporaneamente si sfrutta l'area rilevata nei passaggi precedenti: se l'area dell'entit\`a rilevata supera una certa soglia (\verb|max1PassArea|) la si considera un blob formato da due passeggeri. Dunque, al rilevamento dell'attraversamento della soglia, si aggiorna il contatore aggiungendo due attraversamenti invece che uno. Allo stesso modo si procede per il rilevamento di tre passeggeri.
+Qualora nel raggio d'azione della telecamera siano presenti pi\`u passeggeri, bisogna tenere conto del funzionamento dell'algoritmo di sottrazione dello sfondo. Infatti, se due persone sono troppo vicine tra loro (ad esempio spalla a spalla), nella foreground mask figurer\`a un'unica sagoma bianca e i due passeggeri verranno inglobati in un unico blob. Quindi, per rilevare correttamente l'attraversamento di pi\`u persone contemporaneamente, si sfrutta l'area rilevata nei passaggi precedenti: se l'area dell'entit\`a rilevata supera una certa soglia (\verb|max1PassArea|) la si considera un blob formato da due passeggeri. Dunque, al rilevamento dell'attraversamento della soglia, si aggiorna il contatore aggiungendo due attraversamenti invece che uno. Allo stesso modo si procede per il rilevamento di tre passeggeri.
 
 %% Interruzione di pagina
 \newpage
 
-Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nel codice precedente.
+Per visualizzare quanto avviene all'interno del programma e semplificare il debugging tramite OpenCV si \`e deciso di plottare a schermo tutte le informazioni utilizzate nella sezione precedente.
 Questa parte di visualizzazione delle informazioni \`e stata implementata per mezzo del codice seguente:
 
 \begin{lstlisting}[language=C++, caption=PNC.cpp metodo count() parte 4., style=customcpp, firstnumber=134, label=countpt4]
@@ -1495,8 +1497,8 @@ putText(frame, "Count OUT: " + to_string(cnt_out), Point(0, frame.rows - 10) , F
 \begin{itemize}
 \item Per ogni passeggero in memoria:
     \begin{enumerate}
-    \item Disegna la traccia per mezzo della funzione \verb|polylines|.
-    \item Visualizza l'identificatore univoco \verb|pid| tramite la funzione \verb|putText|.
+    \item Disegna la traccia per mezzo della funzione \verb|polylines()|.
+    \item Visualizza accanto al centro del blob l'identificatore univoco \verb|pid| tramite la funzione \verb|putText()|.
     \item Aggiorna il parametro \verb|age|.
     \item Quando il parametro \verb|age| \`e maggiore di 1 significa che non si trova pi\`u all'interno del raggio visivo della telecamera, in tal caso si aggiorna la nuova posizione del passeggero con l'ultima posizione nota. Questo evita il conteggio di falsi attraversamenti.
     \item Nel caso il parametro \verb|age| abbia superato il valore massimo, il passeggero viene rimosso dalla memoria del contatore.
@@ -1591,9 +1593,9 @@ int main(int argc, char * argv[]) {
                     cout << "Toggle color\n";
                     counters[i]->toggleDisplayColor();
                     break;
+\end{lstlisting}
                 
-                ...
-                
+\begin{lstlisting}[language=C++, caption=main.cpp, style=customcpp, firstnumber=90]
                 case('q'):
                     cout << "Exiting program!\n";
                     counters[i]->stop();
@@ -1637,7 +1639,11 @@ Nel capitolo \ref{CapitoloManuale} a pagina \pageref{CapitoloManuale} sono ripor
 In questo paragrafo vengono riportati i risultati dei test effettuati con questa versione del contatore di passeggeri.
 
 \subsection{Dimostrazione funzionamento}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuta in seguito alla sottrazione del background (cio\`e la foreground mask contenuta in \verb|fgMaskMOG2|), a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore (cio\`e \verb|denoisedMat|).
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera descritta nel paragrafo \ref{HardwarePCN}, la quale \`e stata montata sulla traversa di una porta ad una altezza di circa 2,10m. 
+
+Si \`e deciso di procedere in questo modo per poter simulare al meglio l'ambiente di applicazione finale. Il Passenger Counter Eurotech infatti, da specifiche viene montato circa a 2 metri di altezza sopra il punto di accesso sul quale si vuole effettuare il conteggio\cite{eurotech:DynaPCN10-20}.
+
+Ogni figura riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine ottenuta in seguito alla sottrazione del background (cio\`e la foreground mask contenuta in \verb|fgMaskMOG2|), a destra l'immagine cui sono state applicate le operazioni di sottrazione del rumore (cio\`e \verb|denoisedMat|).
 
 \begin{figure}[h!]
   \centering
@@ -1674,7 +1680,7 @@ Inoltre, al centro del fotogramma, \`e presente un ulteriore falso tracciamento 
   \label{fig:PCNTest4}
 \end{figure}
 
-In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzione del rumore molto elevato in questo frame. Si noti come in questo caso l'ombra proiettata sul muro laterale sia correttamente rilevata come ombra e quindi eliminata dalle operazioni di riduzione del rumore. Nonostante ci\`o nel frame a colori l'ombra sul muro ha lasciato una scia di tracciamento, ci\`o \`e dovuto al fatto che, pur essendo sparita dal raggio visivo, il suo parametro \verb|age| non ha ancora raggiunto il valore massimo, e quindi non \`e ancora stata eliminata dalla memoria.
+In figura \ref{fig:PCNTest4} \`e nuovamente possibile notare l'effetto di riduzione del rumore molto elevato in questo frame. Si noti come in questo caso l'ombra proiettata sul muro laterale sia correttamente rilevata come ombra e quindi eliminata dalle operazioni di riduzione del rumore. Nonostante ci\`o nel frame a colori l'ombra sul muro ha lasciato una scia di tracciamento, ci\`o \`e dovuto al fatto che, pur essendo sparita dal raggio visivo, il suo parametro \verb|age| non ha ancora raggiunto il valore massimo e quindi non \`e ancora stata eliminata dalla memoria.
 
 %% Interruzione di pagina
 \newpage
@@ -1694,7 +1700,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -1703,11 +1709,11 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     % ReliaGate 20-25
     \addplot 
         coordinates {(29.4414,Sottrazione background) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
-                        (0.178409,Tracking oggetti)};
+                        (0.178409,Tracking passeggeri)};
     % Sistema Linux
     \addplot 
         coordinates {(3.16497,Sottrazione background) (0.546563,Sottrazione rumore) (0.211879,Rilevamento contorni) 
-                        (0.026478,Tracking oggetti)};
+                        (0.026478,Tracking passeggeri)};
     \legend{ReliaGate 20-25, Sistema Linux}
     \end{axis}
     \end{tikzpicture}
@@ -1724,7 +1730,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Algoritmo sottrazione del background & 29.4414 ms & 3.16497 ms \\ \hline
     Sottrazione del rumore & 2.80683 ms & 0.546563 ms \\ \hline
     Algoritmo rilevamento contorni & 1.09507 ms & 0.211879 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 0.178409 ms & 0.026478 ms \\ \hline
+    Rilevamento e tracking dei passeggeri & 0.178409 ms & 0.026478 ms \\ \hline
     Frame Rate & 20.1 fps & 30 fps \\ \hline
 	\end{tabular}
     \caption{Risultati Passenger Counter a sottrazione del background con telecamera 30 fps.}
@@ -1747,7 +1753,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Sottrazione background, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -1756,11 +1762,11 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     % ReliaGate 20-25
     \addplot[green!20!black,fill=green!80!white] 
     coordinates {(33.3335,Sottrazione background) (2.7739,Sottrazione rumore) (1.75694,Rilevamento contorni) 
-                    (0.279599,Tracking oggetti)};
+                    (0.279599,Tracking passeggeri)};
     % Sistema Linux
     \addplot[yellow!20!black,fill=yellow!80!white] 
     coordinates {(3.10198,Sottrazione background) (0.538276,Sottrazione rumore) (0.233947,Rilevamento contorni) 
-                    (0.028581,Tracking oggetti)};
+                    (0.028581,Tracking passeggeri)};
     \legend{ReliaGate 20-25, Sistema Linux}
     \end{axis}
     \end{tikzpicture}
@@ -1777,15 +1783,15 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Algoritmo sottrazione del background & 33.3335 ms & 3.10198 ms \\ \hline
     Sottrazione del rumore & 2.7739 ms & 0.538276 ms \\ \hline
     Algoritmo rilevamento contorni & 1.75694 ms & 0.233947 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 0.279599 ms & 0.028581 ms \\ \hline
+    Rilevamento e tracking dei passeggeri & 0.279599 ms & 0.028581 ms \\ \hline
     Frame Rate & 20.5 fps & 60 fps \\ \hline
 	\end{tabular}
     \caption{Risultati Passenger Counter a sottrazione del background con telecamera 60 fps.}
 \end{table}
 
-Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo che la stabilit\`a del framerate risulta compromessa. Nominalmente il flusso video dovrebbe essere stabile sui 30 fps ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare la computazione.
+Come evidenziato dai dati riportati nelle tabelle la funzione pi\`u onerosa del punto di vista computazionale \`e quella che applica l'algoritmo di sottrazione del background. Inoltre si pu\`o notare come nel caso del 20-25, la computazione occupa talmente tanto tempo che la stabilit\`a del framerate risulta compromessa. Nominalmente il flusso video dovrebbe essere stabile sui 30 fps ma per il 20-25 si ferma a circa 20 frame al secondo. L'utilizzo di una telecamera con risoluzione pi\`u elevata comprometterebbe ulteriormente le performance a causa del maggior numero di pixel sul quale effettuare il calcolo.
 
-Infine \`e opportuno notare che la durata del loop principale nel caso della telecamera a 30 fps, \`e simile sui due sistemi poich\'e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame. La funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 fps poich\'e fornisce i frame pi\`u velocemente.
+Infine \`e opportuno notare che la durata del loop principale nel caso della telecamera a 30 fps, \`e simile sui due sistemi poich\'e quello pi\`u performante impiega la maggior parte del tempo ad aspettare i frame: la funzione \verb|cap.read()| \`e infatti bloccante. Questo non si verifica invece nel caso della telecamera a 60 fps poich\'e fornisce i frame pi\`u velocemente.
 
 %% Interruzione di pagina
 \newpage
@@ -1794,7 +1800,7 @@ Infine \`e opportuno notare che la durata del loop principale nel caso della tel
 I problemi principali rilevati in questa implementazione del Passenger Counter sono i seguenti:
 \begin{enumerate}
 \item \textbf{Imprecisione}: Le immagini risultati dalla sottrazione del background tendono ad essere molto rumorose, nonostante il post-processing applicato. Il conteggio ne risulta influenzato negativamente.
-\item \textbf{Tracciamenti indesiderati}: Come visto nel paragrafo precedente, nonostante l'algoritmo riesca a rilevare la maggior parte delle ombre come tali, spesso queste vengono comunque tracciate erroneamente. Ci\`o comporta errori nel conteggio.
+\item \textbf{Tracciamenti indesiderati}: Come visto nella sezione precedente, nonostante l'algoritmo riesca a rilevare la maggior parte delle ombre come tali, spesso queste vengono comunque tracciate erroneamente. Ci\`o comporta errori nel conteggio.
 \item \textbf{Performance}: L'algoritmo di sottrazione del background, come riportato nel paragrafo precedente, \`e piuttosto oneroso dal punto di vista computazionale. Ci\`o ne limita le possibili applicazioni: non \`e possibile utilizzare telecamere con risoluzione elevata e bisogna limitare il numero di telecamere utilizzate contemporaneamente.
 \item \textbf{Tecnologia}: Il problema pi\`u grave \`e senz'altro determinato dalla tecnologia utilizzata. La tecnica della background subtraction si basa sulla costruzione di un modello dello sfondo costruito a partire dalle immagini ricavate dalla telecamera. Un ambiente come quello di un mezzo pubblico \`e troppo dinamico perch\'e l'algoritmo possa costruire un modello di background affidabile: le condizioni di luce cambiano con troppa frequenza, senza contare le vibrazioni del mezzo.
 \end{enumerate}
