@@ -2149,7 +2149,7 @@ Si noti infine che durante questa elaborazione sono stati conservati i dati del 
 \newpage
 
 \section{Metodo getFrame()}
-Questo metodo \`e alla base del funzionamento di questa versione del Passenger Counter. Esso va a recuperare i dati forniti dalle telecamere RealSense e li converte in un formato che pu\`o essere dato in pasto allo stesso algoritmo usato a valle della sottrazione del background nella precedente versione del contatore.
+Questo metodo \`e alla base del funzionamento di questa versione del Passenger Counter. Esso va a recuperare i dati forniti dalle telecamere RealSense e li converte in un formato che pu\`o essere passato in ingresso allo stesso algoritmo usato a valle della sottrazione del background nella precedente versione del contatore.
 
 Qui di seguito \`e riportato il codice della funzione:
 
@@ -2160,7 +2160,6 @@ Mat RSPCN::getFrame(Mat depthImage, int thresholdCentimeters) {
     // If depthImage(x,y) == NODATA, set it to 65535
     depthImage.setTo(65535, depthImage == NODATA);
 
-    // Threshold only accepts CV_8U or CV_32F types
     depthImage.convertTo(depthImage, CV_32FC1);
 
     // Converting threshold from cm to pixel value
@@ -2179,11 +2178,11 @@ Mat RSPCN::getFrame(Mat depthImage, int thresholdCentimeters) {
 }
 \end{lstlisting}
 
-In ingresso abbiamo il formato immagine illustrato in figura \ref{fig:rawDepthImage} e la soglia espressa in centimetri da applicare all'immagine in ingresso.
+In ingresso si ha il formato immagine illustrato in figura \ref{fig:rawDepthImage} e la soglia espressa in centimetri da applicare all'immagine.
 
-Come nel caso precedente applichiamo la funzione \verb|setTo()| per imporre tutti i pixel nulli a 65535. Quindi convertiamo l'immagine da 16 bit privi di segno a 32 bit floating point. Questo passaggio  \`e necessario per poter passare l'immagine alla funzione \verb|threshold()|, la quale accetta solamente immagini nel formato 8 bit privi di segno o 32 bit floating point. Il risultato di questo passaggio \`e visibile in figura \ref{fig:getFrameStep1}.
+Come nel caso precedente si applica la funzione \verb|setTo()| per imporre tutti i pixel nulli a 65535. Quindi si converte l'immagine da 16 bit privi di segno a 32 bit floating point per mezzo della funzione \verb|convertTo()|. Questo passaggio  \`e necessario per poter passare l'immagine alla funzione \verb|threshold()|, la quale accetta solamente immagini nel formato 8 bit privi di segno o 32 bit floating point. Si \`e scelto il secondo formato per non perdere informazioni di profondit\`a usando una conversione con perdita. Il risultato di questo passaggio \`e visibile in figura \ref{fig:getFrameStep1}.
 
-Passiamo quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel rappresentano una distanza possiamo eliminare tutto ci\`o che si trova oltre una certa distanza dalla telecamera per mezzo della funzione \verb|threshold()|. Anzitutto \`e necessario convertire la soglia da centimetri al valore numerico applicabile sui pixel, quindi si passa all'applicazione della soglia vera e propria.
+Si passa quindi ad applicare la soglia sull'immagine. Siccome i valori dei pixel rappresentano una distanza \`e possibile eliminare tutto ci\`o che si trova oltre una certa lunghezza dalla telecamera per mezzo della funzione \verb|threshold()|. Anzitutto \`e necessario convertire la soglia da centimetri al valore numerico applicabile sui pixel, quindi si passa all'applicazione della soglia vera e propria.
 
 \verb|scale| \`e la scala alla quale \`e impostata la telecamera e viene ricavata interrogandola per mezzo della libreria librealsense. Va moltiplicata per un fattore cento in quanto l'unit\`a di misura con la quale viene fornita sono i metri mentre la soglia \`e espressa in centimetri.
 
@@ -2216,7 +2215,7 @@ Ora \`e possibile convertire l'immagine al formato 8 bit privi di segno applican
 \end{minipage}
 \end{figure}
 
-Infine, poich\'e vogliamo avere che gli oggetti in primo piano siano bianchi e gli oggetti dello sfondo neri, non ci resta che sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Il risultato \`e riportato in figura \ref{fig:getFrameStep3}.
+Infine, poich\'e si vuole avere che gli oggetti in primo piano siano bianchi e gli oggetti dello sfondo neri, non resta che sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Il risultato \`e riportato in figura \ref{fig:getFrameStep3}.
 
 \begin{figure}[h!]
   \centering
@@ -2296,9 +2295,9 @@ Come nella versione precedente del Passenger Counter, in questa fase avviene l'e
 
 \noindent Variabili:
 \begin{itemize}
-\item \verb|color|: questa \`e la matrice che conterr\`a i frame dello stream a colori in ingresso dalla telecamera. Verr\`a usata solamente per visualizzare le informazioni sul funzionamento del contatore.
+\item \verb|color|: questa \`e la matrice che contiene i frame dello stream a colori in ingresso dalla telecamera. Verr\`a usata solamente per visualizzare le informazioni sul funzionamento del contatore.
 \item \verb|frame|: rappresenta l'output della funzione \verb|getFrame()| di cui si \`e parlato in precedenza.
-\item \verb|rawDepth|: questa \`e la matrice che conterr\`a i frame grezzi dello stream di profondit\`a in ingresso dalla telecamera ad infrarossi. \`E una copia della matrice \verb|depth| prima che sia passata alle funzioni di elaborazione delle immagini.
+\item \verb|rawDepth|: questa \`e la matrice che contiene i frame grezzi dello stream di profondit\`a in ingresso dalla telecamera ad infrarossi. \`E una copia della matrice \verb|depth| prima che sia passata alle funzioni di elaborazione delle immagini.
 \item \verb|depthColorMap|: rappresenta l'output della funzione \verb|getColorMap()|.
 \item \verb|morphTrans|: \`e la copia di \verb|frame| a seguito dell'applicazione delle funzioni di riduzione del rumore.
 \end{itemize}
@@ -2376,7 +2375,7 @@ for(unsigned int idx = 0; idx < contours.size(); idx++) {
 }
 \end{lstlisting}
 
-A questo punto passiamo a rilevare i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato ne calcoliamo l'area, se l'area supera un valore minimo deciso arbitrariamente in fase sperimentale viene considerato un passeggero.
+A questo punto vengono rilevati i contorni degli oggetti in primo piano tramite la funzione \verb|findCountours()|. Per ogni oggetto cos\`\i\ ricavato se ne calcola l'area, se questa supera un valore minimo deciso arbitrariamente in fase sperimentale viene considerato un passeggero.
 
 \noindent Quindi si passa ad aggiornare la posizione dei passeggeri.
 
@@ -2446,17 +2445,17 @@ Una volta aggiornate le posizioni viene letto l'intero database dei passeggeri a
 \item Se ne disegna la traccia dello storico delle posizioni per mezzo della funzione \verb|polylines()|.
 \item Si rilevano gli attraversamenti della soglia:
     \begin{itemize}
-    \item Se l'ultima posizione si trova al di sotto della soglia e la nuova posizione rilevata al di sopra, si aggiorna il contatore in ingresso. 
+    \item Se l'ultima posizione si trova al di sotto della soglia e la nuova posizione rilevata al di sopra, viene aggiornato il contatore in ingresso. 
     \item Se l'ultima posizione si trova al di sopra della soglia e la nuova posizione rilevata al di sotto, si aggiorna il contatore in uscita. 
     \end{itemize}
 \item Si effettua l'update del parametro \verb|age| dei passeggeri.
 \item Se il passeggero si trova fuori dal raggio d'azione della telecamera se ne aggiorna la posizione con l'ultima conosciuta.
-\item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\'e troppo a lungo fuori dal raggio visivo della telecamera.
+\item I passeggeri la cui \verb|age| supera un limite massimo deciso in precedenza, vengono rimossi dalla memoria perch\'e troppo a lungo assenti dal raggio visivo della telecamera.
 \end{enumerate}
 
-A differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\'e nel caso delle telecamere RealSense riusciamo a rilevare con precisione la testa dei passeggeri e non l'intera sagoma.
+A differenza del caso del Passenger Counter a sottrazione del background, l'area non viene usata per decidere quante persone hanno effettuato l'attraversamento della soglia. Questo perch\'e, nel caso delle telecamere RealSense, \`e possibile rilevare con precisione la testa dei passeggeri invece dell'intera sagoma.
 
-Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante il funzionamento del contatore \`e riportato in figura \ref{fig:RSPCN}.
+Come nella versione precedente si \`e deciso di plottare a schermo tutte le informazioni utili a semplificare la comprensione del funzionamento del programma e al debugging. Un esempio della schermata tipica durante l'esecuzione del contatore \`e riportato in figura \ref{fig:RSPCN}.
 
 \begin{figure}[h!]
   \centering
@@ -2473,10 +2472,10 @@ Questo ovviamente non compromette la funzionalit\`a del programma ma pu\`o crear
 \newpage
 
 \section{Risultati ottenuti}
-In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare le prestazioni dei due modelli di telecamera.
+In questa sezione sono riportati i risultati dei test di funzionamento del contatore con telecamere RealSense. Si \`e cercato di replicare le stesse condizioni dei test effettuati con la versione a sottrazione del background. Ogni test \`e stato effettuato due volte per confrontare le prestazioni di entrambi i modelli di telecamera a disposizione.
 
 \subsection{Dimostrazione funzionamento telecamera R200}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10 m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a (contenute nella variabile \verb|depthColorMap|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (contenute nella variabile \verb|frame|).
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore. Per il test si \`e utilizzata la telecamera Intel RealSense R200, la quale \`e stata montata sulla traversa di una porta ad una altezza di circa 2,10 m. Ogni frame riporta a sinistra l'immagine tratta dal video in ingresso dove sono state disegnate le forme per rendere pi\`u comprensibile il tracciamento, al centro l'immagine con le informazioni di profondit\`a (contenute nella variabile \verb|depthColorMap|), a destra l'immagine cui sono state applicate le operazioni di soglia e sottrazione del rumore (contenute nella variabile \verb|frame|).
 
 \begin{figure}[h!]
   \centering
@@ -2519,7 +2518,7 @@ In figura \ref{fig:R2003} il pallino verde in alto a destra nell'immagine indica
 \newpage
 
 \subsection{Dimostrazione funzionamento telecamera SR300}
-Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore effettuata utilizzando la telecamera Intel RealSense SR300, la quale \`e stata montata su uno stipite di una porta ad una altezza di circa 2,10 m. Il formato dei frame \`e lo stesso del caso precedente.
+Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un test del contatore effettuata utilizzando la telecamera Intel RealSense SR300. Il setup del test e il formato dei frame sono gli stessi del caso precedente.
 
 \begin{figure}[h!]
   \centering
@@ -2528,7 +2527,7 @@ Nel seguito sono riportati alcuni fotogrammi tratti da una registrazione di un t
   \label{fig:SR3001}
 \end{figure}
 
-Si noti che a differenza del caso precedente nell'immagine contenente i dati di profondit\`a non viene rilevato il pavimento. Questo \`e dovuto al fatto che il range operativo della telecamera SR300 \`e inferiore a quello della R200. Ci\`o per\`o non influisce sul corretto funzionamento del contatore.
+A differenza del test precedente nell'immagine contenente i dati di profondit\`a non viene rilevato il pavimento. Questo \`e dovuto al fatto che il range operativo della telecamera SR300 \`e inferiore a quello della R200. Ci\`o per\`o non influisce sul corretto funzionamento del contatore.
 
 \begin{figure}[h!]
   \centering
@@ -2559,7 +2558,7 @@ In questo caso, \`e stata rilevata correttamente l'intera testa del passeggero. 
 \subsection{Performance}
 Per la misura dei tempi di esecuzione si \`e fatto nuovamente uso della libreria standard \verb|chrono| di C++. I test sono stati effettuati usando le due telecamere RealSense su due diversi dispositivi: il ReliaGate 20-25 e una macchina Linux ad alte prestazioni. I tempi sono stati mediati sul numero di cicli effettuati, cio\`e pari al numero di frame catturati dalla telecamera.
 
-Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300:
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense SR300 impostata ad una risoluzione di 640 x 480 pixel a 30 fps.
 
 \begin{figure}[h!]
     \centering
@@ -2612,7 +2611,7 @@ Anche in questo caso all'interno del tempo di esecuzione del loop principale \`e
 %% Interruzione di pagina
 \newpage
 
-Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense R200:
+Nel seguito sono riportati i risultati relativi alle performance dell'applicazione utilizzando la telecamera RealSense R200 impostata ad una risoluzione di 320 x 240 pixel a 60 fps.
 
 \begin{figure}[h!]
     \centering
@@ -2660,6 +2659,8 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Performance Passenger Counter con telecamera RealSense R200.}
 \end{table}
 
+La differenza nei tempi di esecuzione nei due test \`e dovuta al fatto che nel caso della telecamera R200 si \`e usata una risoluzione pi\`u bassa e un framerate pi\`u elevato del caso della RealSense SR300.
+
 Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato. Ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
 
 Si noti inoltre come i tempi di esecuzione del loop principale siano pressoch\'e identici per entrambi i sistemi: ora entrambi impiegano la maggior parte del tempo di CPU ad attendere il frame successivo in ingresso dalla telecamera.
@@ -2670,7 +2671,7 @@ Si noti inoltre come i tempi di esecuzione del loop principale siano pressoch\'e
 \section{Problemi}
 Nonostante i miglioramenti anche questa versione del software non \`e esente da problemi.
 
-Anzitutto \`e necessario considerare che il programma \`e molto dipendente dall'altezza dei passeggeri. La soglia applicata alle informazioni di profondit\`a implica che i passeggeri aventi un'altezza inferiore a detta soglia non verranno rilevati, mentre i passeggeri troppo alti potrebbero risultare fuori dal range della telecamera. Siccome si suppone che la telecamera sia posta a circa 2 metri da terra, avendo una soglia massima posta a 45 cm, le persone pi\`u basse di 150 cm risultano invisibili al contatore. Questo problema potrebbe essere risolta applicando una soglia pi\`u ``intelligente'', che tenga conto dei massimi locali nell'immagine invece dei massimi assoluti.
+Anzitutto \`e necessario considerare che il programma \`e molto dipendente dall'altezza dei passeggeri. La soglia applicata alle informazioni di profondit\`a implica che i passeggeri aventi un'altezza inferiore a detta soglia non verranno rilevati, mentre i passeggeri troppo alti potrebbero risultare fuori dal range della telecamera. Siccome si suppone che la telecamera sia posta a circa 2 metri da terra, avendo una soglia massima posta a 45 cm, le persone pi\`u basse di 150 cm risultano invisibili al contatore. Questo problema potrebbe essere risolto applicando una soglia pi\`u ``intelligente'', che tenga conto dei massimi relativi nell'immagine.
 
 Inoltre \`e necessario considerare le caratteristiche tecniche delle telecamere utilizzate.
 
