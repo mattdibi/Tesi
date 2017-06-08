@@ -3405,7 +3405,7 @@ $ bitbake-layers add-layer "$INSTALL_DIR/poky/meta-java"
 \begin{lstlisting}[caption=File bblayers.conf risultante]
 # POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
 # changes incompatibly
-POKY_BBLAYERS_CONF_VERSION = "2"
+POKY_BBLAYERS_CONF_VERSION = "1"
 
 BBPATH = "${TOPDIR}"
 BBFILES ?= ""
@@ -3493,7 +3493,7 @@ $ bitbake core-image-sato
 Esiste un problema noto con alcune vecchie versioni del compilatore C++ che possono interrompere il processo di build dell'immagine. Nel caso si presenti l'errore ``\textbf{unrecognized command line option -fno-lifetime-dse}'' \`e necessario che alla ricetta presente al percorso
 
 \begin{verbatim}
-$INSTALL\_DIR/poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc
+$INSTALL_DIR/poky/meta-java/recipes-core/openjdk/openjdk-8-common.inc
 \end{verbatim}
 
 \noindent siano applicate le seguenti modifiche presso la linea 224 del file.
@@ -3580,7 +3580,7 @@ Si noti che questa modalit\`a degrada leggermente le prestazioni del contatore r
 L'applicativo supporta due modalit\`a di esecuzione:
 
 \begin{itemize}
-\item Senza argomenti: apre tutte le telecamere collegate alla macchina di default e cattura gli input stream allocando un contatore per ogni telecamera.
+\item Senza argomenti: si interfaccia a tutte le telecamere collegate alla macchina e cattura gli input stream allocando un contatore per ogni telecamera.
 \item \verb|-s|: in aggiunta alle operazioni di cui sopra, salva in formato video gli stream in ingresso dalle telecamere nei vari passaggi intermedi dell'elaborazione.
 \end{itemize}
 
@@ -3626,7 +3626,7 @@ Una volta lanciato l'applicativo, il programma resta in attesa di input dall'ute
 
 Come \`e possibile notare dalle figure \ref{fig:preset0}, \ref{fig:preset1} e \ref{fig:preset2} i preset sono molto utili per gestire varie situazioni di illuminazione e permettono di variare leggermente il range di funzionamento delle telecamere.
 
-Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione senza argomenti e sono stati visualizzati lo stream a colori e abilitata la calibrazione dei settaggi del contatore.
+Qui di seguito \`e riportato uno screenshot della schermata tipica di funzionamento del programma su una macchina host. Il programma si trova in modalit\`a di esecuzione senza argomenti e sono stati visualizzati lo stream a colori e abilitata la calibrazione dei parametri del contatore.
 
 \begin{figure}[h!]
   \centering
@@ -3666,9 +3666,9 @@ $ scp -r swig_output_20-25/ root@<ReliGATE 20-25 IP address>:
 Una volta connessi al ReliaGate 20-25 e aver trasferito l'intera cartella di output sul dispositivo target \`e possibile eseguire il programma per mezzo dei comandi:
 
 \begin{lstlisting}[language=bash]
-$ cd swig_output_2025/
+$ cd swig_output_20-25/
 $ javac *.java
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/swig_output_2025
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/swig_output_20-25
 $ java Main
 \end{lstlisting}
 
@@ -3716,11 +3716,11 @@ Anche in questo caso le opzioni vengono applicate a tutti i contatori attualment
 \item \verb|q|: Termina il programma.
 \item \verb|r|: Resetta i contatori
 \item \verb|c|: Visualizza il conteggio attuale
-\item \verb|p|: Selezione i preset per la telecamera da utilizzare. I preset sono delle impostazioni della telecamera ad infrarossi che ne modificano il comportamento permettendo di impostare l'esposizione, la precisione ecc.
+\item \verb|p|: Selezione i preset per la telecamera da utilizzare.
 \item \verb|t|: Imposta la soglia in centimetri fino alla quale si effettua il rilevamento degli oggetti.
 \item \verb|x|: Imposta il numero di pixel dell'asse orizzontale per il tracking.
 \item \verb|y|: Imposta il numero di pixel dell'asse verticale per il tracking.
-\item \verb|b|: Imposta la quantit\`a di offuscamento dell'immagine per ridurre il rumore.
+\item \verb|b|: Imposta la quantit\`a di offuscamento dell'immagine per ridurre il rumore (\verb|blur()|).
 \item \verb|a|: Imposta il tempo per il quale i passeggeri tracciati vengono lasciati in memoria prima di essere cancellati quando non vengono pi\`u rilevati nel raggio visivo della telecamera.
 \item \verb|h|: Visualizza il messaggio di aiuto.
 \end{itemize}
