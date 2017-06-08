@@ -388,7 +388,7 @@ Come dispositivi di acquisizione delle immagini sono state utilizzate le telecam
 \end{minipage}
 \end{figure}
 
-Il principio di funzionamento di questo tipo di telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due proiettori ad infrarossi che illuminano la scena. Le due telecamere stereoscopiche acquisiscono due immagini leggermente diverse. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing viene ricostruita l'informazione di profondit\`a\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC (Application-Specific Integrated Circuit) che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
+Il principio di funzionamento di questo tipo di telecamere \`e lo stesso del Passenger Counter Eurotech. Sul modulo sono presenti due proiettori ad infrarossi che illuminano la scena, le due telecamere stereoscopiche acquisiscono due immagini leggermente diverse. Analizzando le differenze tra le due immagini per mezzo di algoritmi di image processing viene ricostruita l'informazione di profondit\`a\footnote{Per approfondire il funzionamento della Computer Stereo Vision si faccia riferimento all'appendice \ref{ComputerStereoVision} a pagina \pageref{ComputerStereoVision}.}. Per ottenere una ricostruzione delle informazioni in real-time \`e stato usato un circuito ASIC (Application-Specific Integrated Circuit) che garantisse le prestazioni desiderate. Il funzionamento \`e riassunto in figura \ref{fig:SchemaFunzR200}.
 
 \begin{figure}[h!]
   \centering
@@ -467,7 +467,7 @@ Specifiche tecniche:
 \end{table}
 
 \subsubsection{Libreria librealsense e formato immagine}\label{librealsense}
-Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame e i dati di profondit\`a dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: https://github.com/IntelRealSense/librealsense}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream video disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono tre: 
+Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la quale \`e possibile recuperare i frame e i dati di profondit\`a dalle telecamere: la libreria \textbf{librealsense}\footnote{Repository libreria all'indirizzo: \url{https://github.com/IntelRealSense/librealsense}.}. Essa provvede all'inizializzazione delle telecamere, apertura dei vari stream video disponibili, impostazione di risoluzione e framerate. Gli stream disponibili sono tre: 
 
 \begin{enumerate}
 \item Lo stream proveniente dalla telecamera a colori.
@@ -475,8 +475,8 @@ Per l'interfacciamento software la Intel fornisce una libreria in C++ tramite la
 \item I frame di profondit\`a provenienti dall'ASIC contenenti le immagini in cui \`e codificata l'informazione di distanza.
 \end{enumerate}
 
-Nonostante usino tecnologie diverse entrambi i modelli di telecamera forniscono lo stesso formato in uscita. Lo stream di profondit\`a \`e uno stream di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
-Vi \`e una eccezione a questa codifica in quanto, un valore nullo \`e attribuito ai pixel per i quali non \`e stato possibile ricavare informazione sulla distanza, ci\`o pu\`o essere dovuto a problemi di range o esposizione dell'immagine.
+Nonostante usino tecnologie diverse entrambi i modelli di telecamera forniscono lo stesso formato in uscita. Lo stream di profondit\`a \`e un flusso di immagini a 16 bit privi di segno in cui il valore di ogni pixel rappresenta la distanza dalla telecamera. La distanza \`e fornita a meno di un fattore di scala reperibile per mezzo di una semplice chiamata di funzione. \`E possibile quindi risalire alla distanza in metri di un pixel dalla telecamera semplicemente moltiplicando il valore del pixel per il fattore di scala.
+Vi \`e una eccezione a questa codifica in quanto un valore nullo \`e attribuito ai pixel per i quali non \`e stato possibile ricavare informazione sulla distanza, ci\`o pu\`o essere dovuto a problemi di range o esposizione dell'immagine.
 
 Vi sono per\`o delle minime differenze tra le due telecamere per quanto riguarda la risoluzione della distanza calcolata:
 \begin{itemize}
@@ -487,7 +487,7 @@ Questo fatto non ha per\`o comportato problemi dal punto di vista della funziona
 
 %% Copiato spudoratamente dalla mia presentazione su OpenCV.
 \subsection{Libreria per l'image processing: OpenCV}\label{OpenCV}
-Siccome una parte centrale del progetto verteva sull'elaborazione delle immagini \`e stato necessario integrare nel sistema l'uso di OpenCV, ormai standard de facto nell'ambito dell'elaborazione delle immagini.
+Siccome la parte centrale del progetto verteva sull'elaborazione delle immagini \`e stato necessario integrare nel sistema l'uso di OpenCV, ormai standard de facto nell'ambito dell'image processing.
 
 OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi piattaforma finalizzata all'image processing real-time e alla computer vision. Essa \`e rilasciata tramite licenza Berkeley Software Distribution (BSD) quindi \`e ad uso gratuito sia per fini accademici che commerciali e contiene pi\`u di 2500 algoritmi pre-ottimizzati per le operazioni di elaborazione di immagini, computer vision e machine learning pi\`u comuni. Sviluppata in C/C++, \`e dotata di interfacce verso C, Python, Java e MATLAB. Poich\'e finalizzata all'utilizzo real-time, la libreria sfrutta molteplici interfacce per l'accelerazione hardware (CUDA, OpenCL, Intel Integrated Perfomance Primitives). OpenCV ha una struttura modulare, il che significa che il pacchetto include diverse librerie statiche o condivise.
 
@@ -523,7 +523,7 @@ OpenCV, acronimo di Open Source Computer Vision, \`e una libreria software multi
 \item Un header: contenente informazioni come la dimensione della matrice, il metodo usato per salvarla, l'indirizzo dove \`e salvata e un puntatore alla matrice.
 \item Una matrice: contenente i valori dei pixel dell'immagine la cui dimensionalit\`a dipende dal metodo utilizzato per salvare l'immagine (B/N, RGB ecc.).
 \end{itemize}
-Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile. Questa conversione \`e garantita dal modulo imgcodecs, la quale funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo \verb|Mat|.
+Questa struttura \`e la stessa per tutti i tipi di immagine, indipendentemente dal formato nella quale \`e salvata. Questa astrazione facilita notevolmente la manipolazione delle immagini in quanto ci si riconduce velocemente ad una matrice di pixel manipolabile. Questa conversione \`e garantita dal modulo imgcodecs, la cui funzione non \`e altro che recuperare i dati sui pixel dell'immagine sulla quale si sta lavorando e generare i metadati per il tipo \verb|Mat|.
 
 \subsubsection{Storia}
 Lanciato ufficialmente nel 1999, il progetto OpenCV era parte di una iniziativa Intel finalizzata all'avanzamento delle applicazioni CPU-intensive che includeva ray tracing real-time e display 3D. Inizialmente le finalit\`a del progetto erano descritte come:
@@ -2921,7 +2921,7 @@ Nel corso della tesi sono state realizzate molteplici versioni dello stesso codi
 Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
 \subsection{Wrapping in Java}
-Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: http://www.swig.org/}.
+Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: \url{http://www.swig.org/}.}.
 
 % TODO: Il seguente paragrafo \`e stato copiato spudoratamente. Cambiare.
 SWIG (Simplified Wrapper and Interface Generator) \`e un wrapper open source utilizzato per collegare i programmi o librerie scritte in C o C++ con altri linguaggi come C Sharp, Java, JavaScript, Go, Modula-3, OCaml, Octave, e Scheme.
@@ -2938,17 +2938,17 @@ SWIG non viene utilizzato per chiamare le funzioni interpretate da codice nativo
 La versione del Passenger Counter realizzata con questo tool conserva le prestazioni del codice nativo pur permettendo l'interfacciamento con Java. Si \`e comunque ritenuto necessario compiere un ulteriore passo ed effettuare il porting vero e proprio dell'applicazione in Java.
 
 \subsection{Versione Java}
-Il porting dell'applicazione ha comportato fin da subito dei problemi di compatibilit\`a dato che, bench\'e OpenCV avesse recentemente introdotto il support a Java, \`e stato necessario utilizzare un wrapper third-party di OpenCV poich\'e lo richiedeva il wrapper ufficiale della libreria librealsense. Entrambi questi wrapper sono stati realizzati dal progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp.}.
+Il porting dell'applicazione ha comportato fin da subito dei problemi di compatibilit\`a dato che, bench\'e OpenCV avesse recentemente introdotto il support a Java, \`e stato necessario utilizzare un wrapper third-party di OpenCV poich\'e lo richiedeva il wrapper ufficiale della libreria librealsense. Entrambi questi wrapper sono stati realizzati dal progetto \textbf{JavaCPP}\footnote{Repository del progetto all'indirizzo: \url{https://github.com/bytedeco/javacpp}.}.
 
 JavaCPP \`e un progetto open source il cui obiettivo \`e fornire un accesso efficiente al codice nativo C++ dentro Java. Esso sfrutta le similitudini sintattiche e semantiche tra Java e C++ per raggiungere questo obiettivo. Inoltre \`e basato sulla Java Native Interface (JNI) quindi funziona per tutte le implementazioni di Java SE.
 
-Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacpp-presets.}.
+Praticamente, parsando il codice nativo degli header file delle librerie, realizza delle interfacce Java che permettono al codice Java di effettuare le chiamate delle librerie C++ installate sulla macchina host. Tramite questa pratica, i manutentori del progetto hanno prodotto delle interfacce complete per OpenCV, FFmpeg, libdc1394, PGR FlyCapture, OpenKinect, videoInput, ARToolKitPlus, e altri come parti del progetto \textbf{JavaCPP Presets}\footnote{Repository del progetto all'indirizzo: \url{https://github.com/bytedeco/javacpp-presets}.}.
 
 JavaCPP Presets \`e un sotto progetto di JavaCPP che rende disponibile le configurazioni e le classi di interfacciamento verso le librerie C++ pi\`u usate sfruttando JavaCPP. I file di configurazione nel pacchetto org.bytedeco.javacpp sono usati dal Parser per creare dai file header C/C++ le interfacce Java che puntano al pacchetto di JavaCPP, il quale a sua volta \`e usato dal Generator e il compilatore nativo C++ per produrre le librerie JNI richieste.
 
 Nella repository del progetto sono inoltre disponibili i file \verb|.jar| precompilati per l'interfacciamento alle librerie librealsense, i quali sono stati usati per facilitare il porting dell'applicazione RSPCN in Java.
 
-Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: https://github.com/bytedeco/javacv.}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e stato rilasciato molto prima dell'attuale wrapper Java ufficiale di OpenCV e risulta pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
+Purtroppo questa interfaccia fa uso del progetto \textbf{JavaCV}\footnote{Repository del progetto all'indirizzo: \url{https://github.com/bytedeco/javacv}.}, il quale \`e un wrapper Java di OpenCV realizzato sempre dal progetto JavaCPP sfruttando i preset resi disponibili da JavaCPP Presets. \`E stato quindi necessario utilizzare JavaCV al posto di OpenCV per realizzare questa versione del codice nonostante quest'ultimo disponesse di un suo interfacciamento a Java. \`E necessario notare per\`o che il progetto JavaCV \`e stato rilasciato molto prima dell'attuale wrapper Java ufficiale di OpenCV e risulta pi\`u completo della controparte. Nonostante ci\`o le differenze tra i due erano cos\`\i\ spiccate che \`e stata necessaria una revisione abbastanza corposa del codice e in alcuni casi non \`e stato possibile portare tutte le feature presenti nella versione C++.
 
 Caratteristiche di questa implementazione:
 \begin{itemize}
