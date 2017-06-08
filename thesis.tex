@@ -1840,7 +1840,7 @@ In figura \ref{fig:RSPCNUML} \`e riportato il diagramma UML del Passenger Counte
 \newpage
 
 \section{Classe RSPCN}
-Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Counter a sottrazione del background, con qualche aggiunta. Essa deve infatti:
+Questa classe ha gli stessi obiettivi della classe PCN nel caso del Passenger Counter a sottrazione del background, con qualche aggiunta. Essa deve infatti, oltre ai compiti visti in precedenza:
 
 \begin{itemize}
 \item Interfacciarsi con le telecamere RealSense per mezzo della libreria librealsense in modo da poterne controllare i settaggi in tempo reale e ricavare i dati di profondit\`a.
@@ -1936,7 +1936,7 @@ private:
 
 \noindent Variabili:
 \begin{itemize}
-\item \verb|dev|: \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria delle telecamere RealSense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
+\item \verb|dev|: \`e la telecamera dalla quale il contatore raccoglie i dati. Questo tipo \`e definito nella libreria librealsense ed \`e usato per andare a raccogliere i frame in uscita dalla telecamera, nonch\`e altri dati utili per il funzionamento del programma.
 \item \verb|cameraDevice|: si \`e resa necessaria per poter distinguere i due modelli di telecamere usati durante lo sviluppo del progetto poich\'e necessitano di settaggi diversi per il loro funzionamento.
 \item \verb|ImageWidth|, \verb|ImageHeight|, \verb|CameraFramerate|: sono le impostazioni di risoluzione e framerate dei flussi video in ingresso dalle telecamere.
 \item \verb|scale|: \`e il fattore di scala alla quale viene impostata la telecamera, ricavato in run-time.
@@ -1946,8 +1946,8 @@ private:
 
     \begin{itemize}
     \item \verb|displayColor|, \verb|displayRawDepth|, \verb|displayDepth|, \verb|displayFrame|: permettono di aprire e chiudere le finestre al cui interno vengono visualizzati gli stream della telecamere nei vari step di elaborazione. Nel seguito vedremo nel dettaglio quali sono questi stream.
-    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare le strutture necessarie al salvataggio degli stream video.
-    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del kernel del programma. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre video.
+    \item \verb|saveVideo|: viene usata dal metodo \verb|count()| per dichiarare e inizializzare le strutture necessarie al salvataggio degli stream video.
+    \item \verb|setCalibration|: abilita la calibrazione real-time di alcuni parametri del contatore. Questa calibrazione \`e resa possibile dal modulo HighGui di OpenCV il quale permette di aggiungere delle trackbar alle finestre che visualizzano gli stream video.
     \item \verb|framerateStabilizationOn|: va ad agire sulla funzione per mezzo della quale si vanno a ricavare i frame dalla telecamera. Se lasciato \verb|true| viene usato un metodo bloccante che attende l'arrivo dei frame. Altrimenti viene usato un metodo non bloccante, ci\`o comporta un framerate molto pi\`u elevato ma altrettanto meno stabile.
     \end{itemize}
 \end{itemize}
@@ -1989,7 +1989,7 @@ RSPCN::RSPCN(device *assignedDevice) {
 
 Come \`e possibile notare al costruttore viene passato un oggetto della classe \verb|device| che identifica la telecamera che verr\`a usata come input dal contatore. Ci\`o permette di istanziare pi\`u contatori contemporaneamente.
 
-Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\'e le telecamera operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
+Una volta inizializzata la variabile \verb|dev| si ricava il tipo di telecamera e, in base al nome, vengono configurati gli stream in ingresso. Ci\`o si \`e reso necessario perch\'e le telecamere operano a risoluzioni e framerate diversi. Si \`e deciso quindi di impostare i flussi come segue:
 
 \begin{itemize}
 \item Telecamera R200: 320x240 pixel @ 60 fps.
@@ -2000,13 +2000,16 @@ Infine si ricava il fattore di scala al quale opera la telecamera e viene salvat
 
 \item \verb|start()|: questo metodo crea il thread dove verr\`a eseguito il loop principale del programma. Dopo aver creato il thread lancia il metodo \verb|count()|.
 \item \verb|count()|: anche in questo caso rappresenta il cuore del Passenger Counter e verr\`a analizzata separatamente. 
-\item \verb|getColorMap()| e \verb|getFrame()| sono le funzioni che convertono i frame forniti dalle telecamere RealSense in qualcosa di utilizzabile dal nostro algoritmo. Nel seguito vedremo in dettaglio cosa fanno.
+\item \verb|getColorMap()| e \verb|getFrame()| sono le funzioni che convertono i frame forniti dalle telecamere RealSense in qualcosa di utilizzabile. Nel seguito vedremo in dettaglio cosa fanno.
 \end{itemize}
 
+%% Interruzione di pagina
+\newpage
+
 \subsubsection{Utilizzo della classe RSPCN}
-La sequenza necessaria al funzionamento \`e la seguente:
+La sequenza necessaria al funzionamento \`e la seguente.
 \begin{itemize}
-\item Dichiarazione della variabile della classe \verb|context|: questa classe definita nella libreria librealsense conserva tutti gli handle a tutte le telecamere connesse. \`E necessario per ricavare il numero di telecamere connesse e assegnare le device ai vari contatori. Si noti che all'interno del sistema di Passenger Counter deve esistere una sola istanza di tipo \verb|context|.
+\item Dichiarazione della variabile della classe \verb|context|: questa classe definita nella libreria librealsense contiene tutti gli handle a tutte le telecamere connesse. \`E necessaria per ricavare il numero di telecamere connesse e assegnare le device ai vari contatori. Si noti che all'interno del sistema di Passenger Counter deve esistere una sola istanza di tipo \verb|context|.
 \item Costruttore: per ogni telecamera va creato un oggetto della classe RSPCN assegnandogli, per mezzo dell'oggetto \verb|device| passato al costruttore, una telecamera diversa dagli altri contatori.
 \item \verb|start()|: ogni oggetto della classe RSPCN va lanciato utilizzando il metodo \verb|start()|, questo far\`a in modo che tutti i contatori vengano eseguiti in parallelo su thread diversi.
 \item \verb|stop()|: per chiudere il programma bisogna effettuare la chiamata al metodo \verb|stop()| per ogni istanza di contatore attiva.
@@ -2016,7 +2019,7 @@ La sequenza necessaria al funzionamento \`e la seguente:
 \newpage
 
 \section{Metodo getColorMap()}
-Questo metodo \`e stato utile in fase di sviluppo poich\'e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale nel programma ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
+Questo metodo si \`e rivelato utile in fase di sviluppo poich\'e fornisce una rappresentazione dei dati in uscita dalla telecamera molto intuitiva. Non ha un ruolo funzionale nel programma ma facilita la comprensione di quanto accade al suo interno, quindi \`e opportuno spiegarne il funzionamento.
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo getColorMap(), style=customcpp]
 Mat RSPCN::getColorMap(Mat depthImage) {
@@ -2068,7 +2071,7 @@ Mat RSPCN::getColorMap(Mat depthImage) {
 }
 \end{lstlisting}
 
-Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da delle immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato della visualizzazione per mezzo di OpenCV di questo formato di immagini.
+Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere RealSense \`e dato da un flusso di immagini in scala di grigi i cui pixel hanno formato 16 bit privi di segno, i quali rappresentano la distanza del pixel dalla telecamera. Il valore 0 significa che non si \`e potuti ricavare dati sulla distanza. Questo \`e il formato dell'immagine che ci aspettiamo in ingresso alla funzione e in figura \ref{fig:rawDepthImage} \`e riportato il risultato della visualizzazione per mezzo di OpenCV di questo formato di immagini.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{8.5cm}
@@ -2086,14 +2089,14 @@ Come si \`e detto nel paragrafo \ref{librealsense} l'output delle telecamere Rea
 \end{minipage}
 \end{figure}
 
-Si noti che la leggera discrepanza tra le due immagini \`e dovuta al fatto che il sensore a infrarossi e quello per le immagini a colori si trovano in posizioni diverse. Inoltre il sensore a infrarossi ha un FOV pi\`u elevato.
+Si noti che la leggera discrepanza tra le due immagini \`e dovuta al fatto che il sensore a infrarossi e quello per le immagini a colori si trovano in posizioni diverse. Inoltre il sensore a infrarossi ha un FOV (Field Of View) pi\`u elevato.
 
 \subsection{Funzionamento getColorMap()}
-Il primo step \`e portare il valore dei pixel per i quali non \`e stato possibile ricavare il dato di distanza alla massima distanza rappresentabile. Quindi portiamo tutti i pixel nulli a 65535. Questo \`e implementato dalla funzione \verb|setTo()|.
+Il primo passo \`e portare il valore dei pixel per i quali non \`e stato possibile ricavare alcun dato di profondit\`a alla massima distanza rappresentabile. Cio\`e si pongono tutti i pixel nulli a 65535 per mezzo della funzione \verb|setTo()|.
 
-Quindi convertiamo l'immagine da 16 bit a 8 bit usando un fattore di scala. Si noti che questa conversione \`e con perdita.
+Quindi si converte l'immagine da 16 bit a 8 bit usando un fattore di scala. Si noti che questa conversione \`e con perdita.
 
-Otteniamo il risultato in figura \ref{fig:getColorMapStep1}.
+Si ottiene il risultato in figura \ref{fig:getColorMapStep1}.
 
 %% Interruzione di pagina
 \newpage
@@ -2114,9 +2117,9 @@ Otteniamo il risultato in figura \ref{fig:getColorMapStep1}.
 \end{minipage}
 \end{figure}
 
-A questo punto vogliamo rappresentare i pixel pi\`u vicini con colori pi\`u chiari e i pixel pi\`u lontani con colori pi\`u scuri. Per ottenere ci\`o \`e sufficiente sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Otteniamo l'immagine in figura \ref{fig:getColorMapStep2}:
+A questo punto si vuole rappresentare i pixel pi\`u vicini con colori pi\`u chiari e i pixel pi\`u lontani con colori pi\`u scuri. Per ottenere ci\`o \`e sufficiente sottrarre l'immagine ad un matrice delle stesse dimensioni in cui tutti i pixel sono bianchi. Otteniamo l'immagine in figura \ref{fig:getColorMapStep2}:
 
-Quindi passiamo l'immagine cos\`\i\ ottenuta alla funzione \verb|equalizeHist()| la quale aumenta il contrasto dell'immagine che le viene passata come argomento. In questo modo i colori che rappresentano la distanza nell'immagine risultano pi\`u evidenti. Poich\'e questa funzione accetta in ingresso solamente immagini a 8 bit si \`e resa necessaria la conversione con perdita.
+Quindi si passa l'immagine cos\`\i\ ottenuta alla funzione \verb|equalizeHist()| la quale aumenta il contrasto dell'immagine che le viene passata come argomento. In questo modo i colori che rappresentano la distanza nell'immagine risultano pi\`u evidenti. Poich\'e questa funzione accetta in ingresso solamente immagini a 8 bit si \`e resa necessaria la conversione con perdita vista in precedenza.
 
 In figura \ref{fig:getColorMapStep3} il risultato dell'applicazione della funzione.
 
