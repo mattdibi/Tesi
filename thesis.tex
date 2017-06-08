@@ -769,7 +769,7 @@ In questo capitolo tratteremo la prima versione realizzata del contatore di pass
 Questa prima versione non faceva uso delle telecamere RealSense e presentava alcune criticit\`a che vedremo nel seguito. 
 
 \section{Componenti hardware}\label{HardwarePCN}
-Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam.
+Per questa prima implementazione del contatore di passeggeri \`e stata utilizzata una semplice webcam come dispositivo di acquisizione video.
 
 \begin{table}[ht]
 \begin{minipage}[b]{0.56\linewidth}
@@ -801,7 +801,7 @@ Essendo driverless veniva riconosciuta senza problemi dal ReliaGate ed \`e stato
 \newpage
 
 \section{Algoritmo per la sottrazione del background}
-La sottrazione del background \`e una tecnica molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per essere ulteriormente manipolato. La background subtraction \`e una tecnica largamente utilizzata per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
+La sottrazione del background \`e una tecnica molto utilizzata dell'image processing e della computer vision, nella quale viene estratto il primo piano dell'immagine per rilevare soggetti in movimento all'interno di flussi video catturati da una telecamera statica.
 
 \subsection{Principio di funzionamento}
 
@@ -812,7 +812,7 @@ La sottrazione del background \`e una tecnica molto utilizzata dell'image proces
   \label{fig:SchemaBackSub}
 \end{figure}
 
-Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione del background \`e l'estrazione delle regioni in movimento (o Foreground, primo piano) comparando il frame corrente con un modello dello sfondo (Background) costruito a partire dai frame precedenti del flusso video. Il prodotto di questa computazione \`e la Foreground Mask, una immagine binaria contenente i pixel che appartengono agli oggetti in movimento nella scena.
+Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione del background \`e l'estrazione delle regioni in movimento (o Foreground, primo piano) comparando il frame corrente con un modello dello sfondo (BG Model) costruito a partire dai frame precedenti del flusso video. Il prodotto di questa computazione \`e la Foreground Mask, una immagine binaria contenente i pixel che appartengono agli oggetti in movimento nella scena.
 
 \begin{figure}[h!]
   \centering
@@ -824,7 +824,7 @@ Come riassunto in figura \ref{fig:SchemaBackSub} l'obiettivo della sottrazione d
 \noindent L'algoritmo si compone di due fasi:
 
 \begin{enumerate}
-\item L'inizializzazione del background: dove viene creato il primo modello dello sfondo (BG Model).
+\item L'inizializzazione del background: dove viene creato il primo modello dello sfondo.
 \item L'aggiornamento del modello: dove le informazioni sul modello del background vengono aggiornate per tenere conto degli eventuali cambiamenti nella scena osservata.
 \end{enumerate}
 
@@ -836,7 +836,7 @@ La funzione utilizzata nello sviluppo di questa versione del Passenger Counter, 
 
 L'algoritmo usato all'interno del codice \`e basato su due paper pubblicati da Z. Zivkovic, \textit{Improved adaptive Gausian mixture model for background subtraction} del 2004 e \textit{Efficient Adaptive Density Estimation per Image Pixel for the Task of Background Subtraction} del 2006.
 
-Esso modella ogni pixel del background con una mixture di distribuzioni gaussiane selezionando automaticamente il numero appropriato da utilizzare. I pesi della mixture di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
+Esso modella ogni pixel del background con una mistura di distribuzioni gaussiane\cite{misturadistribuzioni} selezionando automaticamente il numero appropriato da utilizzare. I pesi della mistura di gaussiane rappresentano il tempo per il quale quei colori permangono all'interno della scena. I colori che pi\`u probabilmente appartengono al background sono quelli che rimangono per un tempo maggiore all'interno della scena e sono i pi\`u statici.
 
 Tipicamente si ricava una immagine in scala di grigi nella quale i pixel neri rappresentano il background e i pixel bianchi il primo piano. Nel caso dell'algoritmo usato per il Passenger Counter, le ombre vengono evidenziate con un colore grigio. 
 
@@ -860,7 +860,7 @@ In figura \ref{fig:EsempioBackSub} si pu\`o notare come le persone vengano corre
 \section{Algoritmo per il rilevamento dei contorni}\label{AlgoritmoFindContours}
 Nella computer vision i metodi di blob detection sono finalizzati a rilevare regioni in un'immagine digitale che differiscano per propriet\`a, come luminosit\`a o colore, rispetto alle regioni circostanti. I blob, quindi, sono regioni di un'immagine nelle quali alcune propriet\`a sono costanti.
 
-Nel caso dell'applicazione del Passenger Counter le regioni di interesse, o blob, saranno i passeggeri che si vuole tracciare all'interno del raggio visivo della telecamera. Per andare a rilevare questi ultimi si \`e usata la funzione \verb|findContours()|.
+Nel caso dell'applicazione del Passenger Counter le regioni di interesse, o blob, sono i passeggeri che si vuole tracciare all'interno del raggio visivo della telecamera. Per andare a rilevare questi ultimi si \`e usata la funzione \verb|findContours()|.
 
 \subsection{Principio di funzionamento}
 Alla base dell'algoritmo implementato dalla funzione \verb|findContours()| c'\`e il Chain Code noto come \textit{Freeman Chain Code of Eight Directions} (FCCE)\cite{freeman61}. Un Chain Code \`e un algoritmo di compressione lossless per immagini monocrome. Il Freeman Chain Code, nello specifico, prevede la codifica dei poligoni presenti in una immagine come una sequenza di step in una delle 8 direzioni rappresentate in figura \ref{fig:Freeman}, in modo tale che ogni componente connesso o blob sia codificato separatamente. Ogni step, successivo al primo, viene quindi rappresentato da un numero intero compreso tra 0 e 7.
@@ -874,7 +874,7 @@ Alla base dell'algoritmo implementato dalla funzione \verb|findContours()| c'\`e
 
 Si consideri in ingresso una immagine monocroma, la quale, ad esempio, rappresenta una scena a cui \`e stato sottratto lo sfondo. Il foreground sia rappresentato per mezzo di pixel bianchi mentre lo sfondo con pixel neri. L'algoritmo si compone delle seguenti operazioni.
 
-Anzitutto si scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine.
+Anzitutto scannerizza l'immagine per individuare il punto dal quale far partire la sequenza che descrive il poligono. Il punto di partenza \`e rappresentato dalle coordinate del pixel all'interno dell'immagine.
 
 %% Interruzione di pagina
 \newpage
@@ -886,11 +886,11 @@ Anzitutto si scannerizza l'immagine per individuare il punto dal quale far parti
 \caption{Analisi pixel appartenenti al bordo del poligono.}
 \end{wrapfigure}
 
-Quindi si passa ad analizzare gli 8 pixel adiacenti al punto di partenza, la direzione del primo pixel appartenente al bordo del poligono \`e salvata nella sequenza. Si considera un pixel appartenente al bordo dell'immagine se condivide almeno un lato o un vertice con almeno un pixel appartenente allo sfondo (cio\`e un pixel nero). Si ripete il procedimento fino a trovare la fine della sequenza, rappresentata dalla coordinata del punto di partenza. A questo punto la sequenza descrive completamente il blob.
+Quindi passa ad analizzare gli 8 pixel adiacenti al punto di partenza, la direzione del primo pixel appartenente al bordo del poligono \`e salvata nella sequenza. Si considera un pixel appartenente al bordo dell'immagine se condivide almeno un lato o un vertice con almeno un pixel appartenente allo sfondo (cio\`e un pixel nero). Ripete il procedimento fino a trovare la fine della sequenza, rappresentata dalla coordinata del punto di partenza. A questo punto la sequenza descrive completamente il blob.
 
-Dunque si ricomincia la scansione dell'immagine per individuare altri poligoni fino a che anche l'ultimo pixel dell'immagine \`e stato analizzato.
+Dunque ricomincia la scansione dell'immagine per individuare altri poligoni fino a che anche l'ultimo pixel dell'immagine \`e stato analizzato.
 
-Alla fine di questa operazione otterremo tante sequenze di interi, le quali rappresentano i blob, quanti sono i poligoni presenti nel foreground.
+Alla fine di questa operazione si otterranno tante sequenze di interi, le quali rappresentano i blob, quanti sono i poligoni presenti nel foreground.
 
 \subsection{Funzione OpenCV: findContours}
 L'algoritmo utilizzato per il Passenger Counter \`e descritto in Suzuki, S. and Abe, K., \textit{Topological Structural Analysis of Digitized Binary Images by Border Following}, CVGIP 30 1, pp 32-46 del 1985.
@@ -906,7 +906,7 @@ Qui di seguito \`e riportato un esempio di funzionamento.
   \label{fig:EsempioFindContours}
 \end{figure}
 
-In figura \ref{fig:EsempioFindContours} l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni in giallo, ricavati per mezzo della funzione \verb|findContours()| sull'immagine a colori.
+In figura \ref{fig:EsempioFindContours} l'immagine a sinistra rappresenta l'immagine di input in bianco e nero ricavata dall'immagine a colori. L'immagine a destra \`e stata ricavata disegnando i contorni in giallo, ricavati per mezzo della funzione \verb|findContours()|, sull'immagine a colori.
 
 %% Interruzione di pagina
 \newpage
