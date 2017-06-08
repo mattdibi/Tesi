@@ -2686,17 +2686,17 @@ In conclusione possiamo affermare che entrambe le telecamere hanno dei difetti p
 \chapter{Confronto implementazioni del Passenger Counter}\label{CapitoloConfronto}
 Nel corso della tesi sono state implementate diverse versioni del contatore, in diversi linguaggi. In questa sezione andremo ad analizzare quali sono queste implementazioni, come sono state realizzate  e quali sono le loro prestazioni.
 
-Per brevit\`a nel seguito verranno adottate le seguenti abbreviazioni:
+Per comodit\`a nel seguito verranno adottate le seguenti abbreviazioni:
 \begin{itemize}
 \item PCN: Passenger Counter a sottrazione del background.
 \item RSPCN: Passenger Counter con telecamere RealSense.
 \end{itemize}
 
 \section{Prestazioni}
-Finora abbiamo trattato nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie e algoritmi utilizzati del punto di vista delle prestazioni del programma.
+Finora sono state trattate nel dettaglio le due diverse implementazioni del Passenger Counter. Ora confronteremo quali differenze comportano le diverse tecnologie e algoritmi utilizzati del punto di vista delle prestazioni del programma.
 
 \subsection{Costo computazionale}
-L'algoritmo di sottrazione dello sfondo oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del lavoro sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, inoltre permette di utilizzare molte pi\`u telecamere contemporaneamente.
+L'algoritmo di sottrazione dello sfondo oltre ad essere impreciso \`e molto pesante dal punto di vista computazionale. L'aver spostato gran parte del calcolo sugli ASIC presenti nelle telecamere RealSense permette di avere uno stream in ingresso con un framerate molto pi\`u stabile ed elevato, di conseguenza \`e possibile utilizzare pi\`u telecamere contemporaneamente.
 
 In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRSPCN} \`e riportato un confronto sui tempi di esecuzione delle funzioni principali delle due implementazioni del contatore. Per il confronto si \`e usata la telecamera SR300 e la webcam Logitech poich\'e posseggono la stessa risoluzione e lo stesso framerate.
 
@@ -2743,7 +2743,7 @@ Per confrontare i due sistemi di Passenger Counter si \`e utilizzata la seguente
 
 \begin{itemize}
 \item Telecamera: Intel RealSense SR300. Nel caso del PCN \`e stata usata come semplice telecamera a colori, ci\`o \`e reso possibile dal fatto che, se non viene utilizzata la libreria librealsense, per OpenCV la telecamera SR300 \`e una webcam qualsiasi. Usare la stessa telecamera per entrambe le versioni ha permesso un confronto pi\`u alla pari.
-\item Ambiente: la telecamera \`e stata montata sullo stipite di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
+\item Ambiente: la telecamera \`e stata montata sulla traversa di una porta ad una altezza di circa 2,10 m. Entrambe le versioni del programma sono state eseguite sul ReliaGate 20-25.
 \item Attraversamenti: per entrambe le versioni sono stati eseguiti 30 attraversamenti della soglia e raccolti i dati del conteggio. Inoltre si \`e testato il funzionamento con l'attraversamento di pi\`u passeggeri contemporaneamente.
 \end{itemize}
 
@@ -2914,10 +2914,10 @@ Infine, in condizioni di bassa illuminazione, il PCN si trova ad avere a che far
 \subsection{Raggio di azione}
 L'implementazione con sottrazione del background non ha problemi legati al range di funzionamento, mentre le telecamere RealSense hanno un range piuttosto limitato e, nel caso della telecamra R200, ci\`o pu\`o compromettere il corretto funzionamento del programma.
 
-Abbiamo visto infatti in figura \ref{fig:R2002} a pagina \pageref{fig:R2002} come l'eccessiva vicinanza dell'oggetto da tracciare non permetta alla telecamera di rilevare correttamente i dati di profondit\`a. Questo comporta un'area priva di dati al centro dell'oggetto da tracciare e, nel caso quest'area diventi troppo grande, un fallimento nel rilevamento dell'oggetto nell'immagine e/o un oggetto tracciato in modo non corretto.
+Si \`e visto infatti, in figura \ref{fig:R2002} a pagina \pageref{fig:R2002}, come l'eccessiva vicinanza dell'oggetto da tracciare non permetta alla telecamera di rilevare correttamente i dati di profondit\`a. Questo comporta un'area priva di dati al centro dell'oggetto da tracciare e, nel caso quest'area diventi troppo grande, un fallimento nel rilevamento dell'oggetto nell'immagine e/o un oggetto tracciato in modo non corretto.
 
 \subsection{Costi}
-Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi tipo di telecamera. L'RSPCN invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice telecamera. Dal punto di vista dei costi di produzione questo \`e un grosso vantaggio.
+Il contatore con sottrazione dello sfondo non \`e basato su nessun tipo di tecnologia particolare e pu\`o essere implementato con qualsiasi telecamera. L'RSPCN invece dipende dalle telecamere Intel RealSense, le quali hanno un costo pi\`u elevato di una semplice webcam. Dal punto di vista dei costi di produzione questo \`e un grosso svantaggio.
 
 Bisogna altres\`\i\ considerare il fatto che il PCN necessita di un hardware pi\`u potente, e quindi pi\`u costoso, a causa del suo costo computazionale pi\`u elevato.
 
@@ -2931,7 +2931,7 @@ Poich\'e i vantaggi della versione con telecamere RealSense superano di gran lun
 Nel corso della tesi sono state realizzate molteplici versioni dello stesso codice. Il motivo di questi porting \`e quello di adattarsi al linguaggio di programmazione utilizzato maggiormente in Eurotech. Nel seguito analizzeremo le versioni del Passenger Counter con telecamere RealSense che sono state realizzate nel corso della tesi.
 
 \subsection{Versione C++}
-Il codice analizzato finora \`e riferito a questa versione del codice. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
+Il codice di cui si \`e parlato finora \`e riferito a questa versione dell'applicativo. Siccome OpenCV e la libreria RealSense sono scritte in questo linguaggio si \`e pensato di usare questo come punto di partenza. In seguito alla prima implementazione si \`e reso necessario il porting negli altri linguaggi per le motivazioni descritte in precedenza.
 
 \subsection{Wrapping in Java}
 Come primo passo si \`e deciso di effettuare un wrapping in Java del codice nativo sfruttando il tool open source \textbf{SWIG}\footnote{Pagina web del progetto: \url{http://www.swig.org/}.}.
