@@ -892,7 +892,7 @@ Dunque ricomincia la scansione dell'immagine per individuare altri poligoni fino
 
 Alla fine di questa operazione si otterranno tante sequenze di interi, le quali rappresentano i blob, quanti sono i poligoni presenti nel foreground.
 
-\subsection{Funzione OpenCV: findContours}
+\subsection{Funzione OpenCV: findContours()}
 L'algoritmo utilizzato per il Passenger Counter \`e descritto in Suzuki, S. and Abe, K., \textit{Topological Structural Analysis of Digitized Binary Images by Border Following}, CVGIP 30 1, pp 32-46 del 1985.
 
 Questo algoritmo per la rilevazione dei contorni \`e reso disponibile dalla funzione \verb|findContours()| di OpenCV ed \`e stato utilizzato anche nella seconda versione del Passenger Counter.
@@ -2231,7 +2231,7 @@ La funzione \verb|count()|, anche per questa versione del contatore, \`e il cuor
 
 \begin{enumerate}
 \item Estrazione degli oggetti in primo piano.
-\item Rilevamento e tracking degli oggetti di nostro interesse.
+\item Rilevamento e tracking dei passeggeri.
 \item Conteggio degli attraversamenti.
 \end{enumerate}
 
@@ -2322,7 +2322,7 @@ Come nella versione precedente del Passenger Counter, in questa fase avviene l'e
 \item Quindi si effettua l'operazione di riduzione del rumore per mezzo della funzione \verb|blur()|.
 \end{enumerate}
 
-\subsection{Rilevamento e tracking degli oggetti di nostro interesse}
+\subsection{Rilevamento e tracking dei passeggeri}
 
 \begin{lstlisting}[language=C++, caption=RSPCN.cpp metodo count() parte 2., style=customcpp, firstnumber=48]
 // --FINDING CONTOURS
@@ -2569,7 +2569,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -2578,11 +2578,11 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     % ReliaGate 20-25
     \addplot 
         coordinates {(7.80747,Metodo getFrame) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
-                        (0.033218,Tracking oggetti)};
+                        (0.033218,Tracking passeggeri)};
     % Sistema Linux
     \addplot 
         coordinates {(0.913448,Metodo getFrame) (0.295688,Sottrazione rumore) (0.228186,Rilevamento contorni)
-                        (0.054902,Tracking oggetti)};
+                        (0.054902,Tracking passeggeri)};
     \legend{ReliaGate 20-25, Sistema Linux}
     \end{axis}
     \end{tikzpicture}
@@ -2599,7 +2599,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Metodo getFrame & 7.80747 ms & 0.913448 ms \\ \hline
     Sottrazione del rumore & 8.69046 ms & 0.295688 ms \\ \hline
     Algoritmo rilevamento contorni & 2.0645 ms & 0.228186 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 0.033218 ms & 0.054902 ms \\ \hline
+    Rilevamento e tracking dei passeggeri & 0.033218 ms & 0.054902 ms \\ \hline
     Frame Rate & 30 fps & 30 fps \\ \hline
 	\end{tabular}
     \caption{Performance Passenger Counter con telecamera RealSense SR300.}
@@ -2622,7 +2622,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -2631,11 +2631,11 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     % ReliaGate 20-25
     \addplot[green!20!black,fill=green!80!white] 
         coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
-                        (4.48531e-4,Tracking oggetti)};
+                        (4.48531e-4,Tracking passeggeri)};
     % Sistema Linux
     \addplot[yellow!20!black,fill=yellow!80!white] 
         coordinates {(0.517965,Metodo getFrame) (0.162011,Sottrazione rumore) (0.095771,Rilevamento contorni)
-                        (1.29373e-4,Tracking oggetti)};
+                        (1.29373e-4,Tracking passeggeri)};
     \legend{ReliaGate 20-25, Sistema Linux}
     \end{axis}
     \end{tikzpicture}
@@ -2652,7 +2652,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     Metodo getFrame & 2.23713 ms & 0.517965 ms \\ \hline
     Sottrazione del rumore & 1.81564 ms & 0.162011 ms \\ \hline
     Algoritmo rilevamento contorni & 0.962472 ms & 0.095771 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
+    Rilevamento e tracking dei passeggeri & 4.48531e-4 ms & 1.29373e-4 ms \\ \hline
     Frame Rate & 60 fps & 60 fps \\ \hline
 	\end{tabular}
     \caption{Performance Passenger Counter con telecamera RealSense R200.}
@@ -2710,7 +2710,7 @@ In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRS
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Rilevamento passeggeri, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Rilevamento passeggeri, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -2719,11 +2719,11 @@ In figura \ref{fig:GraficoTempiPCNRSPCN} a pagina \pageref{fig:GraficoTempiPCNRS
     % ReliaGate 20-25
     \addplot 
         coordinates {(7.80747,Rilevamento passeggeri) (8.69046,Sottrazione rumore) (2.0645,Rilevamento contorni)
-                        (0.033218,Tracking oggetti)};
+                        (0.033218,Tracking passeggeri)};
     % ReliaGate 20-25 BSPCN
     \addplot 
         coordinates {(29.4414,Rilevamento passeggeri) (2.80683,Sottrazione rumore) (1.09507,Rilevamento contorni) 
-                        (0.178409,Tracking oggetti)};
+                        (0.178409,Tracking passeggeri)};
     \legend{RSPCN, PCN}
     \end{axis}
     \end{tikzpicture}
@@ -2980,7 +2980,7 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     align = center,
     enlarge y limits  = 0.2,
     enlarge x limits  = 0.02,
-    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking oggetti},
+    symbolic y coords = {Metodo getFrame, Sottrazione rumore, Rilevamento contorni, Tracking passeggeri},
     nodes near coords,
     grid = major,
     grid style={dashed,gray!30},
@@ -2989,11 +2989,11 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     % ReliaGate 20-25 C++
     \addplot[green!20!black,fill=green!80!white] 
         coordinates {(2.23713,Metodo getFrame) (1.81564,Sottrazione rumore) (0.962472,Rilevamento contorni)
-                        (4.48531e-4,Tracking oggetti)};
+                        (4.48531e-4,Tracking passeggeri)};
     % ReliaGate 20-25 Java
     \addplot[magenta!20!black,fill=magenta!80!white] 
         coordinates {(4.008504,Metodo getFrame) (1.230020,Sottrazione rumore) (0.163716,Rilevamento contorni)
-                        (0.059985,Tracking oggetti)};
+                        (0.059985,Tracking passeggeri)};
     \legend{Versione C++, Versione Java}
     \end{axis}
     \end{tikzpicture}
@@ -3010,7 +3010,7 @@ Qui di seguito sono riportati i dati dei tempi di esecuzione delle funzioni prin
     Metodo getFrame & 2.23713 ms & 4.008504 ms \\ \hline
     Sottrazione del rumore & 1.81564 ms & 1.230020 ms \\ \hline
     Algoritmo rilevamento contorni & 0.962472 ms & 0.163716 ms \\ \hline
-    Rilevamento e tracking degli oggetti & 4.48531e-4 ms & 0.059985 ms \\ \hline
+    Rilevamento e tracking dei passeggeri & 4.48531e-4 ms & 0.059985 ms \\ \hline
     Frame Rate & 60 FPS & 60 FPS \\ \hline
 	\end{tabular}
     \caption{Confronto performance versioni Passenger Counter con telecamera R200.}
