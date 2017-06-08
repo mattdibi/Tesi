@@ -542,9 +542,9 @@ Per lo sviluppo dell'applicazione Passenger Counter la scelta di utilizzare ques
 \subsection{Ambiente di sviluppo per l'OS: Yocto Project}\label{Yocto}
 Per integrare nella piattaforma hardware gli strumenti software necessari al funzionamento dell'applicativo \`e stato indispensabile realizzare una distribuzione Linux customizzata adatta alle esigenze del programma. Per farlo \`e stato utilizzato il progetto Yocto, standard industriale de facto per realizzare distribuzioni Linux embedded.
 
-Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi embedded, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Esso \`e quindi un progetto ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux embedded.
+Yocto Project \`e un insieme di strumenti open source finalizzati alla creazione di distribuzioni Linux per sistemi immersi, corredate da toolchain di cross-compilazione ed emulatori, che siano indipendenti dall'architettura hardware. Esso \`e quindi un progetto ombrello sotto il quale si raccolgono vari sotto-progetti volti allo sviluppo di sistemi Linux.
 
-Le architettura supportate dal progetto sono le pi\`u diffuse in questo ambito: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
+Le architetture supportate dal progetto sono le pi\`u diffuse in questo ambito: ARM, MIPS, PowerPC e x86/x86-64. Una parte fondamentale di questo progetto \`e il build system open source basato sull'architettura OpenEmbedded. Questa implementazione di OpenEmbedded \`e chiamata Poky.
 
 OpenEmbedded \`e un framework software usato per creare distribuzioni Linux embedded. Il build system \`e basato sulle ricette BitBake le quali sono degli script bash specializzati che automatizzano la compilazione e la installazione di pacchetti software. BitBake stesso \`e uno dei componenti fondamentali di Yocto Project: \`e un build automation software, ovvero un tool che legge dei metadati sotto forma di ``ricette'' ed esegue task in base a questi metadati. Le ricette BitBake consistono di un URL che punta alla sorgente del pacchetto software, dipendenze e opzioni di compilazione e installazione. Durante il processo di build sono usate per tenere traccia delle dipendenze ed effettuare la cross-compilazione dei pacchetti affinch\'e sia possibile installarli sulla target distribution.
 
@@ -552,7 +552,7 @@ OpenEmbedded \`e un framework software usato per creare distribuzioni Linux embe
 \begin{itemize}
 \item OpenEmbedded: \`e un build framework per embedded Linux. Permette la creazione di distribuzioni Linux complete per sistemi immersi e offre un ambiente di cross-compilazione completo. Il build system \`e basato su ricette BitBake.
 \item BitBake: \`e un build automation software, ovvero uno strumento software che legge dei metadati ed esegue task in base a tali metadati. \`E uno dei componenti fondamentali di Yocto Project.
-\item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System(BitBake e OpenEmbedded) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata.
+\item Poky: \`e una reference distribution di Yocto Project. Contiene l'OpenEmbedded Build System (BitBake e OpenEmbedded) assieme a un insieme di metadati che permettono di cominciare a costruire la propria distribuzione Linux embedded customizzata.
 \item Layers: il build system del progetto Yocto \`e composto da layer. I layer sono una collezione logica di ricette che rappresentano stack di applicazioni o Board Support Packaged (BSP). I BSP contengono i pacchetti e i driver fondamentali necessari per costruire una distribuzione Linux per una specifica board o architettura. Solitamente questi BSP sono mantenuti dai produttori dell'hardware e sono l'interfaccia tra l'OS e l'hardware che lo esegue.
 \end{itemize}
 
