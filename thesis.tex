@@ -643,7 +643,7 @@ Specifiche tecniche:
     \caption{Specifiche tecniche Avnet Zedboard.}
 \end{table}
 
-Purtroppo, avendo la scheda una sola porta HDMI disponibile solo in output, \`e stato necessario procurarsi un modulo aggiuntivo da collegarsi all'header FMC per avere a disposizione una ulteriore porta HDMI in ingresso. Questo modulo \`e il AES-FMC-HDMI-CAM-G HDMI Input/Output FMC prodotto dalla Avnet\cite{avnet:moduloHDMI}.
+Purtroppo, avendo la scheda una sola porta HDMI disponibile in output, \`e stato necessario procurarsi un modulo aggiuntivo da collegarsi all'header FMC per avere a disposizione una ulteriore porta HDMI in ingresso. Questo modulo \`e il AES-FMC-HDMI-CAM-G HDMI Input/Output FMC prodotto dalla Avnet\cite{avnet:moduloHDMI}.
 
 In figura \ref{fig:Zynq7000} \`e riportato il diagramma del SoC Zynq-7000.
 
@@ -1145,7 +1145,7 @@ Come \`e possibile notare dal codice, al costruttore viene passato un intero che
 Nel seguito sono riportati i parametri di impostazione della funzione che implementa l'algoritmo di sottrazione del background:
     \begin{itemize}
     \item \verb|history|: lunghezza della storia sulla quale costruire il modello del background.
-    \item \verb|varThreshold|: soglia sulla distanza quadratica di Mahalanobis tra pixel e il modello dello sfondo, atta a discriminare qualora un pixel sia ben descritto dal modello. In caso negativo il pixel viene attribuito al foreground. Si \`e lasciato il valore di default associato a 4 sigma.
+    \item \verb|varThreshold|: soglia sulla distanza quadratica di Mahalanobis\cite{distanzaMahalanobis} tra pixel e il modello dello sfondo, atta a discriminare qualora un pixel sia ben descritto dal modello. In caso negativo il pixel viene attribuito al foreground. Si \`e lasciato il valore di default associato a 4 sigma.
     \item \verb|detectShadows|: questo booleano imposta il sottrattore in modo tale che cerchi di rilevare le ombre. Le ombre saranno contrassegnate dal colore grigio.
     \end{itemize}
 
@@ -2659,7 +2659,7 @@ Nel seguito sono riportati i risultati relativi alle performance dell'applicazio
     \caption{Performance Passenger Counter con telecamera RealSense R200.}
 \end{table}
 
-La differenza nei tempi di esecuzione nei due test \`e dovuta al fatto che nel caso della telecamera R200 si \`e usata una risoluzione pi\`u bassa e un framerate pi\`u elevato del caso della RealSense SR300.
+La differenza dei tempi di esecuzione nei due test \`e dovuta al fatto che nel caso della telecamera R200 si \`e usata una risoluzione pi\`u bassa e un framerate pi\`u elevato del caso della RealSense SR300.
 
 Come risulta evidente da queste tabelle i tempi di esecuzione sono molto migliorati rispetto al contatore a sottrazione del background. Ora il ReliaGate \`e in grado di mantenere il frame-rate stabile al valore impostato. Ci\`o \`e dovuto al fatto che parte della computazione \`e stata spostata in hardware sull'ASIC delle telecamere.
 
@@ -3822,7 +3822,7 @@ Anche in questo caso sono possibili dei miglioramenti.
 
 \chapter{Computer Stereo Vision}\label{ComputerStereoVision}
 
-La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti di vista (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{stereopsi}.
+La computer stereo vision \`e una tecnica per l'estrazione di informazioni di profondit\`a dalla immagini digitali. Comparando le informazioni della scena acquisita da due punti di vista (telecamere), le informazioni 3D possono essere estratte esaminando le posizioni relative degli oggetti nei due piani. Il principio di funzionamento di questa tecnica \`e simile al processo biologico noto come \textit{stereopsi}\cite{stereopsi}.
 
 \section{Principio di funzionamento}
 \begin{figure}[h!]
