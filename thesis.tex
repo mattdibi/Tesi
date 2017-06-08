@@ -112,7 +112,7 @@ per avermi supportato (e sopportato) in questi lunghi anni di studio.\end{dedica
 
 %% Sommario (opzionale)
 \abstract
-Nello sviluppo di questa tesi si \`e affrontato lo studio e la progettazione di un sistema di conteggio dei passeggeri, chiamato ``Passenger Counter'', su piattaforma embedded. Il software \`e basato su algoritmi di elaborazione di immagine resi disponibili dalla libreria open-source per l'image processing OpenCV. La piattaforma software \`e stata realizzata utilizzando il progetto Yocto, il quale permette la creazione di distribuzioni Linux custom e finalizzate all'utilizzo in ambito embedded.
+Nello sviluppo di questa tesi si \`e affrontato lo studio e la progettazione di un sistema di conteggio di persone, chiamato ``Passenger Counter'', su piattaforma embedded. Il software \`e basato su algoritmi di elaborazione di immagine resi disponibili dalla libreria open-source per la computer vision OpenCV. La piattaforma software \`e stata realizzata utilizzando il progetto Yocto, il quale permette la creazione di distribuzioni Linux custom finalizzate all'utilizzo nell'ambito dei sistemi immersi.
 
 L'applicazione Passenger Counter ha come scopo quello di contare i passeggeri che attraversano in entrata e in uscita le porte di un mezzo pubblico, in modo tale da permettere un conteggio esatto delle persone presenti sul mezzo.
 
@@ -120,7 +120,7 @@ Lo sviluppo si \`e diviso in tre fasi principali:
 \begin{itemize}
 \item Una indagine preliminare atta ad individuare la miglior piattaforma hardware/software sulla quale sviluppare l'applicazione.
 \item Progettazione e implementazione del contatore basato interamente su algoritmi di elaborazione delle immagini, individuando i passaggi pi\`u pesanti dal punto di vista computazionale. Nel resto del testo ci riferiremo a questa versione del software come: Passenger Counter a sottrazione dello sfondo, o PCN.
-\item Progettazione e implementazione del contatore sfruttando telecamere ad infrarossi Intel RealSense. Nel resto del testo ci riferiremo a questa versione dell'applicazione come: Passenger Counter con telecamere RealSense, o RSPCN.
+\item Progettazione e implementazione del contatore sfruttando le telecamere ad infrarossi Intel RealSense. Nel resto del testo ci riferiremo a questa versione dell'applicazione come: Passenger Counter con telecamere RealSense, o RSPCN.
 \end{itemize}
 
 Contemporaneamente allo sviluppo dell'applicazione si \`e realizzata la piattaforma software sulla quale integrare tutte le tecnologie utilizzate dall'applicativo, per mezzo del progetto Yocto, perch\'e potesse essere installato sull'hardware in dotazione.
