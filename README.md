@@ -1,4 +1,4 @@
-# Tesi PCN
+# Tesi RSPCN
 Repo per il versioning della mia tesi di laurea
 
 Nel seguito ho riportato l'espansione dell'indice dove in ogni sezione ho descritto per sommi capi cosa intendo scrivere.
