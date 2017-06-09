@@ -299,7 +299,7 @@ FUNCTION {format.date}
 }
 
 FUNCTION {format.btitle}
-{ title emphasize
+{ title 
 }
 
 FUNCTION {tie.or.space.connect}
@@ -554,14 +554,28 @@ FUNCTION {format.incoll.inproc.crossref}
   " \cite{" * crossref * "}" *
 }
 
+FUNCTION {enquote}
+{ duplicate$ empty$
+    {pop$ "" }
+    {"``" swap$ * "''" * }
+    if$
+}
+
+FUNCTION {underlinebib}
+{ duplicate$ empty$
+    {pop$ "" }
+    {"\uline{" swap$ * "}" * }
+    if$
+}
+
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.title "title" output.check
+  format.title enquote "title" output.check
   new.block
   crossref missing$
-    { journal emphasize "journal" output.check
+    { journal underlinebib "journal" output.check
       format.vol.num.pages output
       format.date "year" output.check
     }
@@ -729,7 +743,7 @@ FUNCTION {manual}
     { format.authors output.nonnull }
   if$
   new.block
-  format.btitle "title" output.check
+  format.btitle underlinebib "title" output.check
   author empty$
     { organization empty$
     { address new.block.checka
